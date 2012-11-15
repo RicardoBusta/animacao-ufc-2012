@@ -11,6 +11,14 @@ Vector3f::Vector3f(float x, float y, float z)
     this->z = z;
 }
 
+Vector3f::Vector3f(const Vector3f& vec)
+{
+    this->x = vec.x;
+    this->y = vec.y;
+    this->z = vec.z;
+}
+
+
 Vector3f::~Vector3f()
 {
 }

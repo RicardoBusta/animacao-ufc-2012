@@ -25,7 +25,8 @@ SOURCES += \
     interface/glframe.cpp \
     graphics/glvectorfunctions.cpp \
     graphics/glmathelements.cpp \
-    graphics/curve.cpp
+    graphics/curve.cpp \
+    math/pointcubicinterpolation.cpp
 
 HEADERS  += \
     interface/mainwindow.h \
@@ -39,7 +40,8 @@ HEADERS  += \
     interface/glframe.h \
     graphics/glvectorfunctions.h \
     graphics/glmathelements.h \
-    graphics/curve.h
+    graphics/curve.h \
+    math/pointcubicinterpolation.h
 
 FORMS    += \
         interface/mainwindow.ui

@@ -43,19 +43,19 @@ void Scene::draw()
 
     GLMathElements::drawAxis(300);
 
-    glColor3f(0.8,0.8,0);
+    glColor3f(0.5,0.5,0.5);
     for(std::vector<Vector3f*>::iterator it = points.begin(); it!= points.end(); it++){
         glPushMatrix();
         transform.setPosition(*(*it));
         transform.gl();
-        GLPrimitive::sphere(4);
+        GLPrimitive::sphere(6);
         //glVertex3f((*it)->getX(),(*it)->getY(),(*it)->getZ());
         glPopMatrix();
     }
 
     glBegin(GL_LINE_STRIP);
 //    glBegin(GL_POINTS);
-    glColor3f(0,0,0);
+    glColor3f(0.9,0.9,0.9);
     for(std::vector<Vector3f*>::iterator it = curve.begin(); it!= curve.end(); it++){
         glVertex3f((*it)->getX(),(*it)->getY(),(*it)->getZ());
     }

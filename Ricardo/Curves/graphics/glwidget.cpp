@@ -96,7 +96,7 @@ void GLWidget::resizeGL(int w, int h)
     //glViewport(0,0,w,h);
     glMatrixMode (GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(-size,size,-size,size,10000,-10000);
+    glOrtho(-size/2,size/2,-size/2,size/2,10000,-10000);
     //glFrustum(-1,1,-1,1,1,10000);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();

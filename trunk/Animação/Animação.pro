@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui xml opengl
 
 TARGET = Animação
 TEMPLATE = app
@@ -16,3 +16,11 @@ SOURCES += main.cpp\
 HEADERS  += mainwindow.h
 
 FORMS    += mainwindow.ui
+
+
+unix:!macx:!symbian: LIBS += -L$$PWD/../../workspace/libQGLViewer-2.3.17/QGLViewer/ -lQGLViewer
+
+INCLUDEPATH += $$PWD/../../workspace/libQGLViewer-2.3.17/QGLViewer
+DEPENDPATH += $$PWD/../../workspace/libQGLViewer-2.3.17/QGLViewer
+
+LIBS += -lGLU

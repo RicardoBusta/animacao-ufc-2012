@@ -12,10 +12,12 @@ TEMPLATE = app
 
 SOURCES += main.cpp\
         mainwindow.cpp \
-    glviewer.cpp
+    glviewer.cpp \
+    animation.cpp
 
 HEADERS  += mainwindow.h \
-    glviewer.h
+    glviewer.h \
+    animation.h
 
 FORMS    += mainwindow.ui
 

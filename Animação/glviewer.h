@@ -8,10 +8,12 @@ class GLViewer : public QGLViewer
     Q_OBJECT
 public:
     explicit GLViewer(QWidget *parent = 0);
-    
-private:
-    void draw();
 
+private:
+    void postDraw();
+
+    void draw();
+    void init();
 signals:
     
 public slots:

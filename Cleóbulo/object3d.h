@@ -13,9 +13,10 @@ public:
     Object3D(qglviewer::Vec pos, qglviewer::Quaternion ori);
     ~Object3D();
 
+    int                            id();
     inline void                    SetDrawObject          (bool draw) { draw_object_ = draw; }
     inline void                    SetDrawPositionParticle(bool draw) { draw_position_particle_ = draw; }
-    inline void                    SetDrawOrientationAxes (bool draw) { draw_position_particle_ = draw; }
+    inline void                    SetDrawOrientationAxes (bool draw) { draw_orientation_axes_  = draw; }
 
     inline void                    SetNewPosition(qglviewer::Vec position) { position_ = position; }
     inline void                    SetNewOrientation(qglviewer::Quaternion orientation) { orientation_ = orientation; }
@@ -39,6 +40,7 @@ protected:
     qglviewer::Quaternion orientation_;
 private:
     GLUquadricObj* quadric_;
+    int id_;
 
 };
 

@@ -38,9 +38,26 @@ public:
 
     }
 
-
 protected:
     qglviewer::Vec p_a,p_b,p_c;
+
+};
+
+class BezierCubic : public Curve {
+public:
+    BezierCubic(qglviewer::Vec a,qglviewer::Vec b, qglviewer::Vec c, qglviewer::Vec d)
+        : p_a(a), p_b(b), p_c(c), p_d(d) {
+    }
+
+    qglviewer::Vec Evaluate(double t) const {
+
+        double c_a  = (1.0-t);
+        return p_a*c_a*c_a*c_a + p_b*3.0*c_a*c_a*t +p_c*3.0*c_a*t*t+p_d*t*t*t;
+
+    }
+
+protected:
+    qglviewer::Vec p_a,p_b,p_c,p_d;
 
 };
 

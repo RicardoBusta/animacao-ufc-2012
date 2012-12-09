@@ -1,7 +1,12 @@
 #include "joint.h"
 
-Joint::Joint()
+Joint::Joint(Object3D* children_object)
 {
+    children_object_ = children_object;
+}
+
+void Joint::AddChildJoint(Joint* child) {
+    children_joint_.push_back(child);
 }
 
 void Joint::DrawObject() {

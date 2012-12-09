@@ -13,9 +13,11 @@ class PosInterpolator
 {
 public:
     enum InterpolationPolicy {kFrameBased,kConstantSpeed};
+    enum InterpolationType  {kLinear,kBezier};
 
     PosInterpolator();
 
+    void SetInterpolationType(InterpolationType type);
     void SetStartFrame(int start_frame);
     void SetLastFrame(int last_frame);
 
@@ -26,10 +28,12 @@ public:
 
 protected:
     virtual void GenerateMainCurve();
+    void GenerateLinearMainCurve();
+    void GenerateBezierMainCurve();
     void AddCurve(Curve* curve);
 
     std::vector<PositionStep> steps_;
-
+    InterpolationType interpolation_type_;
 private:
     void CleanCurvesAndLengths();
     int ChooseInterval(int frame, InterpolationPolicy policy = kFrameBased);

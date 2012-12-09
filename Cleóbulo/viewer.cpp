@@ -4,12 +4,19 @@
 #include "arclength.h"
 #include <GL/glu.h>
 #include "posinterpolator.h"
+#include "scenecontainer.h"
+#include "joint.h"
 
 qglviewer::Vec global_p[101];
 PosInterpolator pos_interpolator;
 
 void Viewer::draw() {
-    glColor3f(1.0,1.0,1.0);
+    for( size_t i = 0 ; i < SceneContainer::HowManyObjects(); i++ ) {
+        Joint* object = SceneContainer::ObjectAt(i);
+        object->Draw();
+    }
+
+    /*glColor3f(1.0,1.0,1.0);
     glBegin(GL_LINE_STRIP);
     int slices = 50;
     double slice_size = 1.0/((double)(slices-1));
@@ -63,12 +70,19 @@ void Viewer::draw() {
         //gluSphere(gluNewQuadric(),0.02,15,15);
         glPopMatrix();
     }
-    glEnd();
+    glEnd();*/
+    this->drawText(10,10,QString("Frame: %1").arg(SceneContainer::current_frame()));
+}
+
+void Viewer::animate() {
+
+    SceneContainer::GoToNextFrame();
 }
 
 void Viewer::init() {
-
-    glDisable(GL_LIGHTING);
+    SceneContainer::CreateDefaultScene();
+    SceneContainer::SetFrameRange(0,100);
+   /* glDisable(GL_LIGHTING);
 
     nova_ = new BezierQuadratic(qglviewer::Vec(0,0,0),qglviewer::Vec(1.5,3.0,3.0),qglviewer::Vec(3,0,0));
     ArcLength arc(nova_);
@@ -86,8 +100,7 @@ void Viewer::init() {
         PositionStep p;
         p.position_ = nova_->Evaluate(i*0.1) + qglviewer::Vec(0,0,-1);
         int frame = 10*i;
-        /*for(int j = 1 ; j < i+1 ; j++ )
-            frame += 10*j;*/
+
         p.frame_ = frame;
         positions.push_back(p);
     }
@@ -97,7 +110,7 @@ void Viewer::init() {
 
     pos_interpolator.LoadPoints(positions);
     //for(int i = 0 ; i < 101 ; i++ )
-    //    global_p[i] = pos_interpolator.GetPositionAt(i);
+    //    global_p[i] = pos_interpolator.GetPositionAt(i);*/
     setSceneRadius(10.0f);
 
 }

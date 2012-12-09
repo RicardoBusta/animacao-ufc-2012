@@ -6,7 +6,9 @@
 class Joint : public Object3D
 {
 public:
-    Joint();
+    Joint(Object3D* children_object);
+
+    void AddChildJoint(Joint* child);
 
 protected:
     virtual void DrawObject();

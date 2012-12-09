@@ -15,9 +15,11 @@ protected :
   virtual void init();
   virtual QString helpString() const;
 
+
 signals:
 
 public slots:
+    virtual void animate();
 
 private:
     BezierQuadratic* nova_;

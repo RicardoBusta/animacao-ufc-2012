@@ -23,11 +23,13 @@ SOURCES += main.cpp\
     arclength.cpp \
     posinterpolator.cpp \
     oriinterpolator.cpp \
-    scenecontainer.cpp \
     joint.cpp \
     object3d.cpp \
-    interpolator.cpp \
-    timebar.cpp
+    timebar.cpp \
+    scenecontainer.cpp \
+    objectanimator.cpp \
+    trajectoryobject.cpp \
+    curveoject.cpp
 
 HEADERS  += mainwindow.h \
     viewer.h \
@@ -36,11 +38,13 @@ HEADERS  += mainwindow.h \
     oriinterpolator.h \
     animation_step.h \
     curve.h \
-    scenecontainer.h \
     joint.h \
     object3d.h \
-    interpolator.h \
-    timebar.h
+    timebar.h \
+    scenecontainer.h \
+    objectanimator.h \
+    trajectoryobject.h \
+    curveoject.h
 
 FORMS    += mainwindow.ui
 

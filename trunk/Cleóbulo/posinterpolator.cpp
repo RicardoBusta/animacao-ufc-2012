@@ -4,6 +4,11 @@
 PosInterpolator::PosInterpolator() :
     total_length_(0), start_frame_(0), last_frame_(0)
 {
+    interpolation_type_ = kLinear;
+}
+
+void PosInterpolator::SetInterpolationType(InterpolationType type) {
+    interpolation_type_ = type;
 }
 
 void PosInterpolator::SetStartFrame(int start_frame) {
@@ -82,6 +87,50 @@ void PosInterpolator::AddPoint(PositionStep new_step) {
 }
 
 void PosInterpolator::GenerateMainCurve() {
+    switch(interpolation_type_) {
+    case kBezier:
+        GenerateBezierMainCurve();
+        break;
+    default:
+        GenerateLinearMainCurve();
+    }
+
+}
+
+void PosInterpolator::GenerateBezierMainCurve() {
+    if(steps_.size() <= 2) {
+        GenerateLinearMainCurve();
+        return;
+    }
+    qglviewer::Vec a,b,pa;
+    qglviewer::Vec delta;
+    for(size_t i = 0 ; i < steps_.size() ; i++) {
+        if( i == 0 ) {
+            delta = steps_.at(1).position_ - steps_.at(2).position_;
+            pa = steps_.at(1).position_ + delta;
+        } else if( i ==  steps_.size() - 1 ) {
+            delta = steps_.at(i-1).position_ - steps_.at(i-2).position_;
+            b = steps_.at(i-1).position_ + delta;
+            //curves.push_back(new BezierCubic(points.at(i-1),pa,b,points.at(i)));
+            AddCurve(new BezierQuadratic(steps_.at(i-1).position_,pa,steps_.at(i).position_));
+        }else {
+            delta = steps_.at(i).position_ - steps_.at(i-1).position_;
+            a = steps_.at(i).position_ + delta;
+            a = (a + steps_.at(i+1).position_)/2.0;
+            delta = steps_.at(i).position_ - a;
+            b = steps_.at(i).position_ + delta;
+            if( i == 1) {
+                AddCurve(new BezierQuadratic(steps_.at(i-1).position_,b,steps_.at(i).position_));
+            }else{
+                AddCurve(new BezierCubic(steps_.at(i-1).position_,pa,b,steps_.at(i).position_));
+            }
+            pa = a;
+
+        }
+    }
+}
+
+void PosInterpolator::GenerateLinearMainCurve() {
     for(size_t i = 1 ; i < steps_.size() ; i++ ) {
         Curve* curve = new LinearCurve(steps_.at(i-1).position_,steps_.at(i).position_);
         AddCurve(curve);

@@ -12,10 +12,13 @@ public:
     void SetStartFrame(int start_frame);
     void SetLastFrame(int last_frame);
 
-    qglviewer::Vec GetOrientationAt(int frame);
+    qglviewer::Quaternion GetOrientationAt(int frame);
 
     void LoadOrientations(std::vector<OrientationStep>& steps);
     void AddOrientation(OrientationStep new_step);
+private:
+    int start_frame_, last_frame_;
+
 
 };
 

@@ -2,7 +2,7 @@
 #include <GL/glu.h>
 
 Object3D::Object3D()
-{
+{ 
     DefaultInitialisation();
 }
 
@@ -29,11 +29,19 @@ Object3D::~Object3D() {
         gluDeleteQuadric(quadric_);
 }
 
+int Object3D::id() {
+    return id_;
+}
+
 void Object3D::DefaultInitialisation() {
     quadric_ = NULL;
     draw_object_ = true;
     draw_position_particle_ = false;
     draw_orientation_axes_ = false;
+
+    static int next_id = 0;
+    id_ = next_id;
+    next_id++;
 }
 
 void Object3D::Draw() {
@@ -55,13 +63,17 @@ void Object3D::DrawPositionParticle() {
     if(quadric_ == NULL)
         quadric_ = gluNewQuadric();
 
-    gluSphere(quadric_,2.0,5,5);
+    /*glPushAttrib(GL_ALL_ATTRIB_BITS);
+    glDisable(GL_LIGHTING);*/
+    gluSphere(quadric_,0.05,5,5);
+    /*glPopAttrib();*/
 }
 
 void Object3D::DrawOrientationAxes() {
 
-    double radius = 2.0;
-
+    double radius = 0.3;
+    glPushAttrib(GL_ALL_ATTRIB_BITS);
+    glDisable(GL_LIGHTING);
     glBegin(GL_LINES);
         glColor3f(1.0, 0.0, 0.0);
         glVertex3d(0.0, 0.0, 0.0);
@@ -75,6 +87,7 @@ void Object3D::DrawOrientationAxes() {
         glVertex3d(0.0, 0.0, 0.0);
         glVertex3d(0.0, 0.0, radius);
     glEnd();
+    glPopAttrib();
 }
 
 void Object3D::DrawObject() {

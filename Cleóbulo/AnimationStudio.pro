@@ -29,7 +29,9 @@ SOURCES += main.cpp\
     scenecontainer.cpp \
     objectanimator.cpp \
     trajectoryobject.cpp \
-    curveoject.cpp
+    curveoject.cpp \
+    quaternioninterpolation.cpp \
+    spaceshipobject.cpp
 
 HEADERS  += mainwindow.h \
     viewer.h \
@@ -44,7 +46,9 @@ HEADERS  += mainwindow.h \
     scenecontainer.h \
     objectanimator.h \
     trajectoryobject.h \
-    curveoject.h
+    curveoject.h \
+    quaternioninterpolation.h \
+    spaceshipobject.h
 
 FORMS    += mainwindow.ui
 

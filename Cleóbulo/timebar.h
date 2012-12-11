@@ -20,9 +20,9 @@ protected:
     virtual void paintEvent(QPaintEvent* event);
     virtual void mousePressEvent ( QMouseEvent * event );
 signals:
-    
+    void SetSelectedFrame(int frame);
 public slots:
-    
+    void SetCurrentFrame(int frame);
 };
 
 #endif // TIMEBAR_H

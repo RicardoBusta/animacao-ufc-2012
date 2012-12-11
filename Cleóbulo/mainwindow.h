@@ -17,6 +17,8 @@ public:
 
 private:
     Ui::MainWindow *ui;
+public slots:
+    void UpdateAnimators();
 };
 
 #endif // MAINWINDOW_H

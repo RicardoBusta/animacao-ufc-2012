@@ -1,8 +1,12 @@
 #include "glviewer.h"
 
+#include "animation.h"
+#include <QVector3D>
+
 GLViewer::GLViewer(QWidget *parent) :
     QGLViewer(parent)
 {
+    ortho = true;
 }
 
 void GLViewer::init()
@@ -16,12 +20,18 @@ void GLViewer::init()
 void GLViewer::draw()
 {
     glDisable(GL_LIGHTING);
-    glBegin(GL_LINE_STRIP);
-    glColor3f(1,0,0);
+//    glBegin(GL_LINE_STRIP);
+//    glColor3f(1,0,0);
+//    glVertex3f(0,0,0);
+//    glVertex3f(1,0,0);
+//    glVertex3f(1,1,0);
+//    glVertex3f(1,1,1);
+//    glEnd();
+
+    glBegin(GL_LINES);
+    QVector3D v = animation->frame.at(animation->currentFrame);
     glVertex3f(0,0,0);
-    glVertex3f(1,0,0);
-    glVertex3f(1,1,0);
-    glVertex3f(1,1,1);
+    glVertex3f(v.x(),v.y(),v.z());
     glEnd();
 }
 

@@ -13,11 +13,15 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     glviewer.cpp \
-    animation.cpp
+    animation.cpp \
+    joint.cpp \
+    object.cpp
 
 HEADERS  += mainwindow.h \
     glviewer.h \
-    animation.h
+    animation.h \
+    joint.h \
+    object.h
 
 FORMS    += mainwindow.ui
 

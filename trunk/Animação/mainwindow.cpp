@@ -5,12 +5,17 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
-    ui->setupUi(this);
     animation = new Animation(this);
+
+    ui->setupUi(this);
+
     ui->glFrame->animation = animation;
 
     connect(ui->play,SIGNAL(clicked()),animation,SLOT(play()));
     connect(ui->stop,SIGNAL(clicked()),animation,SLOT(stop()));
+
+    ui->glFrame->setAnimationPeriod(20);
+    ui->glFrame->startAnimation();
 }
 
 MainWindow::~MainWindow()
@@ -21,7 +26,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::updateFrame()
 {
-    ui->horizontalSlider->setMaximum(animation->frame.size());
+    ui->horizontalSlider->setMaximum(animation->sizeFrames);
     ui->horizontalSlider->setValue(animation->currentFrame);
-    ui->glFrame->update();
+    //ui->glFrame->update();
 }

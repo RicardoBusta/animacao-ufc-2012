@@ -24,7 +24,7 @@ public:
         orientation_(ori), frame_(frame){
     }
 
-    qglviewer::Vec orientation_;
+    qglviewer::Quaternion orientation_;
     int frame_;
 };
 

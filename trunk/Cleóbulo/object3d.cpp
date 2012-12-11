@@ -44,10 +44,14 @@ void Object3D::DefaultInitialisation() {
     next_id++;
 }
 
-void Object3D::Draw() {
+void Object3D::Draw(bool animate_position, bool animate_orientation) {
     glPushMatrix();
-    glTranslated(position_.x,position_.y,position_.z);
-    glMultMatrixd(orientation_.matrix());    
+
+    if(animate_position)
+        glTranslated(position_.x,position_.y,position_.z);
+
+    if(animate_orientation)
+        glMultMatrixd(orientation_.matrix());
 
     if(draw_position_particle_)
         DrawPositionParticle();

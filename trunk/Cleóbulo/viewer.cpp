@@ -7,13 +7,16 @@
 #include "scenecontainer.h"
 #include "joint.h"
 
-qglviewer::Vec global_p[101];
-PosInterpolator pos_interpolator;
+
+Viewer::Viewer(QWidget* parent) :
+    QGLViewer(parent){
+
+}
 
 void Viewer::draw() {
     for( size_t i = 0 ; i < SceneContainer::HowManyObjects(); i++ ) {
         Joint* object = SceneContainer::ObjectAt(i);
-        object->Draw();
+        object->Draw(SceneContainer::AnimatePosition(),SceneContainer::AnimateOrientation());
     }
 
     /*glColor3f(1.0,1.0,1.0);
@@ -74,9 +77,40 @@ void Viewer::draw() {
     this->drawText(10,10,QString("Frame: %1").arg(SceneContainer::current_frame()));
 }
 
+
+
+void Viewer::Play() {
+    if(!animationIsStarted()) {
+        startAnimation();
+    }
+}
+
+void Viewer::Stop() {
+    if(animationIsStarted()) {
+        stopAnimation();
+    }
+    if(SceneContainer::current_frame()!=0) {
+        SceneContainer::SetCurrentFrame(0);
+        emit CurrentFrame(0);
+        updateGL();
+    }
+}
+
+void Viewer::Pause() {
+    if(animationIsStarted()) {
+        stopAnimation();
+    }
+}
+
 void Viewer::animate() {
 
     SceneContainer::GoToNextFrame();
+    emit CurrentFrame(SceneContainer::current_frame());
+}
+
+void  Viewer::SetCurrentFrame(int frame) {
+    SceneContainer::SetCurrentFrame(frame);
+    updateGL();
 }
 
 void Viewer::init() {

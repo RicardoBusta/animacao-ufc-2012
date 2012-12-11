@@ -23,7 +23,7 @@ public:
     inline qglviewer::Vec          position()    { return position_; }
     inline qglviewer::Quaternion   orientation() { return orientation_; }
 
-    void                           Draw();
+    void                           Draw(bool animate_position = true, bool animate_orientation = true);
 
 protected:
 

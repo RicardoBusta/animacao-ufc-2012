@@ -61,6 +61,29 @@ protected:
 
 };
 
+class CasteljauCurve : public Curve {
+public:
+    CasteljauCurve(qglviewer::Vec a,qglviewer::Vec b, qglviewer::Vec c, qglviewer::Vec d)
+        : p_a(a), p_b(b), p_c(c), p_d(d) {
+    }
+
+    qglviewer::Vec Evaluate(double t) const {
+
+        LinearCurve a(p_a,p_b);
+        LinearCurve b(p_b,p_c);
+        LinearCurve c(p_c,p_d);
+        LinearCurve d(a.Evaluate(t),b.Evaluate(t));
+        LinearCurve e(b.Evaluate(t),c.Evaluate(t));
+        LinearCurve f(d.Evaluate(t),e.Evaluate(t));
+
+        return f.Evaluate(t);
+    }
+
+protected:
+    qglviewer::Vec p_a,p_b,p_c,p_d;
+
+};
+
 //! ---------------------------------------------------------------------------
 
 #endif // CURVE_H

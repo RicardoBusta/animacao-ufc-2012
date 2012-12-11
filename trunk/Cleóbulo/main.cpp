@@ -11,10 +11,10 @@
 int main(int argc, char *argv[])
 {
     QApplication a(argc, argv);
-    //MainWindow w;
-    //w.show();
+    MainWindow w;
+    w.show();
 
-    Viewer v;
+/*    Viewer v;
     v.show();
 
     QScrollArea scroll;
@@ -22,6 +22,6 @@ int main(int argc, char *argv[])
     scroll.setWidget(&t);
     scroll.setFrameShape(QFrame::Panel);
     scroll.setFrameShadow(QFrame::Sunken);
-    scroll.show();
+    scroll.show();*/
     return a.exec();
 }

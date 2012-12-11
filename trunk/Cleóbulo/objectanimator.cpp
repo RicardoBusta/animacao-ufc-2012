@@ -54,16 +54,40 @@ void ObjectAnimator::AddKeyPosition(int frame, qglviewer::Vec pos) {
     update_positions_ = true;
 }
 
-void ObjectAnimator::AddKeyOrientation(int frame, qglviewer::Quaternion pos) {
+void ObjectAnimator::AddKeyOrientation(int frame, qglviewer::Quaternion ori) {
+    OrientationStep key_frame(ori,frame);
 
+    bool new_step = true;
+    for(size_t i = 0 ; i < key_orientations_.size() ; i++ ) {
+        if(key_orientations_.at(i).frame_ == key_frame.frame_) {
+            key_orientations_.at(i).orientation_ = key_frame.orientation_;
+            new_step = false;
+        }
+    }
+
+    if(new_step) key_orientations_.push_back(key_frame);
+
+    update_orientations_ = true;
 }
 
 void ObjectAnimator::RemoveKeyPosition(int frame) {
-
+    for(size_t i = 0 ; i < key_positions_.size() ; i++ ) {
+        if(key_positions_.at(i).frame_ == frame) {
+            key_positions_.erase(key_positions_.begin()+i);
+            update_positions_ = true;
+            return;
+        }
+    }
 }
 
 void ObjectAnimator::RemoveKeyOrientation(int frame) {
-
+    for(size_t i = 0 ; i < key_orientations_.size() ; i++ ) {
+        if(key_orientations_.at(i).frame_ == frame) {
+            key_orientations_.erase(key_orientations_.begin()+i);
+            update_orientations_ = true;
+            return;
+        }
+    }
 }
 
 void ObjectAnimator::SetPosInterpolationType(PosInterpolator::InterpolationType type) {

@@ -18,13 +18,15 @@ public:
 
     QTimer timer;
 
+    bool playing;
+
     QVector<QVector3D> frame;
+    int sizeFrames;
     int currentFrame;
 
 public slots:
     void jumpFrame();
     void play();
-    //void pause();
     void stop();
 };
 

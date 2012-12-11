@@ -28,11 +28,59 @@ void GLViewer::draw()
 //    glVertex3f(1,1,1);
 //    glEnd();
 
-    glBegin(GL_LINES);
-    QVector3D v = animation->frame.at(animation->currentFrame);
+    float s = 0.5;
+
+    glBegin(GL_TRIANGLES);
+
+    glColor3f(1,1,1);
+    //Wings
+    glVertex3f(-2*s,0,0);
+    glVertex3f(2*s,0,0);
+    glVertex3f(0,0,2*s);
+
+    glVertex3f(-2*s,0,0);
+    glVertex3f(0,0,2*s);
+    glVertex3f(2*s,0,0);
+
+    //Bottom
+    glVertex3f(-1*s,0,0);
+    glVertex3f(1*s,0,0);
+    glVertex3f(0,0,3*s);
+
+    glColor3f(0,1,1);
+    //TopLeft
+    glVertex3f(-1*s,0,0);
+    glVertex3f(0,0,3*s);
+    glVertex3f(0,1*s,0);
+
+    //TopRight
+    glVertex3f(1*s,0,0);
+    glVertex3f(0,1*s,0);
+    glVertex3f(0,0,3*s);
+
+    glColor3f(1,0,0);
+    //Back
+    glVertex3f(1*s,0,0);
+    glVertex3f(-1*s,0,0);
+    glVertex3f(0,1*s,0);
+
+    glColor3f(0,0,1);
+    //Tail
     glVertex3f(0,0,0);
-    glVertex3f(v.x(),v.y(),v.z());
+    glVertex3f(0,0,1.5*s);
+    glVertex3f(0,2*s,0);
+
+    glVertex3f(0,0,0);
+    glVertex3f(0,2*s,0);
+    glVertex3f(0,0,1.5*s);
+
     glEnd();
+
+//    glBegin(GL_LINES);
+//    QVector3D v = animation->frame.at(animation->currentFrame);
+//    glVertex3f(0,0,0);
+//    glVertex3f(v.x(),v.y(),v.z());
+//    glEnd();
 }
 
 void GLViewer::postDraw(){

@@ -22,8 +22,9 @@ void TimeBar::paintEvent(QPaintEvent* event) {
     //painter.setRenderHint(QPainter::Antialiasing);
 
     QColor base_color(255,255,255);
+    QColor keyframe_color(0,200,255);
     QColor alternate_color(200,200,200);
-    QColor selection_color(0,200,200);
+    QColor selection_color(255,255,255);
 
     //double step_width = ((double)this->width()) / ((double)number_of_frames_);
     //step_width_ =
@@ -35,8 +36,15 @@ void TimeBar::paintEvent(QPaintEvent* event) {
     for(int i = 0 ; i < number_of_frames_ ; i++ ){
 
         painter.setPen(Qt::NoPen);
-        if(i%2 == 0) painter.setBrush(base_color);
-        else         painter.setBrush(alternate_color);
+        // testing purpose only. change i = keyframe later.
+        if(i%5 == 0) {
+            painter.setBrush(keyframe_color);
+        }else
+
+        /*if(i%2 == 0) */painter.setBrush(alternate_color);
+        /*else         painter.setBrush(alternate_color);*/
+
+
         /*double current = step_width*i;
         double next = current + step_width;
         painter.drawRect(1 + current,1,step_width-1,v_step);

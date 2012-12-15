@@ -9,7 +9,7 @@ QT       += core gui xml opengl
 TARGET = Animação
 TEMPLATE = app
 
-DEFINES += size_t=int
+#DEFINES += size_t= unsigned int
 
 HEADERS += \
     Curves/curve.h \
@@ -27,7 +27,8 @@ HEADERS += \
     Objects3D/curveobject.h \
     Utils/scenecontainer.h \
     Widgets/viewer.h \
-    Widgets/timebar.h
+    Widgets/timebar.h \
+    mainwindow.h
 
 SOURCES += \
     Curves/arclength.cpp \
@@ -43,7 +44,9 @@ SOURCES += \
     Objects3D/curveobject.cpp \
     Utils/scenecontainer.cpp \
     Widgets/viewer.cpp \
-    Widgets/timebar.cpp
+    Widgets/timebar.cpp \
+    main.cpp \
+    mainwindow.cpp
 
 
 
@@ -53,3 +56,6 @@ INCLUDEPATH += $$PWD/../../../../../../usr/include/QGLViewer
 DEPENDPATH += $$PWD/../../../../../../usr/include/QGLViewer
 
 unix:!macx: PRE_TARGETDEPS += $$PWD/../../../../../../usr/lib/x86_64-linux-gnu/libqglviewer-qt4.a
+
+FORMS += \
+    mainwindow.ui

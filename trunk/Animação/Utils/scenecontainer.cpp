@@ -284,11 +284,11 @@ void SceneContainer::SetCurrentFrame(int frame) {
     }
 }
 
-size_t SceneContainer::HowManyObjects() {
+int SceneContainer::HowManyObjects() {
     return objects_.size();
 }
 
-Joint* SceneContainer::ObjectAt(size_t i) {
+Joint* SceneContainer::ObjectAt(int i) {
     return objects_.at(i);
 }
 

@@ -24,8 +24,8 @@ public:
     static void SetCurrentFrame(int frame);
 
     //! Objects management
-    static size_t HowManyObjects();
-    static Joint* ObjectAt(size_t i);
+    static int HowManyObjects();
+    static Joint* ObjectAt(int i);
 
 
     //! Which to animate

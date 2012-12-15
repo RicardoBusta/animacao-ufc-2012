@@ -17,8 +17,11 @@ public:
 
 private:
     Ui::MainWindow *ui;
+
+    bool play_or_pause_;
 public slots:
     void UpdateAnimators();
+    void playPause();
 };
 
 #endif // MAINWINDOW_H

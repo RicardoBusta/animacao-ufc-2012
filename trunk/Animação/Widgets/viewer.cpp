@@ -10,7 +10,8 @@
 
 Viewer::Viewer(QWidget* parent) :
     QGLViewer(parent){
-
+    grid_size_ = 2.0;
+    grid_div_ = 20;
 }
 
 void Viewer::draw() {
@@ -152,6 +153,24 @@ void Viewer::init() {
     //    global_p[i] = pos_interpolator.GetPositionAt(i);*/
     setSceneRadius(10.0f);
 
+}
+
+void Viewer::postDraw(){
+    bool state = gridIsDrawn();
+    setGridIsDrawn(false);
+    QGLViewer::postDraw();
+
+    if(state){
+        setGridIsDrawn();
+
+        glPushAttrib(GL_ALL_ATTRIB_BITS);
+        glPushMatrix();
+        glColor3f(0.7,0.7,0.7);
+        glRotatef(90,1,0,0);
+        drawGrid(grid_size_,grid_div_);
+        glPopMatrix();
+        glPopAttrib();
+    }
 }
 
 QString Viewer::helpString() const {

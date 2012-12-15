@@ -31,6 +31,10 @@ public slots:
 private:
     BezierQuadratic* nova_;
 
+    float grid_size_;
+    int grid_div_;
+
+    void postDraw();
 };
 
 #endif // VIEWER_H

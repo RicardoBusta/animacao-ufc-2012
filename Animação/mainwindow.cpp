@@ -14,10 +14,13 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    play_or_pause_ = true;
+
     ui->setupUi(this);
     this->setWindowTitle(QString("Animating"));
-    connect( ui->button_play, SIGNAL(clicked()), ui->viewer, SLOT(Play()) );
-    connect( ui->button_stop, SIGNAL(clicked()), ui->viewer, SLOT(Stop()));
+//    connect( ui->button_play, SIGNAL(clicked()), ui->viewer, SLOT(Play()) );
+//    connect( ui->button_stop, SIGNAL(clicked()), ui->viewer, SLOT(Stop()));
+    connect(ui->button_play,SIGNAL(clicked()),this,SLOT(playPause()));
     connect( ui->button_pause, SIGNAL(clicked()) , ui->viewer, SLOT(Pause()));
     connect( ui->timebar, SIGNAL(SetSelectedFrame(int)), ui->viewer, SLOT(SetCurrentFrame(int)));
     connect( ui->viewer, SIGNAL(CurrentFrame(int)), ui->timebar, SLOT(SetCurrentFrame(int)));
@@ -46,11 +49,27 @@ MainWindow::MainWindow(QWidget *parent) :
     connect (group4, SIGNAL(buttonClicked(int)), this, SLOT(UpdateAnimators()));
 
     ui->scrollArea->setWidget(ui->timebar);
+
+    // One button for play/pause.
+    ui->button_pause->hide();
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+
+void MainWindow::playPause(){
+    if(play_or_pause_){
+        play_or_pause_ = false;
+        ui->button_play->setText("Pause");
+        ui->viewer->Play();
+    }else{
+        play_or_pause_ = true;
+        ui->button_play->setText("Play");
+        ui->viewer->Pause();
+    }
 }
 
 void MainWindow::UpdateAnimators() {

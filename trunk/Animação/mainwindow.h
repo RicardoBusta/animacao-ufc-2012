@@ -2,7 +2,6 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <animation.h>
 
 namespace Ui {
     class MainWindow;
@@ -11,17 +10,15 @@ namespace Ui {
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-    
+
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 
-    Animation *animation;
-
-    void updateFrame();
-    
 private:
     Ui::MainWindow *ui;
+public slots:
+    void UpdateAnimators();
 };
 
 #endif // MAINWINDOW_H

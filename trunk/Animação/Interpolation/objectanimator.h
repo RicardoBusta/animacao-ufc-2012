@@ -24,6 +24,7 @@ public:
     //! Animation steps controls
     void AddKeyPosition         (int frame, qglviewer::Vec pos);
     void AddKeyOrientation      (int frame, qglviewer::Quaternion pos);
+    void AddKeyOrientation      (int frame, float x, float y, float z); //! Euler Angles / Z then Y then X
     void RemoveKeyPosition      (int frame);
     void RemoveKeyOrientation   (int frame);
 

@@ -72,6 +72,18 @@ void ObjectAnimator::AddKeyOrientation(int frame, qglviewer::Quaternion ori) {
     update_orientations_ = true;
 }
 
+void ObjectAnimator::AddKeyOrientation(int frame, float x, float y, float z)
+{
+    qglviewer::Quaternion qx = qglviewer::Quaternion( qglviewer::Vec(1,0,0), x );
+    qglviewer::Quaternion qy = qglviewer::Quaternion( qglviewer::Vec(0,1,0), y );
+    qglviewer::Quaternion qz = qglviewer::Quaternion( qglviewer::Vec(0,0,1), z );
+
+    qglviewer::Quaternion qaux = (qy*qz);
+    qglviewer::Quaternion q = (qx*q1);
+
+    AddKeyOrientation( frame, q );
+}
+
 void ObjectAnimator::RemoveKeyPosition(int frame) {
     for(size_t i = 0 ; i < key_positions_.size() ; i++ ) {
         if(key_positions_.at(i).frame_ == frame) {

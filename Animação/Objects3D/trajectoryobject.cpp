@@ -25,6 +25,8 @@ void TrajectoryObject::Update() {
 }
 
 void TrajectoryObject::Update(int start_frame, int end_frame) {
+    keyframes_.clear();
+
     positions_.clear();
     if( end_frame < start_frame ) {
         int aux = end_frame;
@@ -36,15 +38,26 @@ void TrajectoryObject::Update(int start_frame, int end_frame) {
         for(int i = start_frame ; i <= end_frame ; i++ ) {
             positions_.push_back(animator_->PositionAt(i));
         }
+        for(uint i=0; i < animator_->GetKeyPositions()->size(); i++){
+            PositionStep pos = animator_->GetKeyPositions()->at(i);
+            keyframes_.push_back( pos.position_ );
+        }
     }else{
         qglviewer::Vec over(0,radius_,0);
         for(int i = start_frame ; i <= end_frame ; i++ ) {
 
             qglviewer::Quaternion ori = animator_->OrientationAt(i);
             qglviewer::Vec pos = ori.rotate(over);
+#ifdef DEBUG_TEXT
             std::cout <<" OVER ROTATED i:" << i <<"(" <<pos.x << ", "<< pos.y << ", " << pos.z << ")" << std::endl;
             std::cout <<" ORI i:" << i <<"(" << ori[0] << ", "<< ori[1] << ", " <<ori[2] << ", " <<ori[3] << ")" << std::endl;
-            positions_.push_back(ori.rotate(over));
+#endif
+            positions_.push_back( pos );
+        }
+        for(uint i=0; i < animator_->GetKeyOrientations()->size(); i++){
+            OrientationStep ori = animator_->GetKeyOrientations()->at(i);
+            qglviewer::Vec pos = ori.orientation_.rotate(over);
+            keyframes_.push_back( pos );
         }
     }
 }
@@ -74,7 +87,7 @@ void TrajectoryObject::DrawPositionsCurve() {
     glDisable(GL_LIGHTING);
 
     glBegin(GL_LINE_STRIP);
-    glColor3d(1,0,0);
+    glColor3d(0,0.5,0.8);
     for(size_t i = 0 ; i < positions_.size() ; i++ ) {
         qglviewer::Vec pos = positions_.at(i);
         glVertex3d(pos.x,pos.y,pos.z);
@@ -83,10 +96,20 @@ void TrajectoryObject::DrawPositionsCurve() {
 
     glPointSize(3.0f);
     glBegin(GL_POINTS);
-    glColor3d(0,1,0);
+    glColor3d(0,1,1);
 
     for(size_t i = 0 ; i < positions_.size() ; i++ ) {
         qglviewer::Vec pos = positions_.at(i);
+        glVertex3d(pos.x,pos.y,pos.z);
+    }
+    glEnd();
+
+    glPointSize(10.0f);
+    glBegin(GL_POINTS);
+    glColor3d(1,1,1);
+
+    for(uint i = 0 ; i < keyframes_.size() ; i++ ) {
+        qglviewer::Vec pos = keyframes_.at(i);
         glVertex3d(pos.x,pos.y,pos.z);
     }
     glEnd();

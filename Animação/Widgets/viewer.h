@@ -20,6 +20,7 @@ protected :
 
 signals:
     void CurrentFrame(int frame);
+    void SignalUpdateObjects();
 public slots:
     void Play();
     void Pause();

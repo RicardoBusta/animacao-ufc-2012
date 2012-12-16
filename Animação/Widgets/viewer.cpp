@@ -15,7 +15,7 @@ Viewer::Viewer(QWidget* parent) :
 }
 
 void Viewer::draw() {
-    for( size_t i = 0 ; i < SceneContainer::HowManyObjects(); i++ ) {
+    for( uint i = 0 ; i < SceneContainer::HowManyObjects(); i++ ) {
         Joint* object = SceneContainer::ObjectAt(i);
         object->Draw(SceneContainer::AnimatePosition(),SceneContainer::AnimateOrientation());
     }
@@ -117,9 +117,14 @@ void  Viewer::SetCurrentFrame(int frame) {
 
 void Viewer::init() {
     SceneContainer::CreateDefaultScene();
-     SceneContainer::SetFrameRange(0,100);
+    SignalUpdateObjects();
+    SceneContainer::SetFrameRange(0,100);
     SceneContainer::ToErase(true,true,0,0,0,0);
     SceneContainer::SetCurrentFrame(0);
+
+    this->setBackgroundColor(QColor(0,0,0));
+    this->setGridIsDrawn(true);
+    this->grid_size_ = 10.0;
 
    /* glDisable(GL_LIGHTING);
 
@@ -164,9 +169,11 @@ void Viewer::postDraw(){
 
         glPushAttrib(GL_ALL_ATTRIB_BITS);
         glPushMatrix();
-        glColor3f(0.7,0.7,0.7);
         glRotatef(90,1,0,0);
+        glColor3f(0.7,0.7,0.7);
         drawGrid(grid_size_,grid_div_);
+        glColor3f(0.1,0.1,0.1);
+        drawGrid(grid_size_,grid_div_*2);
         glPopMatrix();
         glPopAttrib();
     }

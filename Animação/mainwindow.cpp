@@ -20,10 +20,11 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setWindowTitle(QString("Animating"));
 //    connect( ui->button_play, SIGNAL(clicked()), ui->viewer, SLOT(Play()) );
 //    connect( ui->button_stop, SIGNAL(clicked()), ui->viewer, SLOT(Stop()));
-    connect(ui->button_play,SIGNAL(clicked()),this,SLOT(playPause()));
+    connect(ui->button_play,SIGNAL(clicked()),this,SLOT(PlayPause()));
+    connect(ui->viewer,SIGNAL(SignalUpdateObjects()),this,SLOT(UpdateObjects()));
     connect( ui->button_pause, SIGNAL(clicked()) , ui->viewer, SLOT(Pause()));
     connect( ui->timebar, SIGNAL(SetSelectedFrame(int)), ui->viewer, SLOT(SetCurrentFrame(int)));
-    connect( ui->timebar, SIGNAL(SetSelectedFrame(int)), this, SLOT(selectedFramePause()) );
+    connect( ui->timebar, SIGNAL(SetSelectedFrame(int)), this, SLOT(SelectedFramePause()) );
     connect( ui->viewer, SIGNAL(CurrentFrame(int)), ui->timebar, SLOT(SetCurrentFrame(int)));
 
     connect (ui->checkBox, SIGNAL(toggled(bool)), this, SLOT(UpdateAnimators()));
@@ -53,6 +54,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // One button for play/pause.
     ui->button_pause->hide();
+
+    this->showMaximized();
 }
 
 MainWindow::~MainWindow()
@@ -61,7 +64,7 @@ MainWindow::~MainWindow()
 }
 
 
-void MainWindow::playPause(){
+void MainWindow::PlayPause(){
     if(play_or_pause_){
         play_or_pause_ = false;
         ui->button_play->setText("Pause");
@@ -80,10 +83,30 @@ void MainWindow::UpdateAnimators() {
     ui->viewer->updateGL();
 }
 
-
-void MainWindow::selectedFramePause()
+void MainWindow::SelectedFramePause()
 {
     play_or_pause_ = true;
     ui->button_play->setText("Play");
     ui->viewer->Pause();
+}
+
+#include "Objects3D/objectinfotree.h"
+
+void MainWindow::UpdateObjects(){
+    ObjectInfoTree *root = SceneContainer::GetObjects();
+    QTreeWidgetItem *item = new QTreeWidgetItem(QStringList(root->test));
+
+    ui->treeWidget->addTopLevelItem(item);
+
+    updateObjectsRecursive(item, root);
+
+    ui->treeWidget->expandAll();
+}
+
+void MainWindow::updateObjectsRecursive(QTreeWidgetItem *item, ObjectInfoTree *node){
+    for(uint i=0;i<node->child.size(); i++){
+        ObjectInfoTree *childnode = node->child.at(i);
+        QTreeWidgetItem *childitem = new QTreeWidgetItem(QStringList(childnode->test));
+        item->addChild(childitem);
+    }
 }

@@ -5,6 +5,7 @@
 
 class Joint;
 class ObjectAnimator;
+class ObjectInfoTree;
 
 class SceneContainer
 {
@@ -22,8 +23,9 @@ public:
     static void SetCurrentFrame(int frame);
 
     //! Objects management
-    static int HowManyObjects();
+    static unsigned int HowManyObjects();
     static Joint* ObjectAt(int i);
+    static  ObjectInfoTree *GetObjects();
 
 
     //! Which to animate

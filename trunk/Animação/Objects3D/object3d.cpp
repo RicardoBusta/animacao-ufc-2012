@@ -1,9 +1,15 @@
 #include "object3d.h"
 #include <GL/glu.h>
 
+#include <Interpolation/objectanimator.h>
+
 Object3D::Object3D()
 { 
     DefaultInitialisation();
+
+    animator = NULL;
+
+    is_joint_ = false;
 }
 
 Object3D::Object3D(qglviewer::Vec pos) :
@@ -58,9 +64,11 @@ void Object3D::Draw(bool animate_position, bool animate_orientation) {
     if(draw_orientation_axes_)
         DrawOrientationAxes();
     if(draw_object_)
-        DrawObject();
+        DrawObject(animate_position,animate_orientation);
 
     glPopMatrix();
+
+    DrawTrajectory();
 }
 
 void Object3D::DrawPositionParticle() {
@@ -79,21 +87,37 @@ void Object3D::DrawOrientationAxes() {
     glPushAttrib(GL_ALL_ATTRIB_BITS);
     glDisable(GL_LIGHTING);
     glBegin(GL_LINES);
-        glColor3f(1.0, 0.0, 0.0);
-        glVertex3d(0.0, 0.0, 0.0);
-        glVertex3d(radius, 0.0, 0.0);
+    glColor3f(1.0, 0.0, 0.0);
+    glVertex3d(0.0, 0.0, 0.0);
+    glVertex3d(radius, 0.0, 0.0);
 
-        glColor3f(0.0, 1.0, 0.0);
-        glVertex3d(0.0, 0.0, 0.0);
-        glVertex3d(0.0, radius, 0.0);
+    glColor3f(0.0, 1.0, 0.0);
+    glVertex3d(0.0, 0.0, 0.0);
+    glVertex3d(0.0, radius, 0.0);
 
-        glColor3f(0.0, 0.0, 1.0);
-        glVertex3d(0.0, 0.0, 0.0);
-        glVertex3d(0.0, 0.0, radius);
+    glColor3f(0.0, 0.0, 1.0);
+    glVertex3d(0.0, 0.0, 0.0);
+    glVertex3d(0.0, 0.0, radius);
     glEnd();
     glPopAttrib();
 }
 
-void Object3D::DrawObject() {
+void Object3D::DrawObject(bool animate_position, bool animate_orientation) {
+}
 
+void Object3D::DrawTrajectory()
+{
+    if(animator != NULL and animator->GetTrajectory()!=NULL){
+        animator->GetTrajectory()->Draw();
+    }
+}
+
+void Object3D::SetAnimator(ObjectAnimator *animator)
+{
+    this->animator = animator;
+}
+
+ObjectAnimator *Object3D::GetAnimator()
+{
+    return animator;
 }

@@ -5,6 +5,8 @@
 #include <QGLViewer/quaternion.h>
 #include <GL/glu.h>
 
+class ObjectAnimator;
+
 class Object3D {
 public:
     Object3D();
@@ -12,6 +14,8 @@ public:
     Object3D(qglviewer::Quaternion ori);
     Object3D(qglviewer::Vec pos, qglviewer::Quaternion ori);
     ~Object3D();
+
+    bool is_joint_;
 
     int                            id();
     inline void                    SetDrawObject          (bool draw) { draw_object_ = draw; }
@@ -24,13 +28,16 @@ public:
     inline qglviewer::Quaternion   orientation() { return orientation_; }
 
     void                           Draw(bool animate_position = true, bool animate_orientation = true);
+    virtual void                   DrawTrajectory();
 
+    void                           SetAnimator(ObjectAnimator *animator);
+    ObjectAnimator*                GetAnimator();
 protected:
 
     void                           DefaultInitialisation();
     void                           DrawPositionParticle();
     void                           DrawOrientationAxes();
-    virtual void                   DrawObject();
+    virtual void                   DrawObject(bool animate_position = true, bool animate_orientation = true);
 
     bool draw_object_;
     bool draw_position_particle_;
@@ -42,6 +49,7 @@ private:
     GLUquadricObj* quadric_;
     int id_;
 
+    ObjectAnimator *animator;
 };
 
 

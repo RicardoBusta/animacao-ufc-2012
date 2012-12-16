@@ -62,11 +62,11 @@ void TrajectoryObject::Update(int start_frame, int end_frame) {
     }
 }
 
-void TrajectoryObject::DrawObject() {
+void TrajectoryObject::DrawObject(bool animate_position, bool animate_orientation) {
     glPushMatrix();
 
     if(type_ == kOrientation){
-        if(SceneContainer::AnimatePosition()) {
+        if(animate_position) {
             qglviewer::Vec pos = animator_->PositionAt(SceneContainer::current_frame());
             glTranslated(pos.x,pos.y,pos.z);
         }

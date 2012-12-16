@@ -11,7 +11,7 @@ public:
     CurveObject(Curve* cuve);
 
 private:
-    void DrawObject();
+    void DrawObject(bool animate_position = true, bool animate_orientation = true);
     Curve* curve_;
 };
 

@@ -79,7 +79,7 @@ void ObjectAnimator::AddKeyOrientation(int frame, float x, float y, float z)
     qglviewer::Quaternion qz = qglviewer::Quaternion( qglviewer::Vec(0,0,1), z );
 
     qglviewer::Quaternion qaux = (qy*qz);
-    qglviewer::Quaternion q = (qx*q1);
+    qglviewer::Quaternion q = (qx*qaux);
 
     AddKeyOrientation( frame, q );
 }
@@ -151,4 +151,16 @@ void ObjectAnimator::DeleteTrajectory()
         delete trajectory;
         trajectory = NULL;
     }
+}
+
+
+std::vector<PositionStep> *ObjectAnimator::GetKeyPositions()
+{
+    return &key_positions_;
+}
+
+
+std::vector<OrientationStep> *ObjectAnimator::GetKeyOrientations()
+{
+    return &key_orientations_;
 }

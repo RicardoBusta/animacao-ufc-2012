@@ -9,6 +9,8 @@
 
 #include "Objects3D/spaceshipobject.h"
 
+#include "Objects3D/objectinfotree.h"
+
 std::vector<Joint*> SceneContainer::objects_;
 std::vector<ObjectAnimator*> SceneContainer::animators_;
 
@@ -23,10 +25,7 @@ int SceneContainer::start_frame_ = 0;
 int SceneContainer::end_frame_ = 100;
 int SceneContainer::current_frame_ = 0;
 
-SceneContainer::SceneContainer()
-{
-
-}
+SceneContainer::SceneContainer(){}
 
 void SceneContainer::ToErase(bool positions, bool orientations, int scene, int traject, int ori_int, int pos_int) {
     animate_position_ = positions;
@@ -107,11 +106,17 @@ void SceneContainer::CreateDefaultScene() {
     animteste->AddKeyPosition(75,qglviewer::Vec(6,2,3));
     animteste->AddKeyPosition(100,qglviewer::Vec(8,0,0));
 
-    animteste->AddKeyOrientation(0,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(0,1,0)));
-    animteste->AddKeyOrientation(25,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(1,0,1)));
-    animteste->AddKeyOrientation(50,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(-1,0,1)));
-    animteste->AddKeyOrientation(75,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(0,1,0)));
-    animteste->AddKeyOrientation(100,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(1,0,0)));
+    animteste->AddKeyOrientation(0, 0,0,0);
+    animteste->AddKeyOrientation(25, 90,0,0);
+    animteste->AddKeyOrientation(50, 90,90,0);
+    animteste->AddKeyOrientation(75, 90,90,90);
+    animteste->AddKeyOrientation(100, 0,0,0);
+
+//    animteste->AddKeyOrientation(0,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(0,1,0)));
+//    animteste->AddKeyOrientation(25,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(1,0,1)));
+//    animteste->AddKeyOrientation(50,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(-1,0,1)));
+//    animteste->AddKeyOrientation(75,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(0,1,0)));
+//    animteste->AddKeyOrientation(100,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(1,0,0)));
 
 
     /*animator->AddKeyOrientation(0,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(0,1,0)));
@@ -301,7 +306,7 @@ void SceneContainer::SetCurrentFrame(int frame) {
     }
 }
 
-int SceneContainer::HowManyObjects() {
+unsigned int SceneContainer::HowManyObjects() {
     return objects_.size();
 }
 
@@ -320,4 +325,21 @@ bool SceneContainer::AnimatePosition() {
 
 bool SceneContainer::AnimateOrientation() {
     return animate_orientation_;
+}
+
+ObjectInfoTree *SceneContainer::GetObjects()
+{
+    ObjectInfoTree *root = new ObjectInfoTree();
+    root->test = "root";
+
+    for(uint i=0; i<objects_.size(); i++){
+        Object3D *obj = objects_.at(i);
+        ObjectInfoTree *node = new ObjectInfoTree();
+        node->test = "node";
+        root->child.push_back(node);
+
+        // make it recursively fill up the structure
+    }
+
+    return root;
 }

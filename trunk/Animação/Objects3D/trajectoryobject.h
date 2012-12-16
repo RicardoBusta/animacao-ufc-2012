@@ -24,6 +24,7 @@ private:
 
     TrajectoryType type_;
     std::vector<qglviewer::Vec> positions_;
+    std::vector<qglviewer::Vec> keyframes_;
     ObjectAnimator* animator_;
     GLUquadric* quadric_;
     double radius_;

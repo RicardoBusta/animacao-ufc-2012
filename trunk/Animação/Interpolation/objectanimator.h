@@ -21,6 +21,11 @@ public:
     qglviewer::Vec PositionAt           (int frame);
     qglviewer::Quaternion OrientationAt (int frame);
 
+    std::vector<PositionStep> *GetKeyPositions          ();
+    std::vector<OrientationStep> *GetKeyOrientations    ();
+
+    Object3D* GetChild          ();
+
     //! Animation steps controls
     void AddKeyPosition         (int frame, qglviewer::Vec pos);
     void AddKeyOrientation      (int frame, qglviewer::Quaternion pos);
@@ -36,7 +41,6 @@ public:
     void CalculateTrajectory    (TrajectoryObject::TrajectoryType type);
     Object3D* GetTrajectory     ();
 
-    Object3D* GetChild          ();
     void DeleteTrajectory();
 
 private:

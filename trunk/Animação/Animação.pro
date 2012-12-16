@@ -9,7 +9,7 @@ QT       += core gui xml opengl
 TARGET = Animação
 TEMPLATE = app
 
-#DEFINES += size_t= unsigned int
+#DEFINES += DEBUG_TEXT
 
 HEADERS += \
     Curves/curve.h \
@@ -28,7 +28,8 @@ HEADERS += \
     Utils/scenecontainer.h \
     Widgets/viewer.h \
     Widgets/timebar.h \
-    mainwindow.h
+    mainwindow.h \
+    Objects3D/objectinfotree.h
 
 SOURCES += \
     Curves/arclength.cpp \
@@ -46,7 +47,8 @@ SOURCES += \
     Widgets/viewer.cpp \
     Widgets/timebar.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    Objects3D/objectinfotree.cpp
 
 
 

@@ -97,7 +97,9 @@ void ArcLength::AdaptativeGaussianPrecalculation() {
 
 qglviewer::Vec ArcLength::GetByNormalizedS(double s) const {
     double real_length = s * total_length_;
+#ifdef DEBUG_TEXT
     std::cout << "Input: " << s << std::endl;
+#endif
     return GetByS(real_length);
 }
 
@@ -109,9 +111,10 @@ qglviewer::Vec ArcLength::GetByS(double constant_length) const {
 
     double current_result = FunctionToGetRoot(x0,constant_length);
     current_result = MODULUS(current_result);
-
+#ifdef DEBUG_TEXT
     std::cout << "f(x0): " << FunctionToGetRoot(x0,constant_length) << std::endl;
     std::cout << "f'(x0): " << NumericalDerivative(x0,constant_length) << std::endl;
+#endif
     double possible_error = acceptable_error_;
 
     // Using Newton-Raphson to solve main equation s-Lenght(u1,u2) = 0
@@ -132,14 +135,17 @@ qglviewer::Vec ArcLength::GetByS(double constant_length) const {
 
         current_result = new_result;
 
+#ifdef DEBUG_TEXT
         std::cout << " / Current X: " << x0 << std::endl;
         std::cout << " / Delta: " << delta << std::endl;
+#endif
     }
-
+#ifdef DEBUG_TEXT
     std::cout << "Lenght Input: " << constant_length << std::endl;
     std::cout << "Lenght Output: " << GetLength(x0) << std::endl;
     std::cout << "Output: " << x0 << std::endl;
     std::cout <<"----------------------------" << std::endl;
+#endif
 
 
     qglviewer::Vec result = curve_->Evaluate(x0);

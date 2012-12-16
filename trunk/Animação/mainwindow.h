@@ -22,6 +22,7 @@ private:
 public slots:
     void UpdateAnimators();
     void playPause();
+    void selectedFramePause();
 };
 
 #endif // MAINWINDOW_H

@@ -10,6 +10,8 @@ ObjectAnimator::ObjectAnimator(Object3D* child)
     original_orientation_ = child->orientation();
     update_positions_ = true;
     update_orientations_ = true;
+
+    trajectory = NULL;
 }
 
 void ObjectAnimator::SetFrameRange(int start, int end) {
@@ -100,10 +102,13 @@ void ObjectAnimator::SetOriInterpolationType(OriInterpolator::InterpolationType 
     update_orientations_ = true;
 }
 
-Object3D* ObjectAnimator::GetTrajectory(TrajectoryObject::TrajectoryType type) {
-    TrajectoryObject *trajectory = new TrajectoryObject(this);
+void ObjectAnimator::CalculateTrajectory(TrajectoryObject::TrajectoryType type) {
+    trajectory = new TrajectoryObject(this);
     trajectory->SetType(type);
     trajectory->Update();
+}
+
+Object3D* ObjectAnimator::GetTrajectory(){
     return trajectory;
 }
 
@@ -118,5 +123,20 @@ void  ObjectAnimator::OrientationsUpdate() {
     if(update_orientations_) {
         ori_interpolator_.LoadOrientations(key_orientations_);
         update_orientations_ = false;
+    }
+}
+
+
+Object3D *ObjectAnimator::GetChild()
+{
+    return child_object_;
+}
+
+
+void ObjectAnimator::DeleteTrajectory()
+{
+    if(trajectory!=NULL){
+        delete trajectory;
+        trajectory = NULL;
     }
 }

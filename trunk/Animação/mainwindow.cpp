@@ -23,6 +23,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->button_play,SIGNAL(clicked()),this,SLOT(playPause()));
     connect( ui->button_pause, SIGNAL(clicked()) , ui->viewer, SLOT(Pause()));
     connect( ui->timebar, SIGNAL(SetSelectedFrame(int)), ui->viewer, SLOT(SetCurrentFrame(int)));
+    connect( ui->timebar, SIGNAL(SetSelectedFrame(int)), this, SLOT(selectedFramePause()) );
     connect( ui->viewer, SIGNAL(CurrentFrame(int)), ui->timebar, SLOT(SetCurrentFrame(int)));
 
     connect (ui->checkBox, SIGNAL(toggled(bool)), this, SLOT(UpdateAnimators()));
@@ -79,3 +80,10 @@ void MainWindow::UpdateAnimators() {
     ui->viewer->updateGL();
 }
 
+
+void MainWindow::selectedFramePause()
+{
+    play_or_pause_ = true;
+    ui->button_play->setText("Play");
+    ui->viewer->Pause();
+}

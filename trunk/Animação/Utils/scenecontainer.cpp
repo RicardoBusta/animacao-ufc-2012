@@ -12,10 +12,9 @@
 std::vector<Joint*> SceneContainer::objects_;
 std::vector<ObjectAnimator*> SceneContainer::animators_;
 
-Object3D* spaceship = new SpaceShipObject();
-ObjectAnimator* animator = new ObjectAnimator(spaceship);
-Object3D* trajectory = NULL;
-
+//Object3D* spaceship = new SpaceShipObject();
+//ObjectAnimator* animator = new ObjectAnimator(spaceship);
+//Object3D* trajectory = NULL;
 
 bool SceneContainer::animate_position_ = true;
 bool SceneContainer::animate_orientation_ = true;
@@ -34,67 +33,85 @@ void SceneContainer::ToErase(bool positions, bool orientations, int scene, int t
     animate_orientation_ = orientations;
 
     if(scene == 0) {
-        spaceship->SetDrawObject(true);
+        for(uint i=0;i<objects_.size();i++){
+            Object3D *object = objects_.at(i);
+            object->SetDrawObject(true);
+        }
     }else{
-        spaceship->SetDrawObject(false);
+        for(uint i=0;i<objects_.size();i++){
+            Object3D *object = objects_.at(i);
+            object->SetDrawObject(false);
+        }
     }
 
-    switch(ori_int){
-    case 0:
-        animator->SetOriInterpolationType(OriInterpolator::kSlerp);
-        break;
-    case 1:
-        animator->SetOriInterpolationType(OriInterpolator::kBezier);
-        break;
-    default:
-        break;
-    }
+    for(uint i=0;i<animators_.size();i++){
+        ObjectAnimator *animator = animators_.at(i);
+        switch(ori_int){
+        case 0:
+            animator->SetOriInterpolationType(OriInterpolator::kSlerp);
+            break;
+        case 1:
+            animator->SetOriInterpolationType(OriInterpolator::kBezier);
+            break;
+        default:
+            break;
+        }
 
+        switch(pos_int){
+        case 0:
+            animator->SetPosInterpolationType(PosInterpolator::kLinear);
+            break;
+        case 1:
+            animator->SetPosInterpolationType(PosInterpolator::kCatmullRoom);
+            break;
+        default:
+            break;
+        }
 
-    switch(pos_int){
-    case 0:
-        animator->SetPosInterpolationType(PosInterpolator::kLinear);
-        break;
-    case 1:
-        animator->SetPosInterpolationType(PosInterpolator::kCatmullRoom);
-        break;
-    default:
-        break;
-    }
-
-
-    switch(traject){
-    case 0:
-        trajectory = animator->GetTrajectory(TrajectoryObject::kPosition);
-        break;
-    case 1:
-        trajectory = animator->GetTrajectory(TrajectoryObject::kOrientation);
-        break;
-    default:
-        if(trajectory!=NULL) delete trajectory;
-        trajectory = NULL;
+        switch(traject){
+        case 0:
+            animator->CalculateTrajectory(TrajectoryObject::kPosition);
+            break;
+        case 1:
+            animator->CalculateTrajectory(TrajectoryObject::kOrientation);
+            break;
+        default:
+            if(animator->GetTrajectory()!=NULL) animator->DeleteTrajectory();
+        }
     }
 
 }
 
 void SceneContainer::FakeDraw() {
-    spaceship->Draw(animate_position_,animate_orientation_);
-    if(trajectory!=NULL)
-        trajectory->Draw(animate_position_,animate_orientation_);
+    for(uint i = 0; i < SceneContainer::animators_.size();i++){
+        ObjectAnimator *objectanimator = SceneContainer::animators_.at(i);
+        Object3D *object = objectanimator->GetChild();
+        object->Draw(animate_position_,animate_orientation_);
+        Object3D *trajectory = objectanimator->GetTrajectory();
+        if(trajectory!=NULL)
+            trajectory->Draw(animate_position_,animate_orientation_);
+    }
 }
 
 void SceneContainer::CreateDefaultScene() {
-    animator->AddKeyPosition(0,qglviewer::Vec(0,0,0));
-    animator->AddKeyPosition(25,qglviewer::Vec(2,2,3));
-    animator->AddKeyPosition(50,qglviewer::Vec(4,0,5));
-    animator->AddKeyPosition(75,qglviewer::Vec(6,2,3));
-    animator->AddKeyPosition(100,qglviewer::Vec(8,0,0));
+    Object3D *teste = new SpaceShipObject();
+    Joint *joint = new Joint(teste);
+    ObjectAnimator *animteste = new ObjectAnimator(teste);
 
-    animator->AddKeyOrientation(0,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(0,1,0)));
-        animator->AddKeyOrientation(25,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(1,0,1)));
-        animator->AddKeyOrientation(50,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(-1,0,1)));
-        animator->AddKeyOrientation(75,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(0,1,0)));
-        animator->AddKeyOrientation(100,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(1,0,0)));
+    SceneContainer::objects_.push_back(joint);
+    SceneContainer::animators_.push_back(animteste);
+
+    animteste->AddKeyPosition(0,qglviewer::Vec(0,0,0));
+    animteste->AddKeyPosition(25,qglviewer::Vec(2,2,3));
+    animteste->AddKeyPosition(50,qglviewer::Vec(4,0,5));
+    animteste->AddKeyPosition(75,qglviewer::Vec(6,2,3));
+    animteste->AddKeyPosition(100,qglviewer::Vec(8,0,0));
+
+    animteste->AddKeyOrientation(0,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(0,1,0)));
+    animteste->AddKeyOrientation(25,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(1,0,1)));
+    animteste->AddKeyOrientation(50,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(-1,0,1)));
+    animteste->AddKeyOrientation(75,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(0,1,0)));
+    animteste->AddKeyOrientation(100,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(1,0,0)));
 
 
     /*animator->AddKeyOrientation(0,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(0,1,0)));
@@ -102,10 +119,10 @@ void SceneContainer::CreateDefaultScene() {
     animator->AddKeyOrientation(50,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(1,0,0)));
     animator->AddKeyOrientation(75,qglviewer::Quaternion(qglviewer::Vec(0,0,1),90));
     animator->AddKeyOrientation(100,qglviewer::Quaternion(qglviewer::Vec(0,0,1),0));*/
-    animator->SetPosInterpolationType(PosInterpolator::kCatmullRoom);
-    animators_.push_back(animator);
-    spaceship->SetDrawOrientationAxes(true);
-/*    //Object3D* default_object = new Object3D();
+    animteste->SetPosInterpolationType(PosInterpolator::kCatmullRoom);
+    //animators_.push_back(animteste);
+    teste->SetDrawOrientationAxes(true);
+    /*    //Object3D* default_object = new Object3D();
     Object3D* default_object = new SpaceShipObject();
     default_object->SetDrawOrientationAxes(true);
     default_object->SetDrawPositionParticle(true);
@@ -190,7 +207,7 @@ void SceneContainer::CreateDefaultScene() {
     Object3D* curve_obj = new CurveOject(curve);
     Joint* basic3 = new Joint(curve_obj);
     objects_.push_back(basic3);*/
-/*
+    /*
     Object3D* quat1 = new Object3D();
     Object3D* quat2 = new Object3D();
     Object3D* quat3 = new Object3D();
@@ -270,16 +287,16 @@ void SceneContainer::GoToNextFrame() {
 void SceneContainer::SetFrameRange(int start, int end) {
     start_frame_    = start;
     end_frame_      = end;
-    for(size_t i = 0 ; i < animators_.size() ; i++ ) {
-        ObjectAnimator* animator = animators_.at(i);
+    for(size_t i = 0 ; i < SceneContainer::animators_.size() ; i++ ) {
+        ObjectAnimator* animator = SceneContainer::animators_.at(i);
         animator->SetFrameRange(start,end);
     }
 }
 
 void SceneContainer::SetCurrentFrame(int frame) {
     current_frame_ = frame;
-    for(size_t i = 0 ; i < animators_.size() ; i++ ) {
-        ObjectAnimator* animator = animators_.at(i);
+    for(size_t i = 0 ; i < SceneContainer::animators_.size() ; i++ ) {
+        ObjectAnimator* animator = SceneContainer::animators_.at(i);
         animator->SetCurrentFrame(current_frame_);
     }
 }

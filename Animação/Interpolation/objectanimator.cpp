@@ -6,6 +6,7 @@
 ObjectAnimator::ObjectAnimator(Object3D* child)
 {
     child_object_ = child;
+    child->SetAnimator(this);
     original_position_    = child->position();
     original_orientation_ = child->orientation();
     update_positions_ = true;

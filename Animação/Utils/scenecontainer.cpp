@@ -81,14 +81,15 @@ void SceneContainer::ToErase(bool positions, bool orientations, int scene, int t
 
 }
 
-void SceneContainer::FakeDraw() {
-    for(uint i = 0; i < SceneContainer::animators_.size();i++){
-        ObjectAnimator *objectanimator = SceneContainer::animators_.at(i);
-        Object3D *object = objectanimator->GetChild();
+void SceneContainer::DrawObjects() {
+    for(uint i = 0; i < objects_.size();i++){
+//        ObjectAnimator *objectanimator = SceneContainer::animators_.at(i);
+  //      Object3D *object = objectanimator->GetChild();
+        Object3D *object = objects_.at(i);
         object->Draw(animate_position_,animate_orientation_);
-        Object3D *trajectory = objectanimator->GetTrajectory();
-        if(trajectory!=NULL)
-            trajectory->Draw(animate_position_,animate_orientation_);
+        //Object3D *trajectory = objectanimator->GetTrajectory();
+        //if(trajectory!=NULL)
+//            trajectory->Draw(animate_position_,animate_orientation_);
     }
 }
 

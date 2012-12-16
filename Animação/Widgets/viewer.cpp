@@ -7,6 +7,10 @@
 #include "Utils/scenecontainer.h"
 #include "Objects3D/joint.h"
 
+#include <iostream>
+
+#include "Interpolation/objectanimator.h"
+
 
 Viewer::Viewer(QWidget* parent) :
     QGLViewer(parent){
@@ -15,10 +19,14 @@ Viewer::Viewer(QWidget* parent) :
 }
 
 void Viewer::draw() {
-    for( uint i = 0 ; i < SceneContainer::HowManyObjects(); i++ ) {
-        Joint* object = SceneContainer::ObjectAt(i);
-        object->Draw(SceneContainer::AnimatePosition(),SceneContainer::AnimateOrientation());
-    }
+//    for( uint i = 0 ; i < SceneContainer::HowManyObjects(); i++ ) {
+//        Joint* object = SceneContainer::ObjectAt(i);
+//        object->Draw(SceneContainer::AnimatePosition(),SceneContainer::AnimateOrientation());
+//    }
+
+    SceneContainer::DrawObjects();
+
+    this->drawText(10,10,QString("Frame: %1").arg(SceneContainer::current_frame()));
 
     /*glColor3f(1.0,1.0,1.0);
     glBegin(GL_LINE_STRIP);
@@ -75,8 +83,6 @@ void Viewer::draw() {
         glPopMatrix();
     }
     glEnd();*/
-    this->drawText(10,10,QString("Frame: %1").arg(SceneContainer::current_frame()));
-    SceneContainer::FakeDraw();
 }
 
 
@@ -126,7 +132,7 @@ void Viewer::init() {
     this->setGridIsDrawn(true);
     this->grid_size_ = 10.0;
 
-   /* glDisable(GL_LIGHTING);
+    /* glDisable(GL_LIGHTING);
 
     nova_ = new BezierQuadratic(qglviewer::Vec(0,0,0),qglviewer::Vec(1.5,3.0,3.0),qglviewer::Vec(3,0,0));
     ArcLength arc(nova_);

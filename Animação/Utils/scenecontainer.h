@@ -34,7 +34,7 @@ public:
     static bool AnimateOrientation();
 
     static void ToErase(bool positions, bool orientations, int scene, int traject, int ori_int, int pos_int);
-    static void FakeDraw();
+    static void DrawObjects();
 
 private:
     static bool animate_position_, animate_orientation_;

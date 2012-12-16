@@ -4,6 +4,7 @@
 #include <QGLViewer/qglviewer.h>
 
 class BezierQuadratic;
+class Object3D;
 
 class Viewer : public QGLViewer
 {
@@ -12,11 +13,9 @@ public:
     explicit Viewer(QWidget* parent = 0);
 
 protected :
-
   virtual void draw();
   virtual void init();
   virtual QString helpString() const;
-
 
 signals:
     void CurrentFrame(int frame);

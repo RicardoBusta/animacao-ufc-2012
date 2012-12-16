@@ -13,8 +13,6 @@ public:
     //! Scene definition
     static void CreateDefaultScene();
 
-
-
     //! Animation parameters
     static int start_frame();
     static int end_frame();

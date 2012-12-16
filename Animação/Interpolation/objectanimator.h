@@ -32,7 +32,11 @@ public:
     void SetOriInterpolationType   (OriInterpolator::InterpolationType type);
 
     //! Trajectory options
-    Object3D* GetTrajectory     (TrajectoryObject::TrajectoryType type);
+    void CalculateTrajectory    (TrajectoryObject::TrajectoryType type);
+    Object3D* GetTrajectory     ();
+
+    Object3D* GetChild          ();
+    void DeleteTrajectory();
 
 private:
     void PositionsUpdate();
@@ -50,6 +54,8 @@ private:
 
     qglviewer::Vec original_position_;
     qglviewer::Quaternion original_orientation_;
+
+    TrajectoryObject *trajectory;
 };
 
 #endif // OBJECTANIMATOR_H

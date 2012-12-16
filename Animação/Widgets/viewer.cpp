@@ -116,7 +116,6 @@ void  Viewer::SetCurrentFrame(int frame) {
 }
 
 void Viewer::init() {
-
     SceneContainer::CreateDefaultScene();
      SceneContainer::SetFrameRange(0,100);
     SceneContainer::ToErase(true,true,0,0,0,0);

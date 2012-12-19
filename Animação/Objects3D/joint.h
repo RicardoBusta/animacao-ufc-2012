@@ -10,10 +10,10 @@ public:
 
     void AddChildJoint(Joint* child);
 
-    virtual void DrawTrajectory();
+    virtual void DrawTrajectory(bool animate_position = true, bool animate_orientation = true);
 
 protected:
-    virtual void DrawObject(bool animate_position, bool animate_orientation);
+    virtual void DrawObject(bool animate_position = true, bool animate_orientation = true);
 
 private:
     Object3D* children_object_;

@@ -10,20 +10,20 @@ void Joint::AddChildJoint(Joint* child) {
     children_joint_.push_back(child);
 }
 
-void Joint::DrawObject(bool animate_position = true, bool animate_orientation = true) {
+void Joint::DrawObject(bool animate_position, bool animate_orientation) {
     children_object_->Draw(animate_position,animate_orientation);
 
     for(size_t i = 0 ; i < children_joint_.size() ; i++ )
         children_joint_.at(i)->Draw(animate_position,animate_orientation);
 }
 
-void Joint::DrawTrajectory(){
+void Joint::DrawTrajectory(bool animate_position, bool animate_orientation){
     for( uint i = 0; i < children_joint_.size(); i++ ){
         Joint *joint = children_joint_.at(i);
-        joint->DrawTrajectory();
+        joint->DrawTrajectory(animate_position,animate_orientation);
     }
 
     if(children_object_!=NULL){
-        children_object_->DrawTrajectory();
+        children_object_->DrawTrajectory(animate_position,animate_orientation);
     }
 }

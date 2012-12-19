@@ -33,6 +33,7 @@ MainWindow::MainWindow(QWidget *parent) :
     group1->addButton(ui->rad_pos,0);
     group1->addButton(ui->rad_ori,1);
     group1->addButton(ui->radioButton_4,2);
+    group1->addButton(ui->rad_both,3);
 
     group2->addButton(ui->radioButton_2,0);
     group2->addButton(ui->radioButton_5,1);
@@ -40,10 +41,8 @@ MainWindow::MainWindow(QWidget *parent) :
     group3->addButton(ui->radioButton_6,0);
     group3->addButton(ui->radioButton_7,1);
 
-
     group4->addButton(ui->radioButton,0);
     group4->addButton(ui->radioButton_3,1);
-
 
     connect (group1, SIGNAL(buttonClicked(int)), this, SLOT(UpdateAnimators()));
     connect (group2, SIGNAL(buttonClicked(int)), this, SLOT(UpdateAnimators()));

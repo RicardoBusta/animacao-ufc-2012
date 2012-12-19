@@ -9,7 +9,7 @@ class ObjectAnimator;
 class TrajectoryObject : public Object3D
 {
 public:
-    enum TrajectoryType {kPosition,kOrientation};
+    enum TrajectoryType {kPosition,kOrientation,kBoth};
     TrajectoryObject(ObjectAnimator* animator);
 
     void Update();

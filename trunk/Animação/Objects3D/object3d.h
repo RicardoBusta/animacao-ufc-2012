@@ -28,7 +28,7 @@ public:
     inline qglviewer::Quaternion   orientation() { return orientation_; }
 
     void                           Draw(bool animate_position = true, bool animate_orientation = true);
-    virtual void                   DrawTrajectory();
+    virtual void                   DrawTrajectory(bool animate_position = true, bool animate_orientation = true);
 
     void                           SetAnimator(ObjectAnimator *animator);
     ObjectAnimator*                GetAnimator();

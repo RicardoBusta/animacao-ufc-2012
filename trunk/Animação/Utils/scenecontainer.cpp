@@ -74,6 +74,8 @@ void SceneContainer::ToErase(bool positions, bool orientations, int scene, int t
         case 1:
             animator->CalculateTrajectory(TrajectoryObject::kOrientation);
             break;
+        case 3:
+            animator->CalculateTrajectory(TrajectoryObject::kBoth);
         default:
             if(animator->GetTrajectory()!=NULL) animator->DeleteTrajectory();
         }

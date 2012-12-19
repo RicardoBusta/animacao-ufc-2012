@@ -61,3 +61,6 @@ unix:!macx: PRE_TARGETDEPS += $$PWD/../../../../../../usr/lib/x86_64-linux-gnu/l
 
 FORMS += \
     mainwindow.ui
+
+RESOURCES += \
+    Resources/Resources.qrc

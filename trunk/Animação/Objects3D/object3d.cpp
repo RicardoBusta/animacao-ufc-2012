@@ -68,7 +68,7 @@ void Object3D::Draw(bool animate_position, bool animate_orientation) {
 
     glPopMatrix();
 
-    DrawTrajectory();
+    DrawTrajectory(animate_position, animate_orientation);
 }
 
 void Object3D::DrawPositionParticle() {
@@ -105,10 +105,10 @@ void Object3D::DrawOrientationAxes() {
 void Object3D::DrawObject(bool animate_position, bool animate_orientation) {
 }
 
-void Object3D::DrawTrajectory()
+void Object3D::DrawTrajectory(bool animate_position, bool animate_orientation)
 {
     if(animator != NULL and animator->GetTrajectory()!=NULL){
-        animator->GetTrajectory()->Draw();
+        animator->GetTrajectory()->Draw(animate_position,animate_orientation);
     }
 }
 

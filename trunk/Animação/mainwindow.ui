@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>635</width>
+    <width>643</width>
     <height>694</height>
    </rect>
   </property>
@@ -29,11 +29,10 @@
       <property name="autoFillBackground">
        <bool>true</bool>
       </property>
-      <zorder></zorder>
      </widget>
     </item>
     <item row="1" column="2">
-     <widget class="QWidget" name="" native="true">
+     <widget class="QWidget" name="widget" native="true">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Maximum" vsizetype="Expanding">
         <horstretch>0</horstretch>
@@ -101,6 +100,13 @@
            <widget class="QRadioButton" name="rad_ori">
             <property name="text">
              <string>Orientation</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QRadioButton" name="rad_both">
+            <property name="text">
+             <string>Both</string>
             </property>
            </widget>
           </item>
@@ -270,7 +276,7 @@
            <x>0</x>
            <y>0</y>
            <width>76</width>
-           <height>84</height>
+           <height>63</height>
           </rect>
          </property>
          <property name="sizePolicy">

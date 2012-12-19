@@ -60,7 +60,7 @@ private:
     qglviewer::Vec original_position_;
     qglviewer::Quaternion original_orientation_;
 
-    TrajectoryObject *trajectory;
+    TrajectoryObject *oriTrajectory;
 };
 
 #endif // OBJECTANIMATOR_H

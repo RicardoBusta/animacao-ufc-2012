@@ -13,7 +13,6 @@
 
 RotationWidget* rotation = new RotationWidget(new Object3D());
 
-
 Viewer::Viewer(QWidget* parent) :
     QGLViewer(parent){
     grid_size_ = 2.0;

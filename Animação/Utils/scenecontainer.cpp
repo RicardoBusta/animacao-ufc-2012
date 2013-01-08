@@ -7,7 +7,7 @@
 #include "Objects3D/curveobject.h"
 #include "Interpolation/quaternioninterpolation.h"
 
-#include "Objects3D/spaceshipobject.h"
+#include "Objects3D/fileobj.h"
 
 #include "Objects3D/objectinfotree.h"
 
@@ -97,12 +97,27 @@ void SceneContainer::DrawObjects() {
 }
 
 void SceneContainer::CreateDefaultScene() {
-    Object3D *teste = new SpaceShipObject();
+    FileObj* obj = new FileObj();
+    Object3D *teste = obj;
+    obj->loadFile(":ship.obj");
+    obj->loadTex(":ship.png");
     Joint *joint = new Joint(teste);
-    ObjectAnimator *animteste = new ObjectAnimator(teste);
+
+    ObjectAnimator *animteste = new ObjectAnimator(joint);
+
+
+    FileObj* obj2 = new FileObj();
+    obj2->loadFile(":ship.obj");
+    obj2->loadTex(":ship.png");
+    Object3D *teste2 = obj2;
+    Joint *joint2 = new Joint(teste2);
+    joint->AddChildJoint(joint2);
+
+    ObjectAnimator *animteste2 = new ObjectAnimator(joint2);
 
     SceneContainer::objects_.push_back(joint);
     SceneContainer::animators_.push_back(animteste);
+    SceneContainer::animators_.push_back(animteste2);
 
     animteste->AddKeyPosition(0,qglviewer::Vec(0,0,0));
     animteste->AddKeyPosition(25,qglviewer::Vec(2,2,3));
@@ -112,9 +127,22 @@ void SceneContainer::CreateDefaultScene() {
 
     animteste->AddKeyOrientation(0, 0,0,0);
     animteste->AddKeyOrientation(25, 90,0,0);
-    animteste->AddKeyOrientation(50, 90,90,0);
+    animteste->AddKeyOrientation(50, 90,90,30);
     animteste->AddKeyOrientation(75, 90,90,90);
     animteste->AddKeyOrientation(100, 0,0,0);
+
+    animteste2->AddKeyPosition(0,qglviewer::Vec(0,0,0));
+    animteste2->AddKeyPosition(25,qglviewer::Vec(2,2,3));
+    animteste2->AddKeyPosition(50,qglviewer::Vec(4,0,5));
+    animteste2->AddKeyPosition(75,qglviewer::Vec(6,2,3));
+    animteste2->AddKeyPosition(100,qglviewer::Vec(8,0,0));
+
+    animteste2->AddKeyOrientation(0, 0,0,0);
+    animteste2->AddKeyOrientation(25, 90,0,0);
+    animteste2->AddKeyOrientation(50, 90,90,30);
+    animteste2->AddKeyOrientation(75, 90,90,90);
+    animteste2->AddKeyOrientation(100, 0,0,0);
+
 
 //    animteste->AddKeyOrientation(0,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(0,1,0)));
 //    animteste->AddKeyOrientation(25,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(1,0,1)));
@@ -131,6 +159,7 @@ void SceneContainer::CreateDefaultScene() {
     animteste->SetPosInterpolationType(PosInterpolator::kCatmullRoom);
     //animators_.push_back(animteste);
     teste->SetDrawOrientationAxes(true);
+    //teste2->SetDrawOrientationAxes(true);
     /*    //Object3D* default_object = new Object3D();
     Object3D* default_object = new SpaceShipObject();
     default_object->SetDrawOrientationAxes(true);

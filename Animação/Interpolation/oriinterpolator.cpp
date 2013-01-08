@@ -115,6 +115,6 @@ void OriInterpolator::LoadOrientations(std::vector<OrientationStep>& steps) {
     GenerateMainCurve();
 }
 
-void OriInterpolator::AddOrientation(OrientationStep new_step) {
+void OriInterpolator::AddOrientation(OrientationStep) {
 
 }

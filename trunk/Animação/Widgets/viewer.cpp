@@ -6,13 +6,14 @@
 #include "Interpolation/posinterpolator.h"
 #include "Utils/scenecontainer.h"
 #include "Objects3D/joint.h"
+#include "Widgets/rotationwidget.h"
 
-#include <iostream>
-
+#include <iostream>RotationWidget* rotation = new RotationWidget(new Object3D());
 #include "Interpolation/objectanimator.h"
 
 
 Viewer::Viewer(QWidget* parent) :
+    QGLViewer(parent){
     QGLViewer(parent){
     grid_size_ = 2.0;
     grid_div_ = 20;
@@ -83,6 +84,7 @@ void Viewer::draw() {
         glPopMatrix();
     }
     glEnd();*/
+        rotation->Draw();
 }
 
 

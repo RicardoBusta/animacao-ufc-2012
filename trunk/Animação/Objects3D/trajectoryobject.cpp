@@ -44,9 +44,9 @@ void TrajectoryObject::Update(int start_frame, int end_frame) {
         }
     }else{
         qglviewer::Vec over(0,radius_,0);
-        for(int i = start_frame ; i <= end_frame ; i++ ) {
-
-            qglviewer::Quaternion ori = animator_->OrientationAt(i);
+        for(int current_frame = start_frame ; current_frame <= end_frame ; current_frame++ ) {
+            std::cout <<" CURRENT_FRAME: " << current_frame << " of " << end_frame << std::endl;
+            qglviewer::Quaternion ori = animator_->OrientationAt(current_frame);
             qglviewer::Vec pos = ori.rotate(over);
 #ifdef DEBUG_TEXT
             std::cout <<" OVER ROTATED i:" << i <<"(" <<pos.x << ", "<< pos.y << ", " << pos.z << ")" << std::endl;

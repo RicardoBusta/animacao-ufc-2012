@@ -8,12 +8,13 @@
 #include "Objects3D/joint.h"
 #include "Widgets/rotationwidget.h"
 
-#include <iostream>RotationWidget* rotation = new RotationWidget(new Object3D());
+#include <iostream>
 #include "Interpolation/objectanimator.h"
+
+RotationWidget* rotation = new RotationWidget(new Object3D());
 
 
 Viewer::Viewer(QWidget* parent) :
-    QGLViewer(parent){
     QGLViewer(parent){
     grid_size_ = 2.0;
     grid_div_ = 20;
@@ -28,7 +29,7 @@ void Viewer::draw() {
     SceneContainer::DrawObjects();
 
     this->drawText(10,10,QString("Frame: %1").arg(SceneContainer::current_frame()));
-
+        rotation->Draw();
     /*glColor3f(1.0,1.0,1.0);
     glBegin(GL_LINE_STRIP);
     int slices = 50;
@@ -84,7 +85,7 @@ void Viewer::draw() {
         glPopMatrix();
     }
     glEnd();*/
-        rotation->Draw();
+
 }
 
 

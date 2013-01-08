@@ -11,6 +11,7 @@
 
 #include "Objects3D/objectinfotree.h"
 
+
 std::vector<Joint*> SceneContainer::objects_;
 std::vector<ObjectAnimator*> SceneContainer::animators_;
 

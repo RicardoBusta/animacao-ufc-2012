@@ -30,7 +30,9 @@ HEADERS += \
     Widgets/timebar.h \
     mainwindow.h \
     Objects3D/objectinfotree.h \
-    Objects3D/fileobj.h
+    Objects3D/fileobj.h \
+    Widgets/rotationwidget.h \
+    Objects3D/torus.h
 
 SOURCES += \
     Curves/arclength.cpp \
@@ -50,7 +52,9 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     Objects3D/objectinfotree.cpp \
-    Objects3D/fileobj.cpp
+    Objects3D/fileobj.cpp \
+    Widgets/rotationwidget.cpp \
+    Objects3D/torus.cpp
 
 
 

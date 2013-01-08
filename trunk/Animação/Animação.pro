@@ -57,16 +57,17 @@ SOURCES += \
     Objects3D/torus.cpp
 
 
-
-unix:!macx: LIBS += -L$$PWD/../../../../../../usr/lib/x86_64-linux-gnu/ -lqglviewer-qt4
-
-INCLUDEPATH += $$PWD/../../../../../../usr/include/QGLViewer
-DEPENDPATH += $$PWD/../../../../../../usr/include/QGLViewer
-
-unix:!macx: PRE_TARGETDEPS += $$PWD/../../../../../../usr/lib/x86_64-linux-gnu/libqglviewer-qt4.a
-
 FORMS += \
     mainwindow.ui
+
+RESOURCES += \
+    Resources/Resources.qrc
+
+
+exists( /usr/lib/libQGLViewer.so ) {
+LIBS *= -lqglviewer-qt4
+}
+
 
 RESOURCES += \
     Resources/Resources.qrc

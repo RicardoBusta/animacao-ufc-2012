@@ -20,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setWindowTitle(QString("Animating"));
 //    connect( ui->button_play, SIGNAL(clicked()), ui->viewer, SLOT(Play()) );
 //    connect( ui->button_stop, SIGNAL(clicked()), ui->viewer, SLOT(Stop()));
-    connect(ui->button_play,SIGNAL(clicked()),this,SLOT(PlayPause()));
+/*    connect(ui->button_play,SIGNAL(clicked()),this,SLOT(PlayPause()));
     connect(ui->viewer,SIGNAL(SignalUpdateObjects()),this,SLOT(UpdateObjects()));
     connect( ui->button_pause, SIGNAL(clicked()) , ui->viewer, SLOT(Pause()));
     connect( ui->timebar, SIGNAL(SetSelectedFrame(int)), ui->viewer, SLOT(SetCurrentFrame(int)));
@@ -54,7 +54,7 @@ MainWindow::MainWindow(QWidget *parent) :
     // One button for play/pause.
     ui->button_pause->hide();
 
-    this->showMaximized();
+    this->showMaximized();*/
 }
 
 MainWindow::~MainWindow()

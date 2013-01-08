@@ -20,71 +20,11 @@ Viewer::Viewer(QWidget* parent) :
 }
 
 void Viewer::draw() {
-//    for( uint i = 0 ; i < SceneContainer::HowManyObjects(); i++ ) {
-//        Joint* object = SceneContainer::ObjectAt(i);
-//        object->Draw(SceneContainer::AnimatePosition(),SceneContainer::AnimateOrientation());
-//    }
 
     SceneContainer::DrawObjects();
 
     this->drawText(10,10,QString("Frame: %1").arg(SceneContainer::current_frame()));
         rotation->Draw();
-    /*glColor3f(1.0,1.0,1.0);
-    glBegin(GL_LINE_STRIP);
-    int slices = 50;
-    double slice_size = 1.0/((double)(slices-1));
-    for(int i = 0 ; i < slices ; i++ )
-    {
-        qglviewer::Vec p = nova_->Evaluate(slice_size*((double)(i)));
-        glVertex3d(p.x,p.y,p.z);
-        i += 0.02;
-    }
-    glEnd();
-
-    glPushMatrix();
-    glTranslated(0,0,0);
-    gluSphere(gluNewQuadric(),0.02,15,15);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslated(1.5,3.0,3.0);
-    gluSphere(gluNewQuadric(),0.02,15,15);
-    glPopMatrix();
-
-    glPushMatrix();
-    glTranslated(3,0,0);
-    gluSphere(gluNewQuadric(),0.02,15,15);
-    glPopMatrix();
-
-    glColor3f(1.0,0.0,0.0);
-    for(int i = 0 ; i < 101 ; i++ ) {
-        glPushMatrix();
-        glTranslated(global_p[i].x,global_p[i].y,global_p[i].z-0.004);
-        gluSphere(gluNewQuadric(),0.02,15,15);
-        glPopMatrix();
-    }
-
-    glColor3f(0.0,0.0,1.0);
-    for(int i = 0 ; i < 11 ; i++ ) {
-        glPushMatrix();
-        qglviewer::Vec point = nova_->Evaluate(i*0.1);
-        glTranslated(point.x,point.y,point.z+0.004);
-        gluSphere(gluNewQuadric(),0.02,15,15);
-        glPopMatrix();
-    }
-
-    glColor3f(0.0,1.0,1.0);
-    glBegin(GL_LINE_STRIP);
-    for(int i = 0 ; i < 11 ; i++ ) {
-        glPushMatrix();
-        qglviewer::Vec point;
-        point = pos_interpolator.GetPositionAt(i*10);
-        glVertex3f(point.x,point.y,point.z);
-        //gluSphere(gluNewQuadric(),0.02,15,15);
-        glPopMatrix();
-    }
-    glEnd();*/
-
 }
 
 

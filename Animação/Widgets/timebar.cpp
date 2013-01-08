@@ -15,6 +15,7 @@ TimeBar::TimeBar(QWidget *parent) :
     //this->setMinimumHeight(const_height);
     //this->setMaximumHeight(const_height);
     this->setGeometry(0,0,100*(step_width_-1)+1,const_height);
+    this->setMinimumWidth(100*(step_width_-1)+1);
 }
 #include <iostream>
 void TimeBar::paintEvent(QPaintEvent* event) {

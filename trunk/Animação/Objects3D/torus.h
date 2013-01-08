@@ -32,7 +32,7 @@ private:
     std::vector<Slice> torus_slices_;
 
     void CreateSlices();
-    void DrawObject();
+    void DrawObject(bool animate_position, bool animate_orientation);
     
 };
 

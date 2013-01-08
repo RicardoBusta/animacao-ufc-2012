@@ -13,7 +13,7 @@ public:
 
 private:
     void DrawCircle(double radius, qglviewer::Quaternion ori, int steps);
-    void DrawObject();
+    void DrawObject(bool animate_position = true, bool animate_orientation = true);
 
     Object3D* to_rotate_;
 

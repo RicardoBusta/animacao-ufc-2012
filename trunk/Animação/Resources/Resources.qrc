@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>ship.png</file>
-        <file>nave.obj</file>
+        <file>ship.obj</file>
+        <file>monkey.obj</file>
     </qresource>
 </RCC>

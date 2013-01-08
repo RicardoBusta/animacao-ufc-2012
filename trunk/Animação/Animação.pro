@@ -70,3 +70,6 @@ FORMS += \
 
 RESOURCES += \
     Resources/Resources.qrc
+
+OTHER_FILES += \
+    todo.txt

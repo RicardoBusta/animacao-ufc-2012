@@ -1,4 +1,4 @@
-#include "rotationwidget.h"
+#include "Widgets/rotationwidget.h"
 #include "Objects3D/torus.h"
 
 RotationWidget::RotationWidget(Object3D* to_rotate)
@@ -12,11 +12,11 @@ RotationWidget::~RotationWidget() {
     gluDeleteQuadric(quadric_);
 }
 
-void RotationWidget::SetClick(qglviewer::Vec click_position) {
+void RotationWidget::SetClick(qglviewer::Vec) {
 
 }
 
-void RotationWidget::DrawCircle(double radius, qglviewer::Quaternion ori, int steps) {
+void RotationWidget::DrawCircle(double, qglviewer::Quaternion ori, int) {
     glPushMatrix();
     glMultMatrixd(ori.matrix());
     Torus t(0.96*radius_,1.04*radius_,64,36);
@@ -24,7 +24,7 @@ void RotationWidget::DrawCircle(double radius, qglviewer::Quaternion ori, int st
     glPopMatrix();
 }
 
-void RotationWidget::DrawObject(bool animate_position, bool animate_orientation) {
+void RotationWidget::DrawObject(bool, bool) {
     int steps = 40;
     radius_ = 0.5;
     glPushAttrib(GL_ALL_ATTRIB_BITS);

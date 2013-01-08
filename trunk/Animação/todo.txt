@@ -1,0 +1,3 @@
+Inserir frames via interface (forma texto)
+Ease-in-ease-out (opção de ligar/desligar na interface ou multiplas funções/desligar)
+

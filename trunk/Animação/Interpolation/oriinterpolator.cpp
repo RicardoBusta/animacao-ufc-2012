@@ -2,7 +2,7 @@
 #include "quaternioninterpolation.h"
 #include <cmath>
 
-OriInterpolator::OriInterpolator()
+OriInterpolator::OriInterpolator():GenericInterpolator()
 {
     type_ = kSlerp;
 }
@@ -23,6 +23,11 @@ qglviewer::Quaternion OriInterpolator::GetOrientationAt(int frame) {
     QuaternionInterpolator* interpolator = quaternions_curves_.at(interval);
 
     double t = ((double)(frame - steps_.at(interval).frame_))/((double)(steps_.at(interval+1).frame_ - steps_.at(interval).frame_));
+
+    setSpeedFunction(SF_EASE_IN_POW);
+
+    t = speedControl(t);
+
     return interpolator->Evaluate(t);
 }
 

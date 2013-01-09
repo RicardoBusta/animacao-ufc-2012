@@ -1,7 +1,7 @@
 #include "posinterpolator.h"
 #include "Curves/arclength.h"
 
-PosInterpolator::PosInterpolator() :
+PosInterpolator::PosInterpolator() : GenericInterpolator(),
     total_length_(0), start_frame_(0), last_frame_(0)
 {
     interpolation_type_ = kLinear;
@@ -30,6 +30,9 @@ qglviewer::Vec PosInterpolator::GetPositionAt(int frame) {
     int interval_end_frame = steps_.at(interval).frame_;
     double current_step = (((double)(frame)) - ((double)(interval_start_frame)))/((double)(interval_end_frame - interval_start_frame));
     if(current_step>1.0) current_step = 1.0;
+
+    setSpeedFunction(SF_EASE_IN_POW);
+    current_step = speedControl(current_step);
 
     std::pair<Curve*,ArcLength*> curve_and_length = curves_.at(interval-1);
     return curve_and_length.second->GetByNormalizedS(current_step);

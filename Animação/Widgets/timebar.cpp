@@ -10,7 +10,7 @@ TimeBar::TimeBar(QWidget *parent) :
     number_of_frames_ = 101;
     current_frame_ = 0;
 
-    int const_height = 50;
+    int const_height = 25;
     step_width_ = 7;
     //this->setMinimumHeight(const_height);
     //this->setMaximumHeight(const_height);
@@ -23,7 +23,8 @@ void TimeBar::paintEvent(QPaintEvent* event) {
     //painter.setRenderHint(QPainter::Antialiasing);
 
     QColor base_color(255,255,255);
-    QColor keyframe_color(0,200,255);
+    QColor pos_keyframe_color(0,200,255);
+    QColor ori_keyframe_color(255,150,150);
     QColor alternate_color(200,200,200);
     QColor selection_color(255,255,255);
 
@@ -39,12 +40,18 @@ void TimeBar::paintEvent(QPaintEvent* event) {
         painter.setPen(Qt::NoPen);
         // testing purpose only. change i = keyframe later.
         if(i%5 == 0) {
-            painter.setBrush(keyframe_color);
-        }else
+            painter.setBrush(pos_keyframe_color);
+        }else{
+            painter.setBrush(base_color);
+        }
+        painter.drawRect(1 + (h_step)*i,1,h_step-1,(v_step/2)-1);
 
-        /*if(i%2 == 0) */painter.setBrush(alternate_color);
-        /*else         painter.setBrush(alternate_color);*/
-
+        if(i%5 == 0) {
+            painter.setBrush(ori_keyframe_color);
+        }else{
+            painter.setBrush(alternate_color);
+        }
+        painter.drawRect(1 + (h_step)*i,(v_step/2),h_step-1,(v_step/2)-1);
 
         /*double current = step_width*i;
         double next = current + step_width;
@@ -52,9 +59,10 @@ void TimeBar::paintEvent(QPaintEvent* event) {
         painter.setPen(Qt::SolidLine);
         painter.drawLine(next,1,next,height()-1);*/
 
-        painter.drawRect(1 + (h_step)*i,1,h_step-1,v_step);
+
+
         painter.setPen(Qt::SolidLine);
-        painter.drawLine((h_step)*(i+1),1,(h_step)*(i+1),height()-1);
+        //painter.drawLine((h_step)*(i+1),1,(h_step)*(i+1),height()-1);
 
     }
 

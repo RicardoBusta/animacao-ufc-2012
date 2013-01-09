@@ -32,7 +32,8 @@ HEADERS += \
     Objects3D/objectinfotree.h \
     Objects3D/fileobj.h \
     Widgets/rotationwidget.h \
-    Objects3D/torus.h
+    Objects3D/torus.h \
+    Interpolation/genericinterpolator.h
 
 SOURCES += \
     Curves/arclength.cpp \
@@ -54,7 +55,8 @@ SOURCES += \
     Objects3D/objectinfotree.cpp \
     Objects3D/fileobj.cpp \
     Widgets/rotationwidget.cpp \
-    Objects3D/torus.cpp
+    Objects3D/torus.cpp \
+    Interpolation/genericinterpolator.cpp
 
 
 FORMS += \
@@ -67,6 +69,12 @@ RESOURCES += \
 exists( /usr/lib/libQGLViewer.so ) {
 LIBS *= -lqglviewer-qt4
 }
+
+#tive que recolocar pra compilar, o outro não funcionou.
+unix:!macx: LIBS += -L$$PWD/../../../../../../usr/lib/x86_64-linux-gnu/ -lqglviewer-qt4
+INCLUDEPATH += $$PWD/../../../../../../usr/include/QGLViewer
+DEPENDPATH += $$PWD/../../../../../../usr/include/QGLViewer
+unix:!macx: PRE_TARGETDEPS += $$PWD/../../../../../../usr/lib/x86_64-linux-gnu/libqglviewer-qt4.a
 
 
 RESOURCES += \

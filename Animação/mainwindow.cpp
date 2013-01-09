@@ -9,6 +9,9 @@ QButtonGroup*group2 = new QButtonGroup;
 QButtonGroup*group3 = new QButtonGroup;
 QButtonGroup*group4 = new QButtonGroup;
 
+static QIcon play_icon;
+static QIcon pause_icon;
+static QIcon stop_icon;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -17,16 +20,18 @@ MainWindow::MainWindow(QWidget *parent) :
     play_or_pause_ = true;
 
     ui->setupUi(this);
-    this->setWindowTitle(QString("Animating"));
-//    connect( ui->button_play, SIGNAL(clicked()), ui->viewer, SLOT(Play()) );
-//    connect( ui->button_stop, SIGNAL(clicked()), ui->viewer, SLOT(Stop()));
-/*    connect(ui->button_play,SIGNAL(clicked()),this,SLOT(PlayPause()));
+    this->setWindowTitle(QString("Animation Studio"));
+    connect( ui->button_play, SIGNAL(clicked()), ui->viewer, SLOT(Play()) );
+    connect( ui->button_stop, SIGNAL(clicked()), ui->viewer, SLOT(Stop()));
+    connect(ui->button_play,SIGNAL(clicked()),this,SLOT(PlayPause()));
+
     connect(ui->viewer,SIGNAL(SignalUpdateObjects()),this,SLOT(UpdateObjects()));
-    connect( ui->button_pause, SIGNAL(clicked()) , ui->viewer, SLOT(Pause()));
+
     connect( ui->timebar, SIGNAL(SetSelectedFrame(int)), ui->viewer, SLOT(SetCurrentFrame(int)));
     connect( ui->timebar, SIGNAL(SetSelectedFrame(int)), this, SLOT(SelectedFramePause()) );
     connect( ui->viewer, SIGNAL(CurrentFrame(int)), ui->timebar, SLOT(SetCurrentFrame(int)));
 
+    /*
     connect (ui->checkBox, SIGNAL(toggled(bool)), this, SLOT(UpdateAnimators()));
     connect (ui->checkBox_2, SIGNAL(toggled(bool)), this, SLOT(UpdateAnimators()));
 
@@ -53,8 +58,15 @@ MainWindow::MainWindow(QWidget *parent) :
 
     // One button for play/pause.
     ui->button_pause->hide();
+*/
+    ui->button_play->setFixedSize(30,30);
+    ui->button_stop->setFixedSize(30,30);
 
-    this->showMaximized();*/
+    this->showMaximized();
+
+    play_icon = QIcon(QPixmap::fromImage(QImage(":/buttons/play.png")));
+    pause_icon = QIcon(QPixmap::fromImage(QImage(":/buttons/pause.png")));
+    stop_icon = QIcon(QPixmap::fromImage(QImage(":/buttons/stop.png")));
 }
 
 MainWindow::~MainWindow()
@@ -66,11 +78,15 @@ MainWindow::~MainWindow()
 void MainWindow::PlayPause(){
     if(play_or_pause_){
         play_or_pause_ = false;
-        ui->button_play->setText("Pause");
+        //        ui->button_play->setText("Pause");
+        //ui->button_play->setText("||");
+        ui->button_play->setIcon(pause_icon);
         ui->viewer->Play();
     }else{
         play_or_pause_ = true;
-        ui->button_play->setText("Play");
+        //        ui->button_play->setText("Play");
+        //ui->button_play->setText(">");
+        ui->button_play->setIcon(play_icon);
         ui->viewer->Pause();
     }
 }
@@ -85,7 +101,7 @@ void MainWindow::UpdateAnimators() {
 void MainWindow::SelectedFramePause()
 {
     play_or_pause_ = true;
-    ui->button_play->setText("Play");
+    //ui->button_play->setText("Play");
     ui->viewer->Pause();
 }
 

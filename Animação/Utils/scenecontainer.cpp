@@ -99,16 +99,16 @@ void SceneContainer::DrawObjects() {
 void SceneContainer::CreateDefaultScene() {
     FileObj* obj = new FileObj();
     Object3D *teste = obj;
-    obj->loadFile(":ship.obj");
-    obj->loadTex(":ship.png");
+    obj->loadFile(":/models/ship.obj");
+    obj->loadTex(":/textures/ship.png");
     Joint *joint = new Joint(teste);
 
     ObjectAnimator *animteste = new ObjectAnimator(joint);
 
 
     FileObj* obj2 = new FileObj();
-    obj2->loadFile(":ship.obj");
-    obj2->loadTex(":ship.png");
+//    obj2->loadFile(":/models/ship.obj");
+//    obj2->loadTex(":/textures/ship.png");
     Object3D *teste2 = obj2;
     Joint *joint2 = new Joint(teste2);
     joint->AddChildJoint(joint2);

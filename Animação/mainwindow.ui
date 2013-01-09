@@ -7,11 +7,17 @@
     <x>0</x>
     <y>0</y>
     <width>643</width>
-    <height>694</height>
+    <height>758</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
+  </property>
+  <property name="iconSize">
+   <size>
+    <width>24</width>
+    <height>24</height>
+   </size>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout_3">
@@ -262,7 +268,7 @@
             </item>
             <item>
              <widget class="QTabWidget" name="verticalTabWidget_5">
-              <widget class="QWidget" name="verticalTabWidget_5Page1" native="true">
+              <widget class="QWidget" name="verticalTabWidget_5Page1">
                <attribute name="title">
                 <string/>
                </attribute>
@@ -427,23 +433,31 @@
       <item row="1" column="0">
        <layout class="QHBoxLayout" name="horizontalLayout">
         <item>
-         <widget class="QPushButton" name="button_stop">
+         <widget class="QToolButton" name="button_stop">
           <property name="text">
-           <string>Stop</string>
+           <string>...</string>
+          </property>
+          <property name="icon">
+           <iconset resource="Resources/Resources.qrc">
+            <normaloff>:/buttons/stop.png</normaloff>:/buttons/stop.png</iconset>
           </property>
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="button_play">
+         <widget class="QToolButton" name="button_play">
           <property name="text">
-           <string>Play</string>
+           <string>...</string>
+          </property>
+          <property name="icon">
+           <iconset resource="Resources/Resources.qrc">
+            <normaloff>:/buttons/play.png</normaloff>:/buttons/play.png</iconset>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QScrollArea" name="scrollArea">
           <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
            </sizepolicy>
@@ -468,12 +482,12 @@
             <rect>
              <x>0</x>
              <y>0</y>
-             <width>457</width>
-             <height>52</height>
+             <width>563</width>
+             <height>63</height>
             </rect>
            </property>
            <property name="sizePolicy">
-            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+            <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
              <horstretch>0</horstretch>
              <verstretch>0</verstretch>
             </sizepolicy>
@@ -494,11 +508,6 @@
      </layout>
     </item>
    </layout>
-   <zorder>viewer</zorder>
-   <zorder>verticalLayoutWidget</zorder>
-   <zorder>pushButton_2</zorder>
-   <zorder>verticalLayoutWidget_2</zorder>
-   <zorder>gridLayoutWidget_2</zorder>
   </widget>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
@@ -516,6 +525,8 @@
    <container>1</container>
   </customwidget>
  </customwidgets>
- <resources/>
+ <resources>
+  <include location="Resources/Resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

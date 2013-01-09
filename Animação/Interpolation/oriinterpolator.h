@@ -4,8 +4,9 @@
 #include <QGLViewer/quaternion.h>
 #include "quaternioninterpolation.h"
 #include "animation_step.h"
+#include "genericinterpolator.h"
 
-class OriInterpolator
+class OriInterpolator:public GenericInterpolator
 {
 public:
     enum InterpolationType {kSlerp,kBezier};

@@ -1,7 +1,9 @@
 <RCC>
     <qresource prefix="/">
-        <file>ship.png</file>
-        <file>ship.obj</file>
-        <file>monkey.obj</file>
+        <file>textures/ship.png</file>
+        <file>models/ship.obj</file>
+        <file>buttons/pause.png</file>
+        <file>buttons/play.png</file>
+        <file>buttons/stop.png</file>
     </qresource>
 </RCC>

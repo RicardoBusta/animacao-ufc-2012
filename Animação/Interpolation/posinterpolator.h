@@ -3,13 +3,14 @@
 
 #include <QGLViewer/vec.h>
 #include "animation_step.h"
+#include "genericinterpolator.h"
 
 #include <vector>
 
 class Curve;
 class ArcLength;
 
-class PosInterpolator
+class PosInterpolator:public GenericInterpolator
 {
 public:
     enum InterpolationPolicy {kFrameBased,kConstantSpeed};

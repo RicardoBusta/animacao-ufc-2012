@@ -2,6 +2,9 @@
 #include <QPainter>
 #include <QPaintEvent>
 #include <QMouseEvent>
+#include "Objects3D/object3d.h"
+#include "Interpolation/objectanimator.h"
+#include "Interpolation/animation_step.h"
 
 TimeBar::TimeBar(QWidget *parent) :
     QWidget(parent)
@@ -26,7 +29,7 @@ void TimeBar::paintEvent(QPaintEvent* event) {
     QColor pos_keyframe_color(0,200,255);
     QColor ori_keyframe_color(255,150,150);
     QColor alternate_color(200,200,200);
-    QColor selection_color(255,255,255);
+    QColor selection_color(0,0,0);
 
     //double step_width = ((double)this->width()) / ((double)number_of_frames_);
     //step_width_ =
@@ -39,14 +42,14 @@ void TimeBar::paintEvent(QPaintEvent* event) {
 
         painter.setPen(Qt::NoPen);
         // testing purpose only. change i = keyframe later.
-        if(i%5 == 0) {
+        if(pos_key_frames_.contains(i)) {
             painter.setBrush(pos_keyframe_color);
         }else{
             painter.setBrush(base_color);
         }
         painter.drawRect(1 + (h_step)*i,1,h_step-1,(v_step/2)-1);
 
-        if(i%5 == 0) {
+        if(ori_key_frames_.contains(i)) {
             painter.setBrush(ori_keyframe_color);
         }else{
             painter.setBrush(alternate_color);
@@ -93,4 +96,21 @@ void TimeBar::mousePressEvent ( QMouseEvent * event ) {
 void TimeBar::SetCurrentFrame(int frame) {
     current_frame_ = frame < number_of_frames_ ? frame : number_of_frames_-1;
     update();
+}
+
+
+void TimeBar::setKeyFrames(Object3D *object)
+{
+    this->pos_key_frames_.clear();
+    this->ori_key_frames_.clear();
+
+    //std::vector<OrientationStep> *orivec = &object->GetAnimator()->GetKeyOrientations();
+    //std::vector<PositionStep> *posvec = &object->GetAnimator()->GetKeyPositions();
+
+    for(int i=0;i<object->GetAnimator()->GetKeyOrientations()->size();i++){
+        ori_key_frames_.push_back(object->GetAnimator()->GetKeyOrientations()->at(i).frame_);
+    }
+    for(int i=0;i<object->GetAnimator()->GetKeyPositions()->size();i++){
+        pos_key_frames_.push_back(object->GetAnimator()->GetKeyPositions()->at(i).frame_);
+    }
 }

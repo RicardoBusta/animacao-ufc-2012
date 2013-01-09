@@ -115,6 +115,9 @@ void MainWindow::UpdateObjects(){
 
     updateObjectsRecursive(item, root);
 
+    ui->timebar->setKeyFrames((Object3D*)SceneContainer::ObjectAt(0));
+    ui->timebar->update();
+
     ui->treeWidget->expandAll();
 }
 

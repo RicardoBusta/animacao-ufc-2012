@@ -33,10 +33,12 @@ void TimeBar::paintEvent(QPaintEvent* event) {
     QPainter painter(this);
     //painter.setRenderHint(QPainter::Antialiasing);
 
-    QColor base_color(255,255,255);
-    QColor pos_keyframe_color(0,200,255);
-    QColor ori_keyframe_color(255,150,150);
-    QColor alternate_color(200,200,200);
+    QColor frame_base_color(255,255,255);
+    QColor frame_alternate_color(200,200,200);
+
+    QColor keyframe_pos_color(0,200,255);
+    QColor keyframe_ori_color(255,150,150);
+
     QColor selection_color(0,0,0);
 
     //double step_width = ((double)this->width()) / ((double)number_of_frames_);
@@ -48,45 +50,38 @@ void TimeBar::paintEvent(QPaintEvent* event) {
 
     for(int i = 0 ; i < number_of_frames_ ; i++ ){
 
-        painter.setPen(Qt::NoPen);
+//        painter.setPen(Qt::NoPen);
+        painter.setPen(Qt::SolidLine);
+        painter.setPen(frame_alternate_color);
         // testing purpose only. change i = keyframe later.
         if(pos_key_frames_.contains(i)) {
-            painter.setBrush(pos_keyframe_color);
+            painter.setBrush(keyframe_pos_color);
         }else{
-            painter.setBrush(base_color);
+            painter.setBrush(frame_base_color);
         }
-        painter.drawRect(1 + (h_step)*i,1,h_step-1,(v_step/2)-1);
+        painter.drawRect(QRect((h_step)*i,0,h_step,(v_step/2)));
 
         if(ori_key_frames_.contains(i)) {
-            painter.setBrush(ori_keyframe_color);
+            painter.setBrush(keyframe_ori_color);
         }else{
-            painter.setBrush(alternate_color);
+            painter.setBrush(frame_alternate_color);
         }
-        painter.drawRect(1 + (h_step)*i,(v_step/2),h_step-1,(v_step/2)-1);
-
-        /*double current = step_width*i;
-        double next = current + step_width;
-        painter.drawRect(1 + current,1,step_width-1,v_step);
-        painter.setPen(Qt::SolidLine);
-        painter.drawLine(next,1,next,height()-1);*/
-
-
+        painter.drawRect((h_step)*i,(v_step/2),h_step,(v_step/2));
 
         painter.setPen(Qt::SolidLine);
         //painter.drawLine((h_step)*(i+1),1,(h_step)*(i+1),height()-1);
-
     }
 
     int extreme_right = (number_of_frames_*(box_width-1));
 
-    painter.drawLine(0,0,0,height());
-    painter.drawLine(0,0,extreme_right,0);
-    painter.drawLine(0,height()-1,extreme_right,height()-1);
-    painter.drawLine(extreme_right,0,extreme_right,height());
+//    painter.drawLine(0,0,0,height());
+//    painter.drawLine(0,0,extreme_right,0);
+//    painter.drawLine(0,height()-1,extreme_right,height()-1);
+//    painter.drawLine(extreme_right,0,extreme_right,height());
 
-    painter.setBrush(Qt::NoBrush);
+    painter.setBrush(Qt::BDiagPattern);
     painter.setPen(selection_color);
-    painter.drawRect((box_width-1)*current_frame_,0,box_width-1,height()-1);
+    painter.drawRect((box_width)*current_frame_,0,box_width-1,v_step-3);
     painter.end();
 }
 

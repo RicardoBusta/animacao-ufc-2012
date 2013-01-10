@@ -29,7 +29,6 @@ HEADERS += \
     Widgets/viewer.h \
     Widgets/timebar.h \
     mainwindow.h \
-    Objects3D/objectinfotree.h \
     Objects3D/fileobj.h \
     Widgets/rotationwidget.h \
     Objects3D/torus.h \
@@ -52,7 +51,6 @@ SOURCES += \
     Widgets/timebar.cpp \
     main.cpp \
     mainwindow.cpp \
-    Objects3D/objectinfotree.cpp \
     Objects3D/fileobj.cpp \
     Widgets/rotationwidget.cpp \
     Objects3D/torus.cpp \

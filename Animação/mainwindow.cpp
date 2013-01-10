@@ -38,10 +38,10 @@ MainWindow::MainWindow(QWidget *parent) :
     connect( ui->checkbox_freeze_ori, SIGNAL(clicked()), this, SLOT(UpdateFreeze()));
 
 
-    ui->button_play->setFixedSize(30,30);
-    ui->button_stop->setFixedSize(30,30);
+    //ui->button_play->setFixedSize(30,30);
+    //ui->button_stop->setFixedSize(30,30);
 
-    ui->tool_box->setEnabled(false);
+    //ui->tool_box->setEnabled(false);
 
     this->showMaximized();
 

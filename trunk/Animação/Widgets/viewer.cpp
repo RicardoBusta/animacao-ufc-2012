@@ -75,8 +75,6 @@ void Viewer::init() {
     this->setGridIsDrawn(true);
     this->grid_size_ = 10.0;
 
-    this->;
-
     setSceneRadius(10.0f);
 }
 

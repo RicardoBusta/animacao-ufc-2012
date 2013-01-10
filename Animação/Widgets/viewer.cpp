@@ -24,7 +24,8 @@ void Viewer::draw() {
     SceneContainer::DrawObjects();
 
     this->drawText(10,10,QString("Frame: %1").arg(SceneContainer::current_frame()));
-        rotation->Draw();
+
+    //rotation->Draw();
 }
 
 
@@ -65,46 +66,16 @@ void  Viewer::SetCurrentFrame(int frame) {
 
 void Viewer::init() {
     SceneContainer::CreateDefaultScene();
-    SignalUpdateObjects();
+    emit SignalUpdateObjects();
+
     SceneContainer::SetFrameRange(0,100);
-    SceneContainer::ToErase(true,true,0,0,0,0);
     SceneContainer::SetCurrentFrame(0);
 
-    this->setBackgroundColor(QColor(0,0,0));
+    this->setBackgroundColor(QColor(45,45,45));
     this->setGridIsDrawn(true);
     this->grid_size_ = 10.0;
 
-    /* glDisable(GL_LIGHTING);
-
-    nova_ = new BezierQuadratic(qglviewer::Vec(0,0,0),qglviewer::Vec(1.5,3.0,3.0),qglviewer::Vec(3,0,0));
-    ArcLength arc(nova_);
-    arc.AdaptativeGaussianPrecalculation();
-    for(int i = 0 ; i < 101 ; i++ )
-        global_p[i] = arc.GetByNormalizedS(i*0.01);
-
-
-    pos_interpolator.SetStartFrame(0);
-    pos_interpolator.SetLastFrame(100);
-
-
-    std::vector<PositionStep> positions;
-    for(int i = 0 ; i < 11 ; i++ ) {
-        PositionStep p;
-        p.position_ = nova_->Evaluate(i*0.1) + qglviewer::Vec(0,0,-1);
-        int frame = 10*i;
-
-        p.frame_ = frame;
-        positions.push_back(p);
-    }
-
-    for(int i = 0 ; i < positions.size() ; i++ )
-        std::cout << "Frame: " << positions.at(i).frame_ << " Position: " << std::endl;
-
-    pos_interpolator.LoadPoints(positions);
-    //for(int i = 0 ; i < 101 ; i++ )
-    //    global_p[i] = pos_interpolator.GetPositionAt(i);*/
     setSceneRadius(10.0f);
-
 }
 
 void Viewer::postDraw(){

@@ -62,14 +62,12 @@ void TrajectoryObject::Update(int start_frame, int end_frame) {
     }
 }
 
-void TrajectoryObject::DrawObject(bool animate_position, bool) {
+void TrajectoryObject::DrawObject() {
     glPushMatrix();
 
     if(type_ == kOrientation){
-        if(animate_position) {
-            qglviewer::Vec pos = animator_->PositionAt(SceneContainer::current_frame());
-            glTranslated(pos.x,pos.y,pos.z);
-        }
+        qglviewer::Vec pos = animator_->PositionAt(SceneContainer::current_frame());
+        glTranslated(pos.x,pos.y,pos.z);
         glPushAttrib(GL_ALL_ATTRIB_BITS);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);

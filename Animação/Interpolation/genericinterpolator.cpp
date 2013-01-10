@@ -1,18 +1,18 @@
 #include "genericinterpolator.h"
-
 #include <cmath>
+
+GenericInterpolator::SpeedFunction GenericInterpolator::speed_function_ = SF_CONSTANT;
 
 GenericInterpolator::GenericInterpolator()
 {
-    speed_function_ = SF_NONE;
 }
 
-void GenericInterpolator::setSpeedFunction(SPEED_FUNCTION value){
+void GenericInterpolator::setSpeedFunction(SpeedFunction value){
     speed_function_ = value;
 }
 
 double GenericInterpolator::speedControl(double step){
-    switch(speed_function_){
+    switch(GenericInterpolator::speed_function_){
     case SF_EASE_IN_OUT_SIN:
         return sin(step*M_PI_2);
         break;
@@ -22,8 +22,8 @@ double GenericInterpolator::speedControl(double step){
     case SF_EASE_OUT_ROOT:
         return sqrt(step);
         break;
-    default:
-        return step;
+    default:    
         break;
     }
+    return step;
 }

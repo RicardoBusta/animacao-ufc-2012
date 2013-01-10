@@ -24,7 +24,10 @@ public:
     std::vector<PositionStep> *GetKeyPositions          ();
     std::vector<OrientationStep> *GetKeyOrientations    ();
 
-    Object3D* GetChild          ();
+    //! Main Hierarchy
+    void            SetParent(ObjectAnimator* parent);
+    ObjectAnimator* Parent();
+    Object3D*       GetChild();
 
     //! Animation steps controls
     void AddKeyPosition         (int frame, qglviewer::Vec pos);
@@ -53,6 +56,7 @@ private:
     std::vector<OrientationStep> key_orientations_;
     bool *pre_calculed_;
 
+    ObjectAnimator* parent_;
     Object3D* child_object_;
     OriInterpolator ori_interpolator_;
     PosInterpolator pos_interpolator_;

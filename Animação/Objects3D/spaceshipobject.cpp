@@ -7,7 +7,7 @@ SpaceShipObject::SpaceShipObject()
      shiptex = QGLWidget::convertToGLFormat( QImage(":ship.png") );
 }
 
-void SpaceShipObject::DrawObject(bool animate_position, bool animate_orientation) {
+void SpaceShipObject::DrawObject() {
     /*double height = 3.0;
     qglviewer::Quaternion orientation = qglviewer::Quaternion(qglviewer::Vec(0,0,1),qglviewer::Vec(0,1,0));
     gluCylinder(quadric_,0.5,0.5,height,16,16);

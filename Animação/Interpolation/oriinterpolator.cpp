@@ -15,19 +15,21 @@ void OriInterpolator::SetLastFrame(int last_frame) {
     last_frame_ = last_frame;
 }
 
-qglviewer::Quaternion OriInterpolator::GetOrientationAt(int frame) {
+qglviewer::Quaternion OriInterpolator::GetOrientationAt(int frame, bool* valid) {
 
     int interval = ChooseInterval(frame);
 
-    if((interval == -1) or (interval==steps_.size()-1)) return qglviewer::Quaternion();
+    if((interval == -1) or (interval==steps_.size()-1)) {
+        if(valid!=NULL) *valid = false;
+        return qglviewer::Quaternion();
+    }
     QuaternionInterpolator* interpolator = quaternions_curves_.at(interval);
 
     double t = ((double)(frame - steps_.at(interval).frame_))/((double)(steps_.at(interval+1).frame_ - steps_.at(interval).frame_));
 
-    setSpeedFunction(SF_EASE_IN_POW);
-
     t = speedControl(t);
 
+    if(valid!=NULL) *valid = true;
     return interpolator->Evaluate(t);
 }
 

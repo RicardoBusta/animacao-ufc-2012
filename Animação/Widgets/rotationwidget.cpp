@@ -24,7 +24,7 @@ void RotationWidget::DrawCircle(double, qglviewer::Quaternion ori, int) {
     glPopMatrix();
 }
 
-void RotationWidget::DrawObject(bool, bool) {
+void RotationWidget::DrawObject() {
     int steps = 40;
     radius_ = 0.5;
     glPushAttrib(GL_ALL_ATTRIB_BITS);

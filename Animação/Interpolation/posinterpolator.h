@@ -10,7 +10,7 @@
 class Curve;
 class ArcLength;
 
-class PosInterpolator:public GenericInterpolator
+class PosInterpolator : public GenericInterpolator
 {
 public:
     enum InterpolationPolicy {kFrameBased,kConstantSpeed};
@@ -22,7 +22,7 @@ public:
     void SetStartFrame(int start_frame);
     void SetLastFrame(int last_frame);
 
-    qglviewer::Vec GetPositionAt(int frame);
+    qglviewer::Vec GetPositionAt(int frame, bool *valid = NULL);
 
     void LoadPoints(std::vector<PositionStep>& steps);
     void AddPoint(PositionStep new_step);

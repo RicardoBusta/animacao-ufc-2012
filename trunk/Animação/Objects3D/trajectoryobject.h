@@ -18,7 +18,7 @@ public:
     void SetType(TrajectoryType type);
 
 private:
-    void DrawObject(bool animate_position = true, bool animate_orientation = true);
+    void DrawObject();
 
     void DrawPositionsCurve();
 

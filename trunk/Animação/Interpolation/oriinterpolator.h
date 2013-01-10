@@ -6,7 +6,7 @@
 #include "animation_step.h"
 #include "genericinterpolator.h"
 
-class OriInterpolator:public GenericInterpolator
+class OriInterpolator : public GenericInterpolator
 {
 public:
     enum InterpolationType {kSlerp,kBezier};
@@ -15,7 +15,7 @@ public:
     void SetStartFrame(int start_frame);
     void SetLastFrame(int last_frame);
 
-    qglviewer::Quaternion GetOrientationAt(int frame);
+    qglviewer::Quaternion GetOrientationAt(int frame, bool *valid = NULL);
 
     void LoadOrientations(std::vector<OrientationStep>& steps);
     void AddOrientation(OrientationStep new_step);

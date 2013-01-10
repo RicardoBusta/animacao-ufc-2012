@@ -19,22 +19,28 @@ void PosInterpolator::SetLastFrame(int last_frame) {
     last_frame_ = last_frame;
 }
 
-qglviewer::Vec PosInterpolator::GetPositionAt(int frame) {
+qglviewer::Vec PosInterpolator::GetPositionAt(int frame, bool* valid) {
 
-    if(frame<start_frame_ or frame>last_frame_) return qglviewer::Vec();
+    if(frame<start_frame_ or frame>last_frame_){
+        if(valid!=NULL) *valid = false;
+        return qglviewer::Vec();
+    }
 
     int interval = ChooseInterval(frame,PosInterpolator::kFrameBased);
-    if(interval==-1 or interval==0)return qglviewer::Vec();
+    if(interval==-1 or interval==0){
+        if(valid!=NULL) *valid = false;
+        return qglviewer::Vec();
+    }
 
     int interval_start_frame = steps_.at(interval -1).frame_;
     int interval_end_frame = steps_.at(interval).frame_;
     double current_step = (((double)(frame)) - ((double)(interval_start_frame)))/((double)(interval_end_frame - interval_start_frame));
     if(current_step>1.0) current_step = 1.0;
 
-    setSpeedFunction(SF_EASE_IN_POW);
     current_step = speedControl(current_step);
 
     std::pair<Curve*,ArcLength*> curve_and_length = curves_.at(interval-1);
+    if(valid!=NULL) *valid = true;
     return curve_and_length.second->GetByNormalizedS(current_step);
 }
 

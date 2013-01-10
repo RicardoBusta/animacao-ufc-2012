@@ -1,13 +1,8 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "Utils/scenecontainer.h"
-
-#include <QButtonGroup>
-
-QButtonGroup*group1 = new QButtonGroup;
-QButtonGroup*group2 = new QButtonGroup;
-QButtonGroup*group3 = new QButtonGroup;
-QButtonGroup*group4 = new QButtonGroup;
+#include "Interpolation/genericinterpolator.h"
+#include "Objects3D/joint.h"
 
 static QIcon play_icon;
 static QIcon pause_icon;
@@ -23,6 +18,8 @@ MainWindow::MainWindow(QWidget *parent) :
     this->setWindowTitle(QString("Animation Studio"));
     connect( ui->button_play, SIGNAL(clicked()), ui->viewer, SLOT(Play()) );
     connect( ui->button_stop, SIGNAL(clicked()), ui->viewer, SLOT(Stop()));
+    connect( ui->button_stop, SIGNAL(clicked()), this, SLOT(Stop()));
+
     connect(ui->button_play,SIGNAL(clicked()),this,SLOT(PlayPause()));
 
     connect(ui->viewer,SIGNAL(SignalUpdateObjects()),this,SLOT(UpdateObjects()));
@@ -31,36 +28,20 @@ MainWindow::MainWindow(QWidget *parent) :
     connect( ui->timebar, SIGNAL(SetSelectedFrame(int)), this, SLOT(SelectedFramePause()) );
     connect( ui->viewer, SIGNAL(CurrentFrame(int)), ui->timebar, SLOT(SetCurrentFrame(int)));
 
-    /*
-    connect (ui->checkBox, SIGNAL(toggled(bool)), this, SLOT(UpdateAnimators()));
-    connect (ui->checkBox_2, SIGNAL(toggled(bool)), this, SLOT(UpdateAnimators()));
+    connect( ui->spin_frame_count, SIGNAL(valueChanged(int)), this, SLOT(UpdateFrameCount(int)));
+    connect( ui->combo_velocity_control, SIGNAL(activated(int)), this, SLOT(UpdateSpeedControl(int)));
 
-    group1->addButton(ui->rad_pos,0);
-    group1->addButton(ui->rad_ori,1);
-    group1->addButton(ui->radioButton_4,2);
-    group1->addButton(ui->rad_both,3);
+    connect( ui->combo_pos_interpolator, SIGNAL(activated(int)), this, SLOT(UpdatePositionInterpolation(int)));
+    connect( ui->combo_ori_interpolator, SIGNAL(activated(int)), this, SLOT(UpdateOrientationInterpolation(int)));
 
-    group2->addButton(ui->radioButton_2,0);
-    group2->addButton(ui->radioButton_5,1);
+    connect( ui->checkbox_freeze_pos, SIGNAL(clicked()), this, SLOT(UpdateFreeze()));
+    connect( ui->checkbox_freeze_ori, SIGNAL(clicked()), this, SLOT(UpdateFreeze()));
 
-    group3->addButton(ui->radioButton_6,0);
-    group3->addButton(ui->radioButton_7,1);
 
-    group4->addButton(ui->radioButton,0);
-    group4->addButton(ui->radioButton_3,1);
-
-    connect (group1, SIGNAL(buttonClicked(int)), this, SLOT(UpdateAnimators()));
-    connect (group2, SIGNAL(buttonClicked(int)), this, SLOT(UpdateAnimators()));
-    connect (group3, SIGNAL(buttonClicked(int)), this, SLOT(UpdateAnimators()));
-    connect (group4, SIGNAL(buttonClicked(int)), this, SLOT(UpdateAnimators()));
-
-    ui->scrollArea->setWidget(ui->timebar);
-
-    // One button for play/pause.
-    ui->button_pause->hide();
-*/
     ui->button_play->setFixedSize(30,30);
     ui->button_stop->setFixedSize(30,30);
+
+    ui->tool_box->setEnabled(false);
 
     this->showMaximized();
 
@@ -78,53 +59,97 @@ MainWindow::~MainWindow()
 void MainWindow::PlayPause(){
     if(play_or_pause_){
         play_or_pause_ = false;
-        //        ui->button_play->setText("Pause");
-        //ui->button_play->setText("||");
         ui->button_play->setIcon(pause_icon);
         ui->viewer->Play();
     }else{
         play_or_pause_ = true;
-        //        ui->button_play->setText("Play");
-        //ui->button_play->setText(">");
         ui->button_play->setIcon(play_icon);
         ui->viewer->Pause();
     }
 }
 
-void MainWindow::UpdateAnimators() {
-    //SceneContainer::SetAnimated(ui->checkBox->isChecked(),ui->checkBox_2->isChecked());
-    SceneContainer::ToErase(ui->checkBox->isChecked(),ui->checkBox_2->isChecked(),group4->checkedId(),
-                            group1->checkedId(), group2->checkedId(), group3->checkedId());
-    ui->viewer->updateGL();
+void MainWindow::Stop() {
+    if(!play_or_pause_) {
+        play_or_pause_ = true;
+        ui->button_play->setIcon(play_icon);
+    }
 }
 
 void MainWindow::SelectedFramePause()
 {
     play_or_pause_ = true;
-    //ui->button_play->setText("Play");
     ui->viewer->Pause();
 }
 
-#include "Objects3D/objectinfotree.h"
-
 void MainWindow::UpdateObjects(){
-    ObjectInfoTree *root = SceneContainer::GetObjects();
-    QTreeWidgetItem *item = new QTreeWidgetItem(QStringList(root->test));
 
-    ui->treeWidget->addTopLevelItem(item);
-
-    updateObjectsRecursive(item, root);
+    for( int i = 0 ; i < SceneContainer::HowManyObjects() ; i++ ) {
+        Joint* object =  SceneContainer::ObjectAt(i);
+        QTreeWidgetItem *item = new QTreeWidgetItem(QStringList(QString(object->label().c_str())));
+        updateObjectsRecursive(item, object);
+        ui->treeWidget->addTopLevelItem(item);
+    }
+    ui->treeWidget->expandAll();
 
     ui->timebar->setKeyFrames((Object3D*)SceneContainer::ObjectAt(0));
-    ui->timebar->update();
-
-    ui->treeWidget->expandAll();
+    ui->timebar->update();    
 }
 
-void MainWindow::updateObjectsRecursive(QTreeWidgetItem *item, ObjectInfoTree *node){
-    for(uint i=0;i<node->child.size(); i++){
-        ObjectInfoTree *childnode = node->child.at(i);
-        QTreeWidgetItem *childitem = new QTreeWidgetItem(QStringList(childnode->test));
-        item->addChild(childitem);
+void MainWindow::updateObjectsRecursive(QTreeWidgetItem *item, Joint* parent){
+    for(int i = 0 ; i < parent->HowManyChilds() ; i++ ) {
+        Joint *child = parent->ChildAt(i);
+        QTreeWidgetItem *childitem = new QTreeWidgetItem(item,QStringList(QString(child->label().c_str())));
+        updateObjectsRecursive(childitem, child);
     }
+}
+
+void MainWindow::UpdateFrameCount(int new_total) {
+    SceneContainer::SetFrameRange(0,new_total);
+    ui->timebar->SetNumberOfFrames(new_total+1);
+}
+
+void MainWindow::UpdateFPS(int new_fps) {
+}
+
+void MainWindow::UpdateSpeedControl(int new_speed_control) {
+    switch(new_speed_control) {
+    case 0:
+        GenericInterpolator::setSpeedFunction(GenericInterpolator::SF_CONSTANT);
+        break;
+    case 1:
+        GenericInterpolator::setSpeedFunction(GenericInterpolator::SF_EASE_IN_OUT_SIN);
+        break;
+    case 2:
+        GenericInterpolator::setSpeedFunction(GenericInterpolator::SF_EASE_IN_POW);
+        break;
+    default:
+        GenericInterpolator::setSpeedFunction(GenericInterpolator::SF_EASE_OUT_ROOT);
+        break;
+    }
+}
+
+void MainWindow::UpdatePositionInterpolation(int new_speed_interpolation) {
+    switch(new_speed_interpolation) {
+    case 0:
+        SceneContainer::SetPositionInterpolationType(PosInterpolator::kLinear);
+        break;
+    default:
+        SceneContainer::SetPositionInterpolationType(PosInterpolator::kCatmullRoom);
+        break;
+    }
+}
+
+void MainWindow::UpdateOrientationInterpolation(int new_orientation_interpolation) {
+    switch(new_orientation_interpolation) {
+    case 0:
+        SceneContainer::SetOrientationInterpolationType(OriInterpolator::kSlerp);
+        break;
+    default:
+        SceneContainer::SetOrientationInterpolationType(OriInterpolator::kBezier);
+        break;
+    }
+}
+
+void MainWindow::UpdateFreeze() {
+    SceneContainer::SetAnimated(!ui->checkbox_freeze_pos->isChecked(),!ui->checkbox_freeze_ori->isChecked());
 }

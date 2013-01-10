@@ -8,8 +8,6 @@ Object3D::Object3D()
     DefaultInitialisation();
 
     animator = NULL;
-
-    is_joint_ = false;
 }
 
 Object3D::Object3D(qglviewer::Vec pos) :
@@ -35,6 +33,14 @@ Object3D::~Object3D() {
         gluDeleteQuadric(quadric_);
 }
 
+std::string Object3D::label() {
+    return label_;
+}
+
+void Object3D::SetLabel(std::string label) {
+    label_ = label;
+}
+
 int Object3D::id() {
     return id_;
 }
@@ -48,27 +54,26 @@ void Object3D::DefaultInitialisation() {
     static int next_id = 0;
     id_ = next_id;
     next_id++;
+
+    label_ = "-";
+
 }
 
-void Object3D::Draw(bool animate_position, bool animate_orientation) {
+void Object3D::Draw() {
+
     glPushMatrix();
 
-    if(animate_position)
-        glTranslated(position_.x,position_.y,position_.z);
-
-    if(animate_orientation)
-        glMultMatrixd(orientation_.matrix());
+    glTranslated(position_.x,position_.y,position_.z);
+    glMultMatrixd(orientation_.matrix());
 
     if(draw_position_particle_)
         DrawPositionParticle();
     if(draw_orientation_axes_)
         DrawOrientationAxes();
     if(draw_object_)
-        DrawObject(animate_position,animate_orientation);
+        DrawObject();
 
     glPopMatrix();
-
-    DrawTrajectory(animate_position, animate_orientation);
 }
 
 void Object3D::DrawPositionParticle() {
@@ -102,14 +107,7 @@ void Object3D::DrawOrientationAxes() {
     glPopAttrib();
 }
 
-void Object3D::DrawObject(bool animate_position, bool animate_orientation) {
-}
-
-void Object3D::DrawTrajectory(bool animate_position, bool animate_orientation)
-{
-    if(animator != NULL and animator->GetTrajectory()!=NULL){
-        animator->GetTrajectory()->Draw(animate_position,animate_orientation);
-    }
+void Object3D::DrawObject() {
 }
 
 void Object3D::SetAnimator(ObjectAnimator *animator)

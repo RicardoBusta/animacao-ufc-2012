@@ -12,15 +12,23 @@ TimeBar::TimeBar(QWidget *parent) :
     setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     number_of_frames_ = 101;
     current_frame_ = 0;
+    step_width_ = 7;
+
+    SetNumberOfFrames(number_of_frames_);
+}
+void TimeBar::SetNumberOfFrames(int total) {
+    number_of_frames_ = total;
 
     int const_height = 25;
-    step_width_ = 7;
-    //this->setMinimumHeight(const_height);
-    //this->setMaximumHeight(const_height);
-    this->setGeometry(0,0,100*(step_width_-1)+1,const_height);
-    this->setMinimumWidth(100*(step_width_-1)+1);
+    this->setGeometry(0,0,(number_of_frames_)*(step_width_-1)+1,const_height);
+    this->setMinimumWidth((number_of_frames_)*(step_width_-1)+1);
+    if(current_frame_ >= number_of_frames_) {
+        SetCurrentFrame(number_of_frames_ -1);
+        emit SetSelectedFrame(current_frame_);
+    }
+
 }
-#include <iostream>
+
 void TimeBar::paintEvent(QPaintEvent* event) {
     QPainter painter(this);
     //painter.setRenderHint(QPainter::Antialiasing);

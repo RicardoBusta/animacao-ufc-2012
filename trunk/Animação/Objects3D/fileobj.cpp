@@ -6,7 +6,7 @@ FileObj::FileObj()
 {
 }
 
-void FileObj::DrawObject(bool, bool)
+void FileObj::DrawObject()
 {
     glPushAttrib(GL_ALL_ATTRIB_BITS);
     glShadeModel(GL_SMOOTH);

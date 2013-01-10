@@ -15,7 +15,8 @@ public:
     Object3D(qglviewer::Vec pos, qglviewer::Quaternion ori);
     ~Object3D();
 
-    bool is_joint_;
+    std::string                    label();
+    void                           SetLabel(std::string label);
 
     int                            id();
     inline void                    SetDrawObject          (bool draw) { draw_object_ = draw; }
@@ -27,18 +28,19 @@ public:
     inline qglviewer::Vec          position()    { return position_; }
     inline qglviewer::Quaternion   orientation() { return orientation_; }
 
-    void                           Draw(bool animate_position = true, bool animate_orientation = true);
-    virtual void                   DrawTrajectory(bool animate_position = true, bool animate_orientation = true);
+    void                           Draw();
 
     void                           SetAnimator(ObjectAnimator *animator);
     ObjectAnimator*                GetAnimator();
+
 protected:
 
     void                           DefaultInitialisation();
     void                           DrawPositionParticle();
     void                           DrawOrientationAxes();
-    virtual void                   DrawObject(bool animate_position = true, bool animate_orientation = true);
+    virtual void                   DrawObject();
 
+    std::string label_;
     bool draw_object_;
     bool draw_position_particle_;
     bool draw_orientation_axes_;

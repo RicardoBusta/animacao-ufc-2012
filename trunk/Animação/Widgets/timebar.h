@@ -11,6 +11,7 @@ class TimeBar : public QWidget
 public:
     explicit TimeBar(QWidget *parent = 0);
     
+    void SetNumberOfFrames(int total);
     void setKeyFrames(Object3D* object);
 private:
     int step_width_;

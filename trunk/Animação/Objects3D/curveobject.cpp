@@ -6,7 +6,7 @@ CurveObject::CurveObject(Curve* curve)
     curve_ = curve;
 }
 
-void CurveObject::DrawObject(bool animate_position, bool animate_orientation) {
+void CurveObject::DrawObject() {
     int steps = 25;
     double delta = (1.0)/((double)(steps-1.0));
 

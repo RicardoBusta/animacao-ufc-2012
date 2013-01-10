@@ -2,6 +2,7 @@
 #include "Objects3D/object3d.h"
 #include "Interpolation/animation_step.h"
 #include "Objects3D/trajectoryobject.h"
+#include "Utils/scenecontainer.h"
 
 ObjectAnimator::ObjectAnimator(Object3D* child)
 {
@@ -26,19 +27,32 @@ void ObjectAnimator::SetCurrentFrame(int frame) {
     PositionsUpdate();
     OrientationsUpdate();
 
-    child_object_->SetNewPosition(pos_interpolator_.GetPositionAt(frame));
-    child_object_->SetNewOrientation(ori_interpolator_.GetOrientationAt(frame));
+    if(SceneContainer::AnimatePosition()) {
+        bool is_valid;
+        qglviewer::Vec pos = pos_interpolator_.GetPositionAt(frame,&is_valid);
+        child_object_->SetNewPosition(is_valid? pos : child_object_->position());
+    }
+
+    if(SceneContainer::AnimateOrientation()) {
+        bool is_valid;
+        qglviewer::Quaternion ori = ori_interpolator_.GetOrientationAt(frame,&is_valid);
+        child_object_->SetNewOrientation(is_valid? ori : child_object_->orientation());
+    }
 
 }
 
 qglviewer::Vec ObjectAnimator::PositionAt(int i) {
     PositionsUpdate();
-    return pos_interpolator_.GetPositionAt(i);
+    bool is_valid;
+    qglviewer::Vec pos = pos_interpolator_.GetPositionAt(i,&is_valid);
+    return is_valid? pos : child_object_->position();
 }
 
 qglviewer::Quaternion ObjectAnimator::OrientationAt(int i) {
     OrientationsUpdate();
-    return ori_interpolator_.GetOrientationAt(i);
+    bool is_valid;
+    qglviewer::Quaternion ori = ori_interpolator_.GetOrientationAt(i,&is_valid);
+    return is_valid? ori : child_object_->orientation();
 }
 
 void ObjectAnimator::AddKeyPosition(int frame, qglviewer::Vec pos) {
@@ -139,8 +153,15 @@ void  ObjectAnimator::OrientationsUpdate() {
     }
 }
 
+void ObjectAnimator::SetParent(ObjectAnimator* parent) {
+    parent_ = parent;
+}
 
-Object3D *ObjectAnimator::GetChild()
+ObjectAnimator* ObjectAnimator::Parent() {
+    return parent_;
+}
+
+Object3D* ObjectAnimator::GetChild()
 {
     return child_object_;
 }

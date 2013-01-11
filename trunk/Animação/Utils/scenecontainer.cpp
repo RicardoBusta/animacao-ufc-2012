@@ -33,7 +33,42 @@ void SceneContainer::DrawObjects() {
     }
 }
 
+Joint* SceneContainer::AddObject(QString objfile, QString texfile, QVector3D position, Joint* parent){
+    FileObj *newobj = new FileObj();
+    newobj->loadFile(objfile);
+    newobj->loadTex(texfile);
+    Joint *newjoint = new Joint(newobj);
+    newjoint->SetNewPosition(qglviewer::Vec(position.x(),position.y(),position.z()));
+    if(parent == NULL){
+        SceneContainer::objects_.push_back(newjoint);
+    }else{
+        parent->AddChildJoint(newjoint);
+    }
+    ObjectAnimator *newanimator = new ObjectAnimator(newjoint);
+    SceneContainer::animators_.push_back(newanimator);
+
+    return newjoint;
+}
+
 void SceneContainer::CreateDefaultScene() {
+
+    Joint* arm_base = AddObject("://models/arm_base.obj","://textures/wooden.png",QVector3D(0,0.75,0),NULL);
+    Joint* arm_part1 = AddObject("://models/arm_part1.obj","://textures/wooden.png",QVector3D(0,0.25,0),arm_base);
+    Joint* arm_part2 = AddObject("://models/arm_part2.obj","://textures/wooden.png",QVector3D(0,3.7,0),arm_part1);
+    Joint* arm_hand = AddObject("://models/arm_hand.obj","://textures/wooden.png",QVector3D(0,4.7,0),arm_part2);
+
+    Joint* arm_finger_5_1 = AddObject("://models/arm_finger.obj","://textures/wooden.png",QVector3D(0.5,1.4,0),arm_hand);
+    Joint* arm_finger_4_1 = AddObject("://models/arm_finger.obj","://textures/wooden.png",QVector3D(0.2,1.5,0),arm_hand);
+    Joint* arm_finger_3_1 = AddObject("://models/arm_finger.obj","://textures/wooden.png",QVector3D(-0.1,1.6,0),arm_hand);
+    Joint* arm_finger_2_1 = AddObject("://models/arm_finger.obj","://textures/wooden.png",QVector3D(-0.4,1.5,0),arm_hand);
+    Joint* arm_finger_1_1 = AddObject("://models/arm_finger.obj","://textures/wooden.png",QVector3D(-0.6,1,0),arm_hand);
+
+    Joint* arm_finger_5_2 = AddObject("://models/arm_finger.obj","://textures/wooden.png",QVector3D(0,0.6,0),arm_finger_5_1);
+    Joint* arm_finger_4_2 = AddObject("://models/arm_finger.obj","://textures/wooden.png",QVector3D(0,0.6,0),arm_finger_4_1);
+    Joint* arm_finger_3_2 = AddObject("://models/arm_finger.obj","://textures/wooden.png",QVector3D(0,0.6,0),arm_finger_3_1);
+    Joint* arm_finger_2_2 = AddObject("://models/arm_finger.obj","://textures/wooden.png",QVector3D(0,0.6,0),arm_finger_2_1);
+    Joint* arm_finger_1_2 = AddObject("://models/arm_finger.obj","://textures/wooden.png",QVector3D(0,0.6,0),arm_finger_1_1);
+
 
  /*   Torus* ss = new Torus(2,3,36,36);
     Joint* joint0 = new Joint(ss);
@@ -45,6 +80,7 @@ void SceneContainer::CreateDefaultScene() {
 
     objects_.push_back(joint0);*/
 
+    /*
     FileObj* obj = new FileObj();
     Object3D *teste = obj;
     obj->loadFile(":/models/ship.obj");
@@ -81,6 +117,7 @@ void SceneContainer::CreateDefaultScene() {
     animteste->AddKeyOrientation(50, 90,90,30);
     animteste->AddKeyOrientation(75, 90,90,90);
     animteste->AddKeyOrientation(100, 0,0,0);
+    */
 
    /*animteste2->AddKeyPosition(0,qglviewer::Vec(0,0,0));
     animteste2->AddKeyPosition(25,qglviewer::Vec(2,2,3));

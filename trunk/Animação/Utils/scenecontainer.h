@@ -26,6 +26,7 @@ public:
     static void SetCurrentFrame(int frame);
 
     //! Objects management
+    static Joint* AddObject(QString objfile, QString texfile, QVector3D position, Joint *parent);
     static unsigned int HowManyObjects();
     static Joint* ObjectAt(int i);
     static  ObjectInfoTree *GetObjects();

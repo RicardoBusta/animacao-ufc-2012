@@ -5,5 +5,11 @@
         <file>buttons/pause.png</file>
         <file>buttons/play.png</file>
         <file>buttons/stop.png</file>
+        <file>models/arm_base.obj</file>
+        <file>models/arm_finger.obj</file>
+        <file>models/arm_hand.obj</file>
+        <file>models/arm_part1.obj</file>
+        <file>models/arm_part2.obj</file>
+        <file>textures/wooden.png</file>
     </qresource>
 </RCC>

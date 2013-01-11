@@ -12,13 +12,14 @@ public:
 
     int HowManyChilds();
     Joint* ChildAt(int index);
+    Object3D *ChildObject();
 
 
 protected:
     virtual void DrawObject();
 
 private:
-    Object3D* children_object_;
+    Object3D* child_object_;
     std::vector<Joint*> children_joint_;
 };
 

@@ -76,6 +76,8 @@ void Viewer::init() {
     this->grid_size_ = 10.0;
 
     setSceneRadius(10.0f);
+
+    this->camera()->fitSphere(qglviewer::Vec(0,5,0),10);
 }
 
 void Viewer::postDraw(){

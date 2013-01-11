@@ -101,6 +101,9 @@ void MainWindow::updateObjectsRecursive(QTreeWidgetItem *item, Joint* parent){
         QTreeWidgetItem *childitem = new QTreeWidgetItem(item,QStringList(QString(child->label().c_str())));
         updateObjectsRecursive(childitem, child);
     }
+    if(parent->ChildObject()!=NULL){
+       new QTreeWidgetItem(item,QStringList(QString(parent->ChildObject()->label().c_str())));
+    }
 }
 
 void MainWindow::UpdateFrameCount(int new_total) {

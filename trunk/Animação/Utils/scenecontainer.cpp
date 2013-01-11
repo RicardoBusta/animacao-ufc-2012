@@ -11,6 +11,8 @@
 
 #include "Objects3D/fileobj.h"
 
+#include <QQuaternion>
+
 std::vector<Joint*> SceneContainer::objects_;
 std::vector<Object3D*> SceneContainer::extras_;
 std::vector<ObjectAnimator*> SceneContainer::animators_;
@@ -33,12 +35,15 @@ void SceneContainer::DrawObjects() {
     }
 }
 
-Joint* SceneContainer::AddObject(QString objfile, QString texfile, QVector3D position, Joint* parent){
+Joint* SceneContainer::AddObject(QString label, QString objfile, QString texfile, QVector3D position, QQuaternion rotation, Joint* parent){
     FileObj *newobj = new FileObj();
+    newobj->SetLabel( label.toStdString() );
     newobj->loadFile(objfile);
     newobj->loadTex(texfile);
     Joint *newjoint = new Joint(newobj);
+    //newjoint->SetLabel( ( label+" Joint" ).toStdString());
     newjoint->SetNewPosition(qglviewer::Vec(position.x(),position.y(),position.z()));
+    newjoint->SetNewOrientation(qglviewer::Quaternion(rotation.x(),rotation.y(),rotation.z(),rotation.scalar()));
     if(parent == NULL){
         SceneContainer::objects_.push_back(newjoint);
     }else{
@@ -52,22 +57,96 @@ Joint* SceneContainer::AddObject(QString objfile, QString texfile, QVector3D pos
 
 void SceneContainer::CreateDefaultScene() {
 
-    Joint* arm_base = AddObject("://models/arm_base.obj","://textures/wooden.png",QVector3D(0,0.75,0),NULL);
-    Joint* arm_part1 = AddObject("://models/arm_part1.obj","://textures/wooden.png",QVector3D(0,0.25,0),arm_base);
-    Joint* arm_part2 = AddObject("://models/arm_part2.obj","://textures/wooden.png",QVector3D(0,3.7,0),arm_part1);
-    Joint* arm_hand = AddObject("://models/arm_hand.obj","://textures/wooden.png",QVector3D(0,4.7,0),arm_part2);
+    Joint* arm_base = AddObject("Arm Base","://models/arm_base.obj","://textures/wooden.png",QVector3D(0,0.75,0), QQuaternion(1,0,0,0), NULL);
+    Joint* arm_part1 = AddObject("Part 1","://models/arm_part1.obj","://textures/wooden.png",QVector3D(0,0.25,0),QQuaternion(1,0,0,0),arm_base);
+    Joint* arm_part2 = AddObject("Part 2","://models/arm_part2.obj","://textures/wooden.png",QVector3D(0,3.7,0),QQuaternion(1,0,0,0),arm_part1);
+    Joint* arm_hand = AddObject("Hand","://models/arm_hand.obj","://textures/wooden.png",QVector3D(0,4.7,0),QQuaternion(1,0,0,0),arm_part2);
 
-    Joint* arm_finger_5_1 = AddObject("://models/arm_finger.obj","://textures/wooden.png",QVector3D(0.5,1.4,0),arm_hand);
-    Joint* arm_finger_4_1 = AddObject("://models/arm_finger.obj","://textures/wooden.png",QVector3D(0.2,1.5,0),arm_hand);
-    Joint* arm_finger_3_1 = AddObject("://models/arm_finger.obj","://textures/wooden.png",QVector3D(-0.1,1.6,0),arm_hand);
-    Joint* arm_finger_2_1 = AddObject("://models/arm_finger.obj","://textures/wooden.png",QVector3D(-0.4,1.5,0),arm_hand);
-    Joint* arm_finger_1_1 = AddObject("://models/arm_finger.obj","://textures/wooden.png",QVector3D(-0.6,1,0),arm_hand);
+    Joint* arm_finger_5_1 = AddObject("Finger 5 Part 1","://models/arm_finger.obj","://textures/wooden.png",QVector3D(0.5,1.4,0),QQuaternion(1,0,0,0),arm_hand);
+    Joint* arm_finger_4_1 = AddObject("Finger 4 Part 1","://models/arm_finger.obj","://textures/wooden.png",QVector3D(0.2,1.5,0),QQuaternion(1,0,0,0),arm_hand);
+    Joint* arm_finger_3_1 = AddObject("Finger 3 Part 1","://models/arm_finger.obj","://textures/wooden.png",QVector3D(-0.1,1.6,0),QQuaternion(1,0,0,0),arm_hand);
+    Joint* arm_finger_2_1 = AddObject("Finger 2 Part 1","://models/arm_finger.obj","://textures/wooden.png",QVector3D(-0.4,1.5,0),QQuaternion(1,0,0,0),arm_hand);
+    Joint* arm_finger_1_1 = AddObject("Finger 1 Part 1","://models/arm_finger.obj","://textures/wooden.png",QVector3D(-0.6,1,0),QQuaternion(1,0,0,0),arm_hand);
 
-    Joint* arm_finger_5_2 = AddObject("://models/arm_finger.obj","://textures/wooden.png",QVector3D(0,0.6,0),arm_finger_5_1);
-    Joint* arm_finger_4_2 = AddObject("://models/arm_finger.obj","://textures/wooden.png",QVector3D(0,0.6,0),arm_finger_4_1);
-    Joint* arm_finger_3_2 = AddObject("://models/arm_finger.obj","://textures/wooden.png",QVector3D(0,0.6,0),arm_finger_3_1);
-    Joint* arm_finger_2_2 = AddObject("://models/arm_finger.obj","://textures/wooden.png",QVector3D(0,0.6,0),arm_finger_2_1);
-    Joint* arm_finger_1_2 = AddObject("://models/arm_finger.obj","://textures/wooden.png",QVector3D(0,0.6,0),arm_finger_1_1);
+    Joint* arm_finger_5_2 = AddObject("Finger 5 Part 2","://models/arm_finger.obj","://textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),arm_finger_5_1);
+    Joint* arm_finger_4_2 = AddObject("Finger 4 Part 2","://models/arm_finger.obj","://textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),arm_finger_4_1);
+    Joint* arm_finger_3_2 = AddObject("Finger 3 Part 2","://models/arm_finger.obj","://textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),arm_finger_3_1);
+    Joint* arm_finger_2_2 = AddObject("Finger 2 Part 2","://models/arm_finger.obj","://textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),arm_finger_2_1);
+    Joint* arm_finger_1_2 = AddObject("Finger 1 Part 2","://models/arm_finger.obj","://textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),arm_finger_1_1);
+
+    ObjectAnimator *animate;
+
+    animate = arm_base->GetAnimator();
+
+    animate->AddKeyPosition(0,qglviewer::Vec(0,0,0));
+    animate->AddKeyPosition(25,qglviewer::Vec(2,2,3));
+    animate->AddKeyPosition(50,qglviewer::Vec(4,0,5));
+    animate->AddKeyPosition(75,qglviewer::Vec(6,2,3));
+    animate->AddKeyPosition(100,qglviewer::Vec(8,0,0));
+
+    animate->AddKeyOrientation(0, 0,0,0);
+    animate->AddKeyOrientation(25, 90,0,0);
+    animate->AddKeyOrientation(50, 90,90,30);
+    animate->AddKeyOrientation(75, 90,90,90);
+    animate->AddKeyOrientation(100, 0,0,0);
+
+    animate = arm_part1->GetAnimator();
+    animate->AddKeyOrientation(0, 0,0,0);
+    animate->AddKeyOrientation(25, 90,0,0);
+    animate->AddKeyOrientation(50, 90,90,30);
+    animate->AddKeyOrientation(75, 90,90,90);
+    animate->AddKeyOrientation(100, 0,0,0);
+
+    animate = arm_part2->GetAnimator();
+    animate->AddKeyOrientation(0, 0,0,0);
+    animate->AddKeyOrientation(25, 90,0,0);
+    animate->AddKeyOrientation(50, 90,90,30);
+    animate->AddKeyOrientation(75, 90,90,90);
+    animate->AddKeyOrientation(100, 0,0,0);
+
+    animate = arm_hand->GetAnimator();
+    animate->AddKeyOrientation(0, 0,0,0);
+    animate->AddKeyOrientation(25, 90,0,0);
+    animate->AddKeyOrientation(50, 90,90,30);
+    animate->AddKeyOrientation(75, 90,90,90);
+    animate->AddKeyOrientation(100, 0,0,0);
+
+    animate = arm_finger_1_1->GetAnimator();
+    animate->AddKeyOrientation(0, 0,0,0);
+    animate->AddKeyOrientation(25, 90,0,0);
+    animate->AddKeyOrientation(50, 90,90,30);
+    animate->AddKeyOrientation(75, 90,90,90);
+    animate->AddKeyOrientation(100, 0,0,0);
+
+    animate = arm_finger_2_1->GetAnimator();
+    animate->AddKeyOrientation(0, 0,0,0);
+    animate->AddKeyOrientation(25, 90,0,0);
+    animate->AddKeyOrientation(50, 90,90,30);
+    animate->AddKeyOrientation(75, 90,90,90);
+    animate->AddKeyOrientation(100, 0,0,0);
+
+    animate = arm_finger_3_1->GetAnimator();
+    animate->AddKeyOrientation(0, 0,0,0);
+    animate->AddKeyOrientation(25, 90,0,0);
+    animate->AddKeyOrientation(50, 90,90,30);
+    animate->AddKeyOrientation(75, 90,90,90);
+    animate->AddKeyOrientation(100, 0,0,0);
+
+    animate = arm_finger_4_1->GetAnimator();
+    animate->AddKeyOrientation(0, 0,0,0);
+    animate->AddKeyOrientation(25, 90,0,0);
+    animate->AddKeyOrientation(50, 90,90,30);
+    animate->AddKeyOrientation(75, 90,90,90);
+    animate->AddKeyOrientation(100, 0,0,0);
+
+    animate = arm_finger_5_1->GetAnimator();
+    animate->AddKeyOrientation(0, 0,0,0);
+    animate->AddKeyOrientation(25, 90,0,0);
+    animate->AddKeyOrientation(50, 90,90,30);
+    animate->AddKeyOrientation(75, 90,90,90);
+    animate->AddKeyOrientation(100, 0,0,0);
+
+
 
 
  /*   Torus* ss = new Torus(2,3,36,36);

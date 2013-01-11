@@ -4,6 +4,7 @@
 
 FileObj::FileObj()
 {
+    label_ = "Untitled";
 }
 
 void FileObj::DrawObject()

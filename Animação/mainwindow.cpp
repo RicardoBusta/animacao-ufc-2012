@@ -55,7 +55,6 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-
 void MainWindow::PlayPause(){
     if(play_or_pause_){
         play_or_pause_ = false;
@@ -83,15 +82,18 @@ void MainWindow::SelectedFramePause()
 
 void MainWindow::UpdateObjects(){
 
+    item_to_object_.clear();
     for( int i = 0 ; i < SceneContainer::HowManyObjects() ; i++ ) {
         Joint* object =  SceneContainer::ObjectAt(i);
         QTreeWidgetItem *item = new QTreeWidgetItem(QStringList(QString(object->label().c_str())));
         updateObjectsRecursive(item, object);
         ui->treeWidget->addTopLevelItem(item);
+        item_to_object_[item] = object;
     }
     ui->treeWidget->expandAll();
 
-    ui->timebar->setKeyFrames((Object3D*)SceneContainer::ObjectAt(0));
+    connect(ui->treeWidget, SIGNAL(itemClicked(QTreeWidgetItem*,int)), this, SLOT(UpdateCurrentSelected(QTreeWidgetItem*,int)));
+    //ui->timebar->setKeyFrames((Object3D*)SceneContainer::ObjectAt(0));
     ui->timebar->update();    
 }
 
@@ -100,9 +102,20 @@ void MainWindow::updateObjectsRecursive(QTreeWidgetItem *item, Joint* parent){
         Joint *child = parent->ChildAt(i);
         QTreeWidgetItem *childitem = new QTreeWidgetItem(item,QStringList(QString(child->label().c_str())));
         updateObjectsRecursive(childitem, child);
+        item_to_object_[childitem] = child;
     }
     if(parent->ChildObject()!=NULL){
        new QTreeWidgetItem(item,QStringList(QString(parent->ChildObject()->label().c_str())));
+    }
+}
+
+void MainWindow::UpdateCurrentSelected(QTreeWidgetItem *item, int column) {
+    if(item == NULL) return;
+    if( item_to_object_.find(item) != item_to_object_.end() ) {
+        Joint* object = item_to_object_[item];
+        UpdateSelectedInfo(object);
+        ui->timebar->setKeyFrames(object);
+        ui->timebar->repaint();
     }
 }
 
@@ -155,4 +168,37 @@ void MainWindow::UpdateOrientationInterpolation(int new_orientation_interpolatio
 
 void MainWindow::UpdateFreeze() {
     SceneContainer::SetAnimated(!ui->checkbox_freeze_pos->isChecked(),!ui->checkbox_freeze_ori->isChecked());
+}
+
+void MainWindow::UpdateSelectedInfo(Joint* object) {
+    if(object==NULL) {
+        ui->tool_box->setEnabled(false);
+        return;
+    }
+
+    ui->line_edit_label->setText(QString(object->label().c_str()));
+    ui->spin_pos_x->setValue(object->position().x);
+    ui->spin_pos_y->setValue(object->position().y);
+    ui->spin_pos_z->setValue(object->position().z);
+    ui->tool_box->setEnabled(true);
+}
+
+void MainWindow::UpdateSelectedLabel(QString label){
+
+}
+
+void MainWindow::UpdateCurrentPosition() {
+
+}
+
+void MainWindow::UpdateCurrentOrientation() {
+
+}
+
+void MainWindow::DisplayTrajectoryPosition(bool display) {
+
+}
+
+void MainWindow::DisplayTrajectoryOrientation(bool display) {
+
 }

@@ -9,7 +9,7 @@
 TimeBar::TimeBar(QWidget *parent) :
     QWidget(parent)
 {
-    setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
+    //setSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding);
     number_of_frames_ = 101;
     current_frame_ = 0;
     step_width_ = 10;
@@ -19,9 +19,9 @@ TimeBar::TimeBar(QWidget *parent) :
 void TimeBar::SetNumberOfFrames(int total) {
     number_of_frames_ = total;
 
-    int const_height = 50;
+    //int const_height = 50;
     //this->setGeometry(0,0,(number_of_frames_)*(step_width_-1)+1,const_height);
-    this->setFixedSize((number_of_frames_)*(step_width_-1)+1,const_height);
+    //this->setFixedSize((number_of_frames_)*(step_width_-1)+1,const_height);
     this->setMinimumWidth((number_of_frames_)*(step_width_-1)+1);
     if(current_frame_ >= number_of_frames_) {
         SetCurrentFrame(number_of_frames_ -1);

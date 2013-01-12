@@ -52,7 +52,7 @@
         <item>
          <widget class="QTabWidget" name="verticalTabWidget_5">
           <property name="currentIndex">
-           <number>1</number>
+           <number>0</number>
           </property>
           <widget class="QWidget" name="verticalTabWidget_5Page1">
            <attribute name="title">
@@ -595,8 +595,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>563</width>
-           <height>81</height>
+           <width>565</width>
+           <height>85</height>
           </rect>
          </property>
          <property name="sizePolicy">

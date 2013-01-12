@@ -32,18 +32,21 @@ public:
 
     void                           SetAnimator(ObjectAnimator *animator);
     ObjectAnimator*                GetAnimator();
-
 protected:
 
     void                           DefaultInitialisation();
     void                           DrawPositionParticle();
     void                           DrawOrientationAxes();
     virtual void                   DrawObject();
+    virtual void                   DrawBoundingBox();
 
     std::string label_;
     bool draw_object_;
     bool draw_position_particle_;
     bool draw_orientation_axes_;
+    bool draw_bounding_box_;
+    qglviewer::Vec bounding_box_max_;
+    qglviewer::Vec bounding_box_min_;
     qglviewer::Vec color_;
     qglviewer::Vec position_;
     qglviewer::Quaternion orientation_;

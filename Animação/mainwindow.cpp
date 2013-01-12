@@ -29,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect( ui->viewer, SIGNAL(CurrentFrame(int)), ui->timebar, SLOT(SetCurrentFrame(int)));
 
     connect( ui->spin_frame_count, SIGNAL(valueChanged(int)), this, SLOT(UpdateFrameCount(int)));
+
     connect( ui->combo_velocity_control, SIGNAL(activated(int)), this, SLOT(UpdateSpeedControl(int)));
 
     connect( ui->combo_pos_interpolator, SIGNAL(activated(int)), this, SLOT(UpdatePositionInterpolation(int)));
@@ -83,7 +84,7 @@ void MainWindow::SelectedFramePause()
 void MainWindow::UpdateObjects(){
 
     item_to_object_.clear();
-    for( int i = 0 ; i < SceneContainer::HowManyObjects() ; i++ ) {
+    for( unsigned int i = 0 ; i < SceneContainer::HowManyObjects() ; i++ ) {
         Joint* object =  SceneContainer::ObjectAt(i);
         QTreeWidgetItem *item = new QTreeWidgetItem(QStringList(QString(object->label().c_str())));
         updateObjectsRecursive(item, object);

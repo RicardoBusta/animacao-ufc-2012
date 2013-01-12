@@ -31,6 +31,10 @@ void FileObj::DrawObject()
 
 void FileObj::loadFile(QString filename)
 {
+    vertex.clear();
+    texturecoord.clear();
+    normal.clear();
+    face.clear();
 
     QFile file(filename);
     if(!file.open(QIODevice::ReadOnly)) {
@@ -45,23 +49,45 @@ void FileObj::loadFile(QString filename)
     texturecoord.push_back(vect);
     QVector3D vecn(0,0,0);
     normal.push_back(vecn);
+    bounding_box_max_ = qglviewer::Vec(0,0,0);
+    bounding_box_min_ = qglviewer::Vec(0,0,0);
 
     while(!in.atEnd()) {
         QString line = in.readLine();
         QStringList token = line.split(' ');
 
         if(token.at(0) == "v" and token.size() == 4){
-            QVector3D vec(token.at(1).toFloat(),token.at(2).toFloat(),token.at(3).toFloat());
+            float x = token.at(1).toFloat();
+            float y = token.at(2).toFloat();
+            float z = token.at(3).toFloat();
+
+            if(x > bounding_box_max_.x){
+                bounding_box_max_.x = x;
+            }
+            if(x < bounding_box_min_.x){
+                bounding_box_min_.x = x;
+            }
+            if(y > bounding_box_max_.y){
+                bounding_box_max_.y = y;
+            }
+            if(y < bounding_box_min_.y){
+                bounding_box_min_.y = y;
+            }
+            if(z > bounding_box_max_.z){
+                bounding_box_max_.z = z;
+            }
+            if(z < bounding_box_min_.z){
+                bounding_box_min_.z = z;
+            }
+
+            QVector3D vec(x,y,z);
             vertex.push_back(vec);
-//            cout << "v " << vec.x() << " " << vec.y() << " " << vec.z() << endl;
         }else if(token.at(0) == "vt" and token.size() == 3){
             QVector2D vec(token.at(1).toFloat(),token.at(2).toFloat());
             texturecoord.push_back(vec);
-//            cout << "vt " << vec.x() << " " << vec.y() << endl;
         }else if(token.at(0) == "vn" and token.size() == 4){
             QVector3D vec(token.at(1).toFloat(),token.at(2).toFloat(),token.at(3).toFloat());
             normal.push_back(vec);
-//            cout << "vn " << vec.x() << " " << vec.y() << " " << vec.z() << endl;
         }else if(token.at(0) == "f" and token.size() == 4){
             FileObjFace f;
 
@@ -94,11 +120,6 @@ void FileObj::loadFile(QString filename)
                 f.textureID[2] = 0;
                 f.normalID[2] = 0;
             }
-//            cout << "f";
-//            for(int i=0;i<3;i++){
-//                cout << " " << f.vertexID[i] << "/" << f.textureID[i] << "/" << f.normalID[i] ;
-//            }
-//            cout << endl;
             face.push_back(f);
         }else{
 

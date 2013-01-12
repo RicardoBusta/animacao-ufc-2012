@@ -35,3 +35,8 @@ Object3D *Joint::ChildObject()
 {
     return child_object_;
 }
+
+
+void Joint::DrawBoundingBox()
+{
+}

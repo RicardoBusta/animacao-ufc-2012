@@ -17,6 +17,7 @@ public:
 
 protected:
     virtual void DrawObject();
+    virtual void DrawBoundingBox();
 
 private:
     Object3D* child_object_;

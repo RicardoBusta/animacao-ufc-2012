@@ -8,6 +8,10 @@ Object3D::Object3D()
     DefaultInitialisation();
 
     animator = NULL;
+
+    draw_bounding_box_ = true;
+    bounding_box_max_ = qglviewer::Vec(0.5,0.5,0.5);
+    bounding_box_min_ = qglviewer::Vec(-0.5,-0.5,-0.5);
 }
 
 Object3D::Object3D(qglviewer::Vec pos) :
@@ -72,6 +76,8 @@ void Object3D::Draw() {
         DrawOrientationAxes();
     if(draw_object_)
         DrawObject();
+    if(draw_bounding_box_)
+        DrawBoundingBox();
 
     glPopMatrix();
 }
@@ -118,4 +124,40 @@ void Object3D::SetAnimator(ObjectAnimator *animator)
 ObjectAnimator *Object3D::GetAnimator()
 {
     return animator;
+}
+
+void Object3D::DrawBoundingBox()
+{
+    glPushAttrib(GL_ALL_ATTRIB_BITS);
+    glDisable(GL_LIGHTING);
+    glBegin(GL_LINE_STRIP);
+
+    glVertex3f(bounding_box_max_.x,bounding_box_max_.y,bounding_box_max_.z);
+    glVertex3f(bounding_box_max_.x,bounding_box_max_.y,bounding_box_min_.z);
+    glVertex3f(bounding_box_min_.x,bounding_box_max_.y,bounding_box_min_.z);
+    glVertex3f(bounding_box_min_.x,bounding_box_max_.y,bounding_box_max_.z);
+    glVertex3f(bounding_box_max_.x,bounding_box_max_.y,bounding_box_max_.z);
+
+    glVertex3f(bounding_box_max_.x,bounding_box_min_.y,bounding_box_max_.z);
+    glVertex3f(bounding_box_max_.x,bounding_box_min_.y,bounding_box_min_.z);
+    glVertex3f(bounding_box_min_.x,bounding_box_min_.y,bounding_box_min_.z);
+    glVertex3f(bounding_box_min_.x,bounding_box_min_.y,bounding_box_max_.z);
+    glVertex3f(bounding_box_max_.x,bounding_box_min_.y,bounding_box_max_.z);
+
+    glEnd();
+
+    glBegin(GL_LINES);
+
+    glVertex3f(bounding_box_max_.x,bounding_box_max_.y,bounding_box_min_.z);
+    glVertex3f(bounding_box_max_.x,bounding_box_min_.y,bounding_box_min_.z);
+
+    glVertex3f(bounding_box_min_.x,bounding_box_max_.y,bounding_box_min_.z);
+    glVertex3f(bounding_box_min_.x,bounding_box_min_.y,bounding_box_min_.z);
+
+    glVertex3f(bounding_box_min_.x,bounding_box_max_.y,bounding_box_max_.z);
+    glVertex3f(bounding_box_min_.x,bounding_box_min_.y,bounding_box_max_.z);
+
+    glEnd();
+
+    glPopAttrib();
 }

@@ -146,9 +146,6 @@ void SceneContainer::CreateDefaultScene() {
     animate->AddKeyOrientation(75, 90,90,90);
     animate->AddKeyOrientation(100, 0,0,0);
 
-
-
-
  /*   Torus* ss = new Torus(2,3,36,36);
     Joint* joint0 = new Joint(ss);
 

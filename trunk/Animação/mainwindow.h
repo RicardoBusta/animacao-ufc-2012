@@ -25,6 +25,9 @@ private:
     bool play_or_pause_;
 
     void updateObjectsRecursive(QTreeWidgetItem *item, Joint* parent);
+
+    std::map<QTreeWidgetItem*, Joint*> item_to_object_;
+
 public slots:
     void PlayPause();
     void Stop();
@@ -38,6 +41,13 @@ private slots:
     void UpdatePositionInterpolation(int new_speed_interpolation);
     void UpdateOrientationInterpolation(int new_orientation_interpolation);
     void UpdateFreeze();
+    void UpdateCurrentSelected(QTreeWidgetItem *item, int column);
+    void UpdateSelectedLabel(QString label);
+    void UpdateCurrentPosition();
+    void UpdateCurrentOrientation();
+    void DisplayTrajectoryPosition(bool display);
+    void DisplayTrajectoryOrientation(bool display);
+    void UpdateSelectedInfo(Joint* object);
 };
 
 #endif // MAINWINDOW_H

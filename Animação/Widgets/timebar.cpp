@@ -39,7 +39,7 @@ void TimeBar::paintEvent(QPaintEvent*) {
     QColor frame_border_color = palette().midlight().color().darker();/*(200,200,200);*/
 
     QColor keyframe_pos_color(0,200,255);
-    QColor keyframe_ori_color(255,150,150);
+    QColor keyframe_ori_color(255,140,0);
 
     QColor border_color = palette().shadow().color().darker();
     QColor selection_color = palette().highlight().color(); /*(0,0,0);*/

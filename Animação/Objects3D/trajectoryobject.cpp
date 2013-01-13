@@ -6,7 +6,7 @@ TrajectoryObject::TrajectoryObject(ObjectAnimator* animator)
 {
     animator_   = animator;
     quadric_    = NULL;
-    radius_     = 1.0;
+    radius_     = 3.0;
 }
 
 void TrajectoryObject::SetType(TrajectoryType type) {
@@ -85,7 +85,11 @@ void TrajectoryObject::DrawPositionsCurve() {
     glDisable(GL_LIGHTING);
 
     glBegin(GL_LINE_STRIP);
-    glColor3d(0,0.5,0.8);
+    if(type_ == kOrientation){
+        glColor3d(0.9,0.5,0);
+    }else{
+        glColor3d(0,0.5,0.8);
+    }
     for(size_t i = 0 ; i < positions_.size() ; i++ ) {
         qglviewer::Vec pos = positions_.at(i);
         glVertex3d(pos.x,pos.y,pos.z);
@@ -94,7 +98,12 @@ void TrajectoryObject::DrawPositionsCurve() {
 
     glPointSize(3.0f);
     glBegin(GL_POINTS);
-    glColor3d(0,1,1);
+
+    if(type_ == kOrientation){
+        glColor3d(1,0.7,0);
+    }else{
+        glColor3d(0,1,1);
+    }
 
     for(size_t i = 0 ; i < positions_.size() ; i++ ) {
         qglviewer::Vec pos = positions_.at(i);

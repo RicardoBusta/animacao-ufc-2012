@@ -26,16 +26,18 @@ int SceneContainer::start_frame_ = 0;
 int SceneContainer::end_frame_ = 100;
 int SceneContainer::current_frame_ = 0;
 
+bool SceneContainer::render_box_over_object_ = false;
+
 SceneContainer::SceneContainer(){}
 
 void SceneContainer::DrawObjects() {
     for(uint i = 0; i < objects_.size();i++){
         Joint *object = objects_.at(i);
-        object->Draw();
+        object->Draw(render_box_over_object_);
     }
     for(int i = 0 ; i < extras_.size() ; i++ ) {
         Object3D* object = extras_.at(i);
-        object->Draw();
+        object->Draw(render_box_over_object_);
     }
 }
 
@@ -78,7 +80,7 @@ void SceneContainer::CreateDefaultScene() {
     Joint* arm_finger_2_2 = AddObject("Finger 2 Part 2","://models/arm_finger.obj","://textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),arm_finger_2_1);
     Joint* arm_finger_1_2 = AddObject("Finger 1 Part 2","://models/arm_finger.obj","://textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),arm_finger_1_1);
 
-   /* ObjectAnimator *animate;
+    ObjectAnimator *animate;
 
     animate = arm_base->GetAnimator();
 
@@ -148,7 +150,7 @@ void SceneContainer::CreateDefaultScene() {
     animate->AddKeyOrientation(25, 90,0,0);
     animate->AddKeyOrientation(50, 90,90,30);
     animate->AddKeyOrientation(75, 90,90,90);
-    animate->AddKeyOrientation(100, 0,0,0);*/
+    animate->AddKeyOrientation(100, 0,0,0);//*/
 
  /*   Torus* ss = new Torus(2,3,36,36);
     Joint* joint0 = new Joint(ss);
@@ -380,4 +382,13 @@ void SceneContainer::RemoveCurrentOrientationKeyframe() {
     if(selected_object_->GetAnimator()!=NULL) {
         selected_object_->GetAnimator()->RemoveKeyOrientation(current_frame_);
     }
+}
+
+bool SceneContainer::RenderBox()
+{
+    return render_box_over_object_;
+}
+
+void SceneContainer::SetRenderBox(bool box){
+    render_box_over_object_ = box;
 }

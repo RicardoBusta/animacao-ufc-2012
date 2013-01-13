@@ -6,7 +6,7 @@ CurveObject::CurveObject(Curve* curve)
     curve_ = curve;
 }
 
-void CurveObject::DrawObject() {
+void CurveObject::DrawObject(bool) {
     int steps = 25;
     double delta = (1.0)/((double)(steps-1.0));
 

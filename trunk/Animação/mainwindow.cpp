@@ -51,6 +51,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect( ui->push_button_traj_pos, SIGNAL(toggled(bool)), this, SLOT(DisplayTrajectoryPosition(bool)));
     connect( ui->push_button_traj_ori, SIGNAL(toggled(bool)), this, SLOT(DisplayTrajectoryOrientation(bool)));
 
+    connect( ui->checkbox_render_box, SIGNAL(toggled(bool)), this, SLOT(UpdateRenderBox(bool)) );
 
 
     //ui->button_play->setFixedSize(30,30);
@@ -138,6 +139,7 @@ void MainWindow::UpdateCurrentSelected(QTreeWidgetItem *item, int column) {
 void MainWindow::UpdateFrameCount(int new_total) {
     SceneContainer::SetFrameRange(0,new_total);
     ui->timebar->SetNumberOfFrames(new_total+1);
+    ui->timebar->repaint();
 }
 
 void MainWindow::UpdateFPS(int new_fps) {
@@ -186,7 +188,7 @@ void MainWindow::UpdateFreeze() {
     SceneContainer::SetAnimated(!ui->checkbox_freeze_pos->isChecked(),!ui->checkbox_freeze_ori->isChecked());
 }
 
-void MainWindow::UpdateSelectedInfo(Joint* object) {
+void MainWindow::UpdateSelectedInfo(Object3D* object) {
     if(SceneContainer::SelectedObject()!=NULL){
        SceneContainer::SelectedObject()->SetDrawBoundingBox(false);
        SceneContainer::SelectedObject()->SetDrawOrientationAxes(false);
@@ -194,13 +196,12 @@ void MainWindow::UpdateSelectedInfo(Joint* object) {
     SceneContainer::SetSelectedObject(object);
 
     if(object==NULL) {
-        ui->tool_box->setEnabled(false);
+        ui->tab_object->setEnabled(false);
         return;
     }
-    ui->tool_box->setEnabled(false);
+    ui->tab_object->setEnabled(false);
     SceneContainer::SelectedObject()->SetDrawBoundingBox(true);
     SceneContainer::SelectedObject()->SetDrawOrientationAxes(true);
-
 
     disconnect( ui->spin_pos_x, 0, this, 0);
     disconnect( ui->spin_pos_y, 0, this, 0);
@@ -232,7 +233,7 @@ void MainWindow::UpdateSelectedInfo(Joint* object) {
     connect( ui->spin_ori_y, SIGNAL(valueChanged(double)), this, SLOT(UpdateCurrentOrientation()));
     connect( ui->spin_ori_z, SIGNAL(valueChanged(double)), this, SLOT(UpdateCurrentOrientation()));
 
-    ui->tool_box->setEnabled(true);
+    ui->tab_object->setEnabled(true);
     ui->viewer->updateGL();
 }
 
@@ -294,4 +295,10 @@ void  MainWindow::RemoveOrientationKeyframe() {
     SceneContainer::RemoveCurrentOrientationKeyframe();
     ui->timebar->setKeyFrames(SceneContainer::SelectedObject());
     ui->timebar->repaint();
+}
+
+void MainWindow::UpdateRenderBox(bool box)
+{
+    SceneContainer::SetRenderBox(box);
+    ui->viewer->repaint();
 }

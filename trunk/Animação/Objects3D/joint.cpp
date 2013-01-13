@@ -23,11 +23,11 @@ Joint* Joint::ChildAt(int index) {
     return children_joint_.at(index);
 }
 
-void Joint::DrawObject() {
-    child_object_->Draw();
+void Joint::DrawObject(bool renderbox) {
+    child_object_->Draw(renderbox);
 
     for(size_t i = 0 ; i < children_joint_.size() ; i++ )
-        children_joint_.at(i)->Draw();
+        children_joint_.at(i)->Draw(renderbox);
 }
 
 
@@ -36,7 +36,7 @@ Object3D *Joint::ChildObject()
     return child_object_;
 }
 
-
 void Joint::DrawBoundingBox()
 {
+    child_object_->DrawBoundingBox();
 }

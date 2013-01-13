@@ -7,26 +7,30 @@ FileObj::FileObj()
     label_ = "Untitled";
 }
 
-void FileObj::DrawObject()
+void FileObj::DrawObject(bool renderbox)
 {
-    glPushAttrib(GL_ALL_ATTRIB_BITS);
-    glShadeModel(GL_SMOOTH);
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_CULL_FACE);
-    glEnable(GL_TEXTURE_2D);
-    glBindTexture( GL_TEXTURE_2D, texID );
-    glBegin(GL_TRIANGLES);
-    for(int i=0;i<face.size();i++){
-        FileObjFace thisface = face[i];
+    if(!renderbox){
+        glPushAttrib(GL_ALL_ATTRIB_BITS);
+        glShadeModel(GL_SMOOTH);
+        glEnable(GL_DEPTH_TEST);
+        glEnable(GL_CULL_FACE);
+        glEnable(GL_TEXTURE_2D);
+        glBindTexture( GL_TEXTURE_2D, texID );
+        glBegin(GL_TRIANGLES);
+        for(int i=0;i<face.size();i++){
+            FileObjFace thisface = face[i];
 
-        for(int j=0;j<3;j++){
-            glTexCoord2f(texturecoord[thisface.textureID[j]].x(),texturecoord[thisface.textureID[j]].y());
-            glNormal3f(normal[thisface.normalID[j]].x(),normal[thisface.normalID[j]].y(),normal[thisface.normalID[j]].z());
-            glVertex3f(vertex[thisface.vertexID[j]].x(),vertex[thisface.vertexID[j]].y(),vertex[thisface.vertexID[j]].z());
+            for(int j=0;j<3;j++){
+                glTexCoord2f(texturecoord[thisface.textureID[j]].x(),texturecoord[thisface.textureID[j]].y());
+                glNormal3f(normal[thisface.normalID[j]].x(),normal[thisface.normalID[j]].y(),normal[thisface.normalID[j]].z());
+                glVertex3f(vertex[thisface.vertexID[j]].x(),vertex[thisface.vertexID[j]].y(),vertex[thisface.vertexID[j]].z());
+            }
         }
+        glEnd();
+        glPopAttrib();
+    }else{
+        DrawBoxObject();
     }
-    glEnd();
-    glPopAttrib();
 }
 
 void FileObj::loadFile(QString filename)
@@ -126,7 +130,7 @@ void FileObj::loadFile(QString filename)
         }
     }
 
-//    cout << vertex.size() << " " << texturecoord.size() << " " << normal.size() << " " << face.size() << endl;
+    //    cout << vertex.size() << " " << texturecoord.size() << " " << normal.size() << " " << face.size() << endl;
     file.close();
 
 }
@@ -135,7 +139,7 @@ void FileObj::loadFile(QString filename)
 void FileObj::loadTex(QString filename)
 {
     QImage tex = QGLWidget::convertToGLFormat( QImage(filename) );
-//    GLuint texId;
+    //    GLuint texId;
     glGenTextures( 1, &texID );
     glBindTexture( GL_TEXTURE_2D, texID );
     glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);

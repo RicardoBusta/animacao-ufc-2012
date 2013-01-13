@@ -32,7 +32,7 @@ public:
 
     GLuint texID;
 
-    void DrawObject();
+    void DrawObject(bool );
     void loadFile(QString filename);
     void loadTex(QString filename);
 

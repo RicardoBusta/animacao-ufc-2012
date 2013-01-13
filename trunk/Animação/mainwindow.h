@@ -10,6 +10,7 @@ namespace Ui {
 }
 
 class Joint;
+class Object3D;
 
 class MainWindow : public QMainWindow
 {
@@ -47,9 +48,10 @@ private slots:
     void UpdateSelectedLabel(QString label);
     void UpdateCurrentPosition();
     void UpdateCurrentOrientation();
+    void UpdateRenderBox(bool box);
     void DisplayTrajectoryPosition(bool display);
     void DisplayTrajectoryOrientation(bool display);
-    void UpdateSelectedInfo(Joint* object);
+    void UpdateSelectedInfo(Object3D *object);
     void AddPositionKeyframe();
     void AddOrientationKeyframe();
     void RemovePositionKeyframe();

@@ -58,7 +58,7 @@ int PosInterpolator::ChooseInterval(int frame, InterpolationPolicy policy ) {
         }
         return interval;
     }else if(PosInterpolator::kFrameBased == policy){
-        for(size_t i = 1 ; i < steps_.size() ; i++ ){
+        for(size_t i = 0 ; i < steps_.size() ; i++ ){
             if(steps_.at(i).frame_ > frame)
                 return i;
         }

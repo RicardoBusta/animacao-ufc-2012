@@ -44,7 +44,7 @@
           </property>
           <column>
            <property name="text">
-            <string notr="true">Hierarchic Object Tree</string>
+            <string notr="true">Object Tree</string>
            </property>
           </column>
          </widget>
@@ -52,7 +52,7 @@
         <item>
          <widget class="QTabWidget" name="verticalTabWidget_5">
           <property name="currentIndex">
-           <number>0</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="verticalTabWidget_5Page1">
            <attribute name="title">
@@ -314,7 +314,11 @@
                         </widget>
                        </item>
                        <item>
-                        <widget class="QDoubleSpinBox" name="spin_pos_x"/>
+                        <widget class="QDoubleSpinBox" name="spin_pos_x">
+                         <property name="minimum">
+                          <double>-99.000000000000000</double>
+                         </property>
+                        </widget>
                        </item>
                       </layout>
                      </item>
@@ -328,7 +332,11 @@
                         </widget>
                        </item>
                        <item>
-                        <widget class="QDoubleSpinBox" name="spin_pos_y"/>
+                        <widget class="QDoubleSpinBox" name="spin_pos_y">
+                         <property name="minimum">
+                          <double>-99.000000000000000</double>
+                         </property>
+                        </widget>
                        </item>
                       </layout>
                      </item>
@@ -342,7 +350,11 @@
                         </widget>
                        </item>
                        <item>
-                        <widget class="QDoubleSpinBox" name="spin_pos_z"/>
+                        <widget class="QDoubleSpinBox" name="spin_pos_z">
+                         <property name="minimum">
+                          <double>-99.000000000000000</double>
+                         </property>
+                        </widget>
                        </item>
                       </layout>
                      </item>
@@ -408,7 +420,11 @@
                         </widget>
                        </item>
                        <item>
-                        <widget class="QDoubleSpinBox" name="spin_ori_x"/>
+                        <widget class="QDoubleSpinBox" name="spin_ori_x">
+                         <property name="minimum">
+                          <double>-99.000000000000000</double>
+                         </property>
+                        </widget>
                        </item>
                       </layout>
                      </item>
@@ -422,7 +438,11 @@
                         </widget>
                        </item>
                        <item>
-                        <widget class="QDoubleSpinBox" name="spin_ori_y"/>
+                        <widget class="QDoubleSpinBox" name="spin_ori_y">
+                         <property name="minimum">
+                          <double>-99.000000000000000</double>
+                         </property>
+                        </widget>
                        </item>
                       </layout>
                      </item>
@@ -436,7 +456,11 @@
                         </widget>
                        </item>
                        <item>
-                        <widget class="QDoubleSpinBox" name="spin_ori_z"/>
+                        <widget class="QDoubleSpinBox" name="spin_ori_z">
+                         <property name="minimum">
+                          <double>-99.000000000000000</double>
+                         </property>
+                        </widget>
                        </item>
                       </layout>
                      </item>
@@ -445,7 +469,7 @@
                    <item>
                     <layout class="QVBoxLayout" name="verticalLayout_5">
                      <item>
-                      <widget class="QPushButton" name="pushButton_6">
+                      <widget class="QPushButton" name="add_keyframe_ori">
                        <property name="maximumSize">
                         <size>
                          <width>25</width>
@@ -458,7 +482,7 @@
                       </widget>
                      </item>
                      <item>
-                      <widget class="QPushButton" name="pushButton_8">
+                      <widget class="QPushButton" name="rem_keyframe_ori">
                        <property name="maximumSize">
                         <size>
                          <width>25</width>
@@ -595,8 +619,8 @@
           <rect>
            <x>0</x>
            <y>0</y>
-           <width>565</width>
-           <height>85</height>
+           <width>563</width>
+           <height>81</height>
           </rect>
          </property>
          <property name="sizePolicy">

@@ -9,7 +9,7 @@ Object3D::Object3D()
 
     animator = NULL;
 
-    draw_bounding_box_ = true;
+    draw_bounding_box_ = false;
     bounding_box_max_ = qglviewer::Vec(0.5,0.5,0.5);
     bounding_box_min_ = qglviewer::Vec(-0.5,-0.5,-0.5);
 }

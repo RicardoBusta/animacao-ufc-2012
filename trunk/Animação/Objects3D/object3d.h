@@ -22,6 +22,7 @@ public:
     inline void                    SetDrawObject          (bool draw) { draw_object_ = draw; }
     inline void                    SetDrawPositionParticle(bool draw) { draw_position_particle_ = draw; }
     inline void                    SetDrawOrientationAxes (bool draw) { draw_orientation_axes_  = draw; }
+    inline void                    SetDrawBoundingBox     (bool draw) { draw_bounding_box_ = draw; }
 
     inline void                    SetNewPosition(qglviewer::Vec position) { position_ = position; }
     inline void                    SetNewOrientation(qglviewer::Quaternion orientation) { orientation_ = orientation; }

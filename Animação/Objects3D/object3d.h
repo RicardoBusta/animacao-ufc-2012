@@ -6,6 +6,7 @@
 #include <GL/glu.h>
 
 class ObjectAnimator;
+class Joint;
 
 class Object3D {
 public:
@@ -29,7 +30,7 @@ public:
     inline qglviewer::Vec          position()    { return position_; }
     inline qglviewer::Quaternion   orientation() { return orientation_; }
 
-    void                           Draw();
+    void                           Draw(bool renderbox);
 
     void                           SetAnimator(ObjectAnimator *animator);
     ObjectAnimator*                GetAnimator();
@@ -38,8 +39,10 @@ protected:
     void                           DefaultInitialisation();
     void                           DrawPositionParticle();
     void                           DrawOrientationAxes();
-    virtual void                   DrawObject();
+    virtual void                   DrawObject(bool renderbox);
     virtual void                   DrawBoundingBox();
+    virtual void                   DrawBoxObject();
+    friend class Joint;
 
     std::string label_;
     bool draw_object_;

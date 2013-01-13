@@ -9,6 +9,8 @@ Object3D::Object3D()
 
     animator = NULL;
 
+    color_ = qglviewer::Vec(1,1,1);
+
     draw_bounding_box_ = false;
     bounding_box_max_ = qglviewer::Vec(0.5,0.5,0.5);
     bounding_box_min_ = qglviewer::Vec(-0.5,-0.5,-0.5);
@@ -63,7 +65,7 @@ void Object3D::DefaultInitialisation() {
 
 }
 
-void Object3D::Draw() {
+void Object3D::Draw(bool options) {
 
     glPushMatrix();
 
@@ -75,7 +77,7 @@ void Object3D::Draw() {
     if(draw_orientation_axes_)
         DrawOrientationAxes();
     if(draw_object_)
-        DrawObject();
+        DrawObject(options);
     if(draw_bounding_box_)
         DrawBoundingBox();
 
@@ -113,7 +115,7 @@ void Object3D::DrawOrientationAxes() {
     glPopAttrib();
 }
 
-void Object3D::DrawObject() {
+void Object3D::DrawObject(bool options) {
 }
 
 void Object3D::SetAnimator(ObjectAnimator *animator)
@@ -156,6 +158,64 @@ void Object3D::DrawBoundingBox()
 
     glVertex3f(bounding_box_min_.x,bounding_box_max_.y,bounding_box_max_.z);
     glVertex3f(bounding_box_min_.x,bounding_box_min_.y,bounding_box_max_.z);
+
+    glEnd();
+
+    glPopAttrib();
+}
+
+void Object3D::DrawBoxObject()
+{
+    glPushAttrib(GL_ALL_ATTRIB_BITS);
+
+    glEnable(GL_CULL_FACE);
+
+    glBegin(GL_QUADS);
+
+    glColor3f(color_.x, color_.y, color_.z);
+
+    //Top
+    glNormal3f(0,1,0);
+    glVertex3f(bounding_box_max_.x,bounding_box_max_.y,bounding_box_max_.z);
+    glVertex3f(bounding_box_max_.x,bounding_box_max_.y,bounding_box_min_.z);
+    glVertex3f(bounding_box_min_.x,bounding_box_max_.y,bounding_box_min_.z);
+    glVertex3f(bounding_box_min_.x,bounding_box_max_.y,bounding_box_max_.z);
+
+    //Bot
+    glNormal3f(0,-1,0);
+    glVertex3f(bounding_box_max_.x,bounding_box_min_.y,bounding_box_max_.z);
+    glVertex3f(bounding_box_min_.x,bounding_box_min_.y,bounding_box_max_.z);
+    glVertex3f(bounding_box_min_.x,bounding_box_min_.y,bounding_box_min_.z);
+    glVertex3f(bounding_box_max_.x,bounding_box_min_.y,bounding_box_min_.z);
+
+    //Front
+    glNormal3f(0,0,1);
+    glVertex3f(bounding_box_max_.x,bounding_box_max_.y,bounding_box_max_.z);
+    glVertex3f(bounding_box_min_.x,bounding_box_max_.y,bounding_box_max_.z);
+    glVertex3f(bounding_box_min_.x,bounding_box_min_.y,bounding_box_max_.z);
+    glVertex3f(bounding_box_max_.x,bounding_box_min_.y,bounding_box_max_.z);
+
+    //Back
+    glNormal3f(0,0,-1);
+    glVertex3f(bounding_box_max_.x,bounding_box_max_.y,bounding_box_min_.z);
+    glVertex3f(bounding_box_max_.x,bounding_box_min_.y,bounding_box_min_.z);
+    glVertex3f(bounding_box_min_.x,bounding_box_min_.y,bounding_box_min_.z);
+    glVertex3f(bounding_box_min_.x,bounding_box_max_.y,bounding_box_min_.z);
+
+    //Left
+    glNormal3f(-1,0,0);
+    glVertex3f(bounding_box_min_.x,bounding_box_max_.y,bounding_box_max_.z);
+    glVertex3f(bounding_box_min_.x,bounding_box_max_.y,bounding_box_min_.z);
+    glVertex3f(bounding_box_min_.x,bounding_box_min_.y,bounding_box_min_.z);
+    glVertex3f(bounding_box_min_.x,bounding_box_min_.y,bounding_box_max_.z);
+
+
+    //Right
+    glNormal3f(1,0,0);
+    glVertex3f(bounding_box_max_.x,bounding_box_max_.y,bounding_box_max_.z);
+    glVertex3f(bounding_box_max_.x,bounding_box_min_.y,bounding_box_max_.z);
+    glVertex3f(bounding_box_max_.x,bounding_box_min_.y,bounding_box_min_.z);
+    glVertex3f(bounding_box_max_.x,bounding_box_max_.y,bounding_box_min_.z);
 
     glEnd();
 

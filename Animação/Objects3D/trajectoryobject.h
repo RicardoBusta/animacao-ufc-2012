@@ -18,7 +18,7 @@ public:
     void SetType(TrajectoryType type);
 
 private:
-    void DrawObject();
+    void DrawObject(bool);
 
     void DrawPositionsCurve();
 

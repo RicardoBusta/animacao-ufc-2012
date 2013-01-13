@@ -54,10 +54,15 @@ public:
 
     static void DrawObjects();
 
+    //! Rendering Parameters
+    static bool RenderBox();
+    static void SetRenderBox(bool box);
+
 private:
+    static Object3D* selected_object_;
     static bool animate_position_, animate_orientation_;
     static int start_frame_, end_frame_,current_frame_;
-    static Object3D* selected_object_;
+    static bool render_box_over_object_;
     static std::vector<ObjectAnimator*> animators_;
     static std::vector<Joint*> objects_;
     static std::vector<Object3D*> extras_;

@@ -11,7 +11,7 @@ public:
     CurveObject(Curve* cuve);
 
 private:
-    void DrawObject();
+    void DrawObject(bool);
     Curve* curve_;
 };
 

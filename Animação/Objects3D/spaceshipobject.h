@@ -10,7 +10,7 @@ public:
     SpaceShipObject();
 
 private:
-    void DrawObject();
+    void DrawObject(bool);
 
 };
 

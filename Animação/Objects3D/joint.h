@@ -16,7 +16,7 @@ public:
 
 
 protected:
-    virtual void DrawObject();
+    virtual void DrawObject(bool renderbox);
     virtual void DrawBoundingBox();
 
 private:

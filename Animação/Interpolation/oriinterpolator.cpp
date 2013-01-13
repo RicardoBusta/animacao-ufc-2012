@@ -17,15 +17,21 @@ void OriInterpolator::SetLastFrame(int last_frame) {
 
 qglviewer::Quaternion OriInterpolator::GetOrientationAt(int frame, bool* valid) {
 
-    int interval = ChooseInterval(frame);
-
-    if((interval == -1) or (interval==steps_.size()-1)) {
+    if(frame<start_frame_ or frame>last_frame_){
         if(valid!=NULL) *valid = false;
         return qglviewer::Quaternion();
     }
-    QuaternionInterpolator* interpolator = quaternions_curves_.at(interval);
 
-    double t = ((double)(frame - steps_.at(interval).frame_))/((double)(steps_.at(interval+1).frame_ - steps_.at(interval).frame_));
+    int interval = ChooseInterval(frame);
+
+    if((interval == -1) or (interval==0)) {
+        if(valid!=NULL) *valid = false;
+        return qglviewer::Quaternion();
+    }
+    QuaternionInterpolator* interpolator = quaternions_curves_.at(interval-1);
+
+    double t = ((double)(frame - steps_.at(interval-1).frame_))/((double)(steps_.at(interval).frame_ - steps_.at(interval-1).frame_));
+    if(t>1.0) t = 1.0;
 
     t = speedControl(t);
 
@@ -34,15 +40,12 @@ qglviewer::Quaternion OriInterpolator::GetOrientationAt(int frame, bool* valid) 
 }
 
 int OriInterpolator::ChooseInterval(int frame) {
-    if(steps_.size() == 0) return -1;
-
     for(size_t i = 0 ; i < steps_.size() ; i++ ) {
         if( steps_.at(i).frame_ > frame)
-            return i-1;
+            return i;
     }
-    if( steps_.at(steps_.size()-1).frame_ < frame)
-        return steps_.size()-2;
-    return 0;
+
+    return steps_.size() - 1;
 }
 
 void OriInterpolator::SetInterpolationType(InterpolationType type) {

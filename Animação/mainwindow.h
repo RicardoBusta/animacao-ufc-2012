@@ -24,6 +24,8 @@ private:
 
     bool play_or_pause_;
 
+    QTreeWidgetItem* selected_item_;
+
     void updateObjectsRecursive(QTreeWidgetItem *item, Joint* parent);
 
     std::map<QTreeWidgetItem*, Joint*> item_to_object_;
@@ -48,6 +50,10 @@ private slots:
     void DisplayTrajectoryPosition(bool display);
     void DisplayTrajectoryOrientation(bool display);
     void UpdateSelectedInfo(Joint* object);
+    void AddPositionKeyframe();
+    void AddOrientationKeyframe();
+    void RemovePositionKeyframe();
+    void RemoveOrientationKeyframe();
 };
 
 #endif // MAINWINDOW_H

@@ -17,7 +17,7 @@ std::vector<Joint*> SceneContainer::objects_;
 std::vector<Object3D*> SceneContainer::extras_;
 std::vector<ObjectAnimator*> SceneContainer::animators_;
 
-int SceneContainer::selected_object_ = -1;
+Object3D* SceneContainer::selected_object_ = NULL;
 
 bool SceneContainer::animate_position_ = true;
 bool SceneContainer::animate_orientation_ = true;
@@ -31,6 +31,10 @@ SceneContainer::SceneContainer(){}
 void SceneContainer::DrawObjects() {
     for(uint i = 0; i < objects_.size();i++){
         Joint *object = objects_.at(i);
+        object->Draw();
+    }
+    for(int i = 0 ; i < extras_.size() ; i++ ) {
+        Object3D* object = extras_.at(i);
         object->Draw();
     }
 }
@@ -74,7 +78,7 @@ void SceneContainer::CreateDefaultScene() {
     Joint* arm_finger_2_2 = AddObject("Finger 2 Part 2","://models/arm_finger.obj","://textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),arm_finger_2_1);
     Joint* arm_finger_1_2 = AddObject("Finger 1 Part 2","://models/arm_finger.obj","://textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),arm_finger_1_1);
 
-    ObjectAnimator *animate;
+   /* ObjectAnimator *animate;
 
     animate = arm_base->GetAnimator();
 
@@ -144,7 +148,7 @@ void SceneContainer::CreateDefaultScene() {
     animate->AddKeyOrientation(25, 90,0,0);
     animate->AddKeyOrientation(50, 90,90,30);
     animate->AddKeyOrientation(75, 90,90,90);
-    animate->AddKeyOrientation(100, 0,0,0);
+    animate->AddKeyOrientation(100, 0,0,0);*/
 
  /*   Torus* ss = new Torus(2,3,36,36);
     Joint* joint0 = new Joint(ss);
@@ -294,6 +298,86 @@ void SceneContainer::SetOrientationInterpolationType(OriInterpolator::Interpolat
     }
 }
 
-int SceneContainer::SelectedObject() {
+Object3D* SceneContainer::SelectedObject() {
     return selected_object_;
+}
+
+void SceneContainer::SetSelectedObject(Object3D* selected) {
+    selected_object_ = selected;
+}
+
+void SceneContainer::SetSelectedPosition(qglviewer::Vec new_position) {
+    if(selected_object_ == NULL) return;
+
+    selected_object_->SetNewPosition(new_position);
+}
+
+void SceneContainer::SetSelectedOrientation(qglviewer::Quaternion new_orientation) {
+    if(selected_object_ == NULL) return;
+
+    selected_object_->SetNewOrientation(new_orientation);
+}
+
+void SceneContainer::DisplaySelectedPositionTrajectory(bool display) {
+    if(selected_object_ == NULL) return;
+
+    if(selected_object_->GetAnimator()!=NULL) {
+
+        if(display) {
+            selected_object_->GetAnimator()->CalculateTrajectory(TrajectoryObject::kPosition);
+            extras_.push_back(selected_object_->GetAnimator()->GetTrajectory());
+        }else{
+            extras_.clear();
+        }
+    }
+}
+
+void SceneContainer::DisplaySelectedOrientationTrajectory(bool display) {
+    if(selected_object_ == NULL) return;
+
+    if(selected_object_->GetAnimator()!=NULL) {
+        if(display) {
+            selected_object_->GetAnimator()->CalculateTrajectory(TrajectoryObject::kOrientation);
+            extras_.push_back(selected_object_->GetAnimator()->GetTrajectory());
+        }else{
+            extras_.clear();
+        }
+    }
+}
+
+void SceneContainer::AddCurrentPositionKeyframe() {
+    if(selected_object_ == NULL) return;
+
+    if(selected_object_->GetAnimator()==NULL) {
+        ObjectAnimator* new_animator = new ObjectAnimator(selected_object_);
+        animators_.push_back(new_animator);
+    }
+    selected_object_->GetAnimator()->AddKeyPosition(current_frame_,selected_object_->position());
+
+}
+
+void SceneContainer::AddCurrentOrientationKeyframe() {
+    if(selected_object_ == NULL) return;
+
+    if(selected_object_->GetAnimator()==NULL) {
+        ObjectAnimator* new_animator = new ObjectAnimator(selected_object_);
+        animators_.push_back(new_animator);
+    }
+    selected_object_->GetAnimator()->AddKeyOrientation(current_frame_,selected_object_->orientation());
+}
+
+void SceneContainer::RemoveCurrentPositionKeyframe() {
+    if(selected_object_ == NULL) return;
+
+    if(selected_object_->GetAnimator()!=NULL) {
+        selected_object_->GetAnimator()->RemoveKeyPosition(current_frame_);
+    }
+}
+
+void SceneContainer::RemoveCurrentOrientationKeyframe() {
+    if(selected_object_ == NULL) return;
+
+    if(selected_object_->GetAnimator()!=NULL) {
+        selected_object_->GetAnimator()->RemoveKeyOrientation(current_frame_);
+    }
 }

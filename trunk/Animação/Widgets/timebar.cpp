@@ -82,7 +82,7 @@ void TimeBar::paintEvent(QPaintEvent*) {
     painter.setPen(keyframe_ori_color.darker(150));
     painter.setBrush(keyframe_ori_color);
     for(int i=0;i<ori_key_frames_.size();i++){
-        painter.drawRect((h_step)*pos_key_frames_.at(i)+3,(v_step/2)+3,h_step-6,(v_step/2)-6);
+        painter.drawRect((h_step)*ori_key_frames_.at(i)+3,(v_step/2)+3,h_step-6,(v_step/2)-6);
     }
 
     //Widget Border

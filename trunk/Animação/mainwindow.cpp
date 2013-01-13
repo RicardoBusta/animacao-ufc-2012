@@ -6,7 +6,7 @@
 
 static QIcon play_icon;
 static QIcon pause_icon;
-static QIcon stop_icon;
+//static QIcon stop_icon;
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -38,6 +38,7 @@ MainWindow::MainWindow(QWidget *parent) :
     connect( ui->checkbox_freeze_pos, SIGNAL(clicked()), this, SLOT(UpdateFreeze()));
     connect( ui->checkbox_freeze_ori, SIGNAL(clicked()), this, SLOT(UpdateFreeze()));
 
+    connect(ui->treeWidget, SIGNAL(itemClicked(QTreeWidgetItem*,int)), this, SLOT(UpdateCurrentSelected(QTreeWidgetItem*,int)));
 
     //ui->button_play->setFixedSize(30,30);
     //ui->button_stop->setFixedSize(30,30);
@@ -48,7 +49,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     play_icon = QIcon(QPixmap::fromImage(QImage(":/buttons/play.png")));
     pause_icon = QIcon(QPixmap::fromImage(QImage(":/buttons/pause.png")));
-    stop_icon = QIcon(QPixmap::fromImage(QImage(":/buttons/stop.png")));
+    //stop_icon = QIcon(QPixmap::fromImage(QImage(":/buttons/stop.png")));
 }
 
 MainWindow::~MainWindow()
@@ -93,9 +94,8 @@ void MainWindow::UpdateObjects(){
     }
     ui->treeWidget->expandAll();
 
-    connect(ui->treeWidget, SIGNAL(itemClicked(QTreeWidgetItem*,int)), this, SLOT(UpdateCurrentSelected(QTreeWidgetItem*,int)));
     //ui->timebar->setKeyFrames((Object3D*)SceneContainer::ObjectAt(0));
-    ui->timebar->update();    
+    ui->timebar->update();
 }
 
 void MainWindow::updateObjectsRecursive(QTreeWidgetItem *item, Joint* parent){
@@ -106,7 +106,7 @@ void MainWindow::updateObjectsRecursive(QTreeWidgetItem *item, Joint* parent){
         item_to_object_[childitem] = child;
     }
     if(parent->ChildObject()!=NULL){
-       new QTreeWidgetItem(item,QStringList(QString(parent->ChildObject()->label().c_str())));
+        new QTreeWidgetItem(item,QStringList(QString(parent->ChildObject()->label().c_str())));
     }
 }
 

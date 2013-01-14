@@ -3,6 +3,9 @@
 
 #include <Interpolation/objectanimator.h>
 
+#include "Utils/scenecontainer.h"
+#include "Widgets/viewer.h"
+
 Object3D::Object3D()
 { 
     DefaultInitialisation();
@@ -72,14 +75,18 @@ void Object3D::Draw(bool options) {
     glTranslated(position_.x,position_.y,position_.z);
     glMultMatrixd(orientation_.matrix());
 
+    SceneContainer::viewer_reference_->BindShader();
+    if(draw_object_)
+        DrawObject(options);
+    SceneContainer::viewer_reference_->ReleaseShader();
     if(draw_position_particle_)
         DrawPositionParticle();
     if(draw_orientation_axes_)
         DrawOrientationAxes();
-    if(draw_object_)
-        DrawObject(options);
     if(draw_bounding_box_)
         DrawBoundingBox();
+    if(SceneContainer::DrawBones())
+        DrawBone();
 
     glPopMatrix();
 }
@@ -220,4 +227,17 @@ void Object3D::DrawBoxObject()
     glEnd();
 
     glPopAttrib();
+}
+
+
+void Object3D::DrawBone()
+{
+//    glPushAttrib(GL_ALL_ATTRIB_BITS);
+//    glDisable(GL_LIGHTING);
+//    glDisable(GL_DEPTH_TEST);
+//    glBegin(GL_LINES);
+//    glVertex3f(0,0,0);
+//    glVertex3f(1,1,1);
+//    glEnd();
+//    glPopAttrib();
 }

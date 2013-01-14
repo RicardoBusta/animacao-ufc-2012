@@ -12,10 +12,12 @@ MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
+    ui->setupUi(this);
+
     play_or_pause_ = true;
     selected_item_ = NULL;
+    SceneContainer::viewer_reference_ = ui->viewer;
 
-    ui->setupUi(this);
     this->setWindowTitle(QString("Animation Studio"));
     connect( ui->button_play, SIGNAL(clicked()), ui->viewer, SLOT(Play()) );
     connect( ui->button_stop, SIGNAL(clicked()), ui->viewer, SLOT(Stop()));
@@ -52,12 +54,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect( ui->push_button_traj_ori, SIGNAL(toggled(bool)), this, SLOT(DisplayTrajectoryOrientation(bool)));
 
     connect( ui->checkbox_render_box, SIGNAL(toggled(bool)), this, SLOT(UpdateRenderBox(bool)) );
+    connect( ui->checkBox_render_bones, SIGNAL(toggled(bool)), this, SLOT(UpdateRenderBones(bool)) );
 
-
-    //ui->button_play->setFixedSize(30,30);
-    //ui->button_stop->setFixedSize(30,30);
-
-    //ui->tool_box->setEnabled(false);
+    connect( ui->comboBox_shader, SIGNAL(currentIndexChanged(int)), ui->viewer, SLOT(SetCurrentShader(int)) );
 
     this->showMaximized();
 
@@ -300,5 +299,11 @@ void  MainWindow::RemoveOrientationKeyframe() {
 void MainWindow::UpdateRenderBox(bool box)
 {
     SceneContainer::SetRenderBox(box);
+    ui->viewer->repaint();
+}
+
+void MainWindow::UpdateRenderBones(bool bones)
+{
+    SceneContainer::SetDrawBones(bones);
     ui->viewer->repaint();
 }

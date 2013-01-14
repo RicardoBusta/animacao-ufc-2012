@@ -42,6 +42,7 @@ protected:
     virtual void                   DrawObject(bool renderbox);
     virtual void                   DrawBoundingBox();
     virtual void                   DrawBoxObject();
+    virtual void                   DrawBone();
     friend class Joint;
 
     std::string label_;

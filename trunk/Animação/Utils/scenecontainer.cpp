@@ -13,6 +13,8 @@
 
 #include <QQuaternion>
 
+Viewer* SceneContainer::viewer_reference_ = NULL;
+
 std::vector<Joint*> SceneContainer::objects_;
 std::vector<Object3D*> SceneContainer::extras_;
 std::vector<ObjectAnimator*> SceneContainer::animators_;
@@ -27,6 +29,7 @@ int SceneContainer::end_frame_ = 100;
 int SceneContainer::current_frame_ = 0;
 
 bool SceneContainer::render_box_over_object_ = false;
+bool SceneContainer::draw_bones_ = false;
 
 SceneContainer::SceneContainer(){}
 
@@ -35,11 +38,16 @@ void SceneContainer::DrawObjects() {
         Joint *object = objects_.at(i);
         object->Draw(render_box_over_object_);
     }
+}
+
+void SceneContainer::DrawExtras()
+{
     for(int i = 0 ; i < extras_.size() ; i++ ) {
         Object3D* object = extras_.at(i);
         object->Draw(render_box_over_object_);
     }
 }
+
 
 Joint* SceneContainer::AddObject(QString label, QString objfile, QString texfile, QVector3D position, QQuaternion rotation, Joint* parent){
     FileObj *newobj = new FileObj();
@@ -62,23 +70,26 @@ Joint* SceneContainer::AddObject(QString label, QString objfile, QString texfile
 }
 
 void SceneContainer::CreateDefaultScene() {
+    //Hand Scene
+    Joint* arm_base = AddObject("Arm Base",":/models/arm_base.obj",":/textures/wooden.png",QVector3D(0,0.75,0), QQuaternion(1,0,0,0), NULL);
+    Joint* arm_part1 = AddObject("Part 1",":/models/arm_part1.obj",":/textures/wooden.png",QVector3D(0,0.25,0),QQuaternion(1,0,0,0),arm_base);
+    Joint* arm_part2 = AddObject("Part 2",":/models/arm_part2.obj",":/textures/wooden.png",QVector3D(0,3.7,0),QQuaternion(1,0,0,0),arm_part1);
+    Joint* arm_hand = AddObject("Hand",":/models/arm_hand.obj",":/textures/wooden.png",QVector3D(0,4.7,0),QQuaternion(1,0,0,0),arm_part2);
+//    Joint* arm_hand = AddObject("Hand",":/models/face_eye.obj",":/textures/eye.png",QVector3D(0,4.7,0),QQuaternion(1,0,0,0),arm_part2);
 
-    Joint* arm_base = AddObject("Arm Base","://models/arm_base.obj","://textures/wooden.png",QVector3D(0,0.75,0), QQuaternion(1,0,0,0), NULL);
-    Joint* arm_part1 = AddObject("Part 1","://models/arm_part1.obj","://textures/wooden.png",QVector3D(0,0.25,0),QQuaternion(1,0,0,0),arm_base);
-    Joint* arm_part2 = AddObject("Part 2","://models/arm_part2.obj","://textures/wooden.png",QVector3D(0,3.7,0),QQuaternion(1,0,0,0),arm_part1);
-    Joint* arm_hand = AddObject("Hand","://models/arm_hand.obj","://textures/wooden.png",QVector3D(0,4.7,0),QQuaternion(1,0,0,0),arm_part2);
 
-    Joint* arm_finger_5_1 = AddObject("Finger 5 Part 1","://models/arm_finger.obj","://textures/wooden.png",QVector3D(0.5,1.4,0),QQuaternion(1,0,0,0),arm_hand);
-    Joint* arm_finger_4_1 = AddObject("Finger 4 Part 1","://models/arm_finger.obj","://textures/wooden.png",QVector3D(0.2,1.5,0),QQuaternion(1,0,0,0),arm_hand);
-    Joint* arm_finger_3_1 = AddObject("Finger 3 Part 1","://models/arm_finger.obj","://textures/wooden.png",QVector3D(-0.1,1.6,0),QQuaternion(1,0,0,0),arm_hand);
-    Joint* arm_finger_2_1 = AddObject("Finger 2 Part 1","://models/arm_finger.obj","://textures/wooden.png",QVector3D(-0.4,1.5,0),QQuaternion(1,0,0,0),arm_hand);
-    Joint* arm_finger_1_1 = AddObject("Finger 1 Part 1","://models/arm_finger.obj","://textures/wooden.png",QVector3D(-0.6,1,0),QQuaternion(1,0,0,0),arm_hand);
 
-    Joint* arm_finger_5_2 = AddObject("Finger 5 Part 2","://models/arm_finger.obj","://textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),arm_finger_5_1);
-    Joint* arm_finger_4_2 = AddObject("Finger 4 Part 2","://models/arm_finger.obj","://textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),arm_finger_4_1);
-    Joint* arm_finger_3_2 = AddObject("Finger 3 Part 2","://models/arm_finger.obj","://textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),arm_finger_3_1);
-    Joint* arm_finger_2_2 = AddObject("Finger 2 Part 2","://models/arm_finger.obj","://textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),arm_finger_2_1);
-    Joint* arm_finger_1_2 = AddObject("Finger 1 Part 2","://models/arm_finger.obj","://textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),arm_finger_1_1);
+    Joint* arm_finger_5_1 = AddObject("Finger 5 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0.5,1.4,0),QQuaternion(1,0,0,0),arm_hand);
+    Joint* arm_finger_4_1 = AddObject("Finger 4 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0.2,1.5,0),QQuaternion(1,0,0,0),arm_hand);
+    Joint* arm_finger_3_1 = AddObject("Finger 3 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(-0.1,1.6,0),QQuaternion(1,0,0,0),arm_hand);
+    Joint* arm_finger_2_1 = AddObject("Finger 2 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(-0.4,1.5,0),QQuaternion(1,0,0,0),arm_hand);
+    Joint* arm_finger_1_1 = AddObject("Finger 1 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(-0.6,1,0),QQuaternion(1,0,0,0),arm_hand);
+
+    Joint* arm_finger_5_2 = AddObject("Finger 5 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),arm_finger_5_1);
+    Joint* arm_finger_4_2 = AddObject("Finger 4 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),arm_finger_4_1);
+    Joint* arm_finger_3_2 = AddObject("Finger 3 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),arm_finger_3_1);
+    Joint* arm_finger_2_2 = AddObject("Finger 2 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),arm_finger_2_1);
+    Joint* arm_finger_1_2 = AddObject("Finger 1 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),arm_finger_1_1);
 
     ObjectAnimator *animate;
 
@@ -151,6 +162,57 @@ void SceneContainer::CreateDefaultScene() {
     animate->AddKeyOrientation(50, 90,90,30);
     animate->AddKeyOrientation(75, 90,90,90);
     animate->AddKeyOrientation(100, 0,0,0);//*/
+
+    //Face Scene
+    Joint* face_head = AddObject("Head",":/models/face_head.obj","://textures/wooden.png",QVector3D(0,3,0), QQuaternion(1,0,0,0), arm_hand);
+//    Joint* face_head = AddObject("Head",":/models/face_head.obj","://textures/wooden.png",QVector3D(-5,3,0), QQuaternion(1,0,0,0), NULL);
+    Joint* face_teeth_top = AddObject("Teeth Up",":/models/face_teeth_top.obj",":/textures/stache_teeth.png",QVector3D(0,-1.5,1), QQuaternion(1,0,0,0), face_head);
+    Joint* face_teeth_bot = AddObject("Teeth Down",":/models/face_teeth_bot.obj",":/textures/stache_teeth.png",QVector3D(0,-1.5,1), QQuaternion(1,0,0,0), face_head);
+    Joint* face_eye_lid_back_left = AddObject("Eye Lid Back Left",":/models/face_eye_lid_back.obj",":/textures/wooden.png",QVector3D(0.7,0.5,1.7), QQuaternion(1,0,0,0), face_head);
+    Joint* face_eye_lid_back_right = AddObject("Eye Lid Back Right",":/models/face_eye_lid_back.obj",":/textures/wooden.png",QVector3D(-0.7,0.5,1.7), QQuaternion(1,0,0,0), face_head);
+    Joint* face_eye_left = AddObject("Eye Left",":/models/face_eye.obj",":/textures/eye.png",QVector3D(0,0,0), QQuaternion(1,0,0,0), face_eye_lid_back_left);
+    Joint* face_eye_right = AddObject("Eye Right",":/models/face_eye.obj",":/textures/eye.png",QVector3D(0,0,0), QQuaternion(1,0,0,0), face_eye_lid_back_right);
+    Joint* face_eye_lid_top_left = AddObject("Eye Lid Top Left",":/models/face_eye_lid_front.obj",":/textures/wooden.png",QVector3D(0,0,0), QQuaternion(1,0,0,0), face_eye_lid_back_left);
+    Joint* face_eye_lid_top_right = AddObject("Eye Lid Top Right",":/models/face_eye_lid_front.obj",":/textures/wooden.png",QVector3D(0,0,0), QQuaternion(1,0,0,0), face_eye_lid_back_right);
+    Joint* face_eye_lid_bot_left = AddObject("Eye Lid Bot Left",":/models/face_eye_lid_front.obj",":/textures/wooden.png",QVector3D(0,0,0), QQuaternion(cos(M_PI_4),sin(M_PI_4),0,0), face_eye_lid_back_left);
+    Joint* face_eye_lid_bot_right = AddObject("Eye Lid Bot Right",":/models/face_eye_lid_front.obj",":/textures/wooden.png",QVector3D(0,0,0), QQuaternion(cos(M_PI_4),sin(M_PI_4),0,0), face_eye_lid_back_right);
+    Joint* face_brow_left = AddObject("Eye Brow Left",":/models/face_brow.obj",":/textures/wooden.png",QVector3D(0.3,1,0), QQuaternion(1,0,0,0), face_eye_lid_back_left);
+    Joint* face_brow_right = AddObject("Eye Brow Right",":/models/face_brow.obj",":/textures/wooden.png",QVector3D(-0.3,1,0), QQuaternion(1,0,0,0), face_eye_lid_back_right);
+    Joint* face_stache = AddObject("Stache",":/models/face_stache.obj",":/textures/stache_teeth.png",QVector3D(0,-0.5,2), QQuaternion(1,0,0,0), face_head);
+    Joint* face_hat = AddObject("Hat",":/models/face_hat.obj",":/textures/wooden.png",QVector3D(0,1.4,0), QQuaternion(1,0,0,0), face_head);
+
+    animate = face_teeth_bot->GetAnimator();
+    animate->AddKeyOrientation(0, 0,0,0);
+    animate->AddKeyOrientation(50, 0.5,0,0);
+    animate->AddKeyOrientation(100, 0,0,0);
+
+    animate = face_eye_lid_top_left->GetAnimator();
+    animate->AddKeyOrientation(0, 0,0,0);
+    animate->AddKeyOrientation(25, -0.5,0,0);
+    animate->AddKeyOrientation(50, 0,0,0);
+    animate->AddKeyOrientation(75, -0.5,0,0);
+    animate->AddKeyOrientation(100, 0,0,0);
+
+    animate = face_eye_lid_bot_left->GetAnimator();
+    animate->AddKeyOrientation(0, 1.6,0,0);
+    animate->AddKeyOrientation(25, 2.1,0,0);
+    animate->AddKeyOrientation(50, 1.6,0,0);
+    animate->AddKeyOrientation(75, 2.1,0,0);
+    animate->AddKeyOrientation(100, 1.6,0,0);
+
+    animate = face_eye_lid_top_right->GetAnimator();
+    animate->AddKeyOrientation(0, 0,0,0);
+    animate->AddKeyOrientation(25, -0.5,0,0);
+    animate->AddKeyOrientation(50, 0,0,0);
+    animate->AddKeyOrientation(75, -0.5,0,0);
+    animate->AddKeyOrientation(100, 0,0,0);
+
+    animate = face_eye_lid_bot_right->GetAnimator();
+    animate->AddKeyOrientation(0, 1.6,0,0);
+    animate->AddKeyOrientation(25, 2.1,0,0);
+    animate->AddKeyOrientation(50, 1.6,0,0);
+    animate->AddKeyOrientation(75, 2.1,0,0);
+    animate->AddKeyOrientation(100, 1.6,0,0);
 
  /*   Torus* ss = new Torus(2,3,36,36);
     Joint* joint0 = new Joint(ss);
@@ -391,4 +453,14 @@ bool SceneContainer::RenderBox()
 
 void SceneContainer::SetRenderBox(bool box){
     render_box_over_object_ = box;
+}
+
+bool SceneContainer::DrawBones()
+{
+    return draw_bones_;
+}
+
+void SceneContainer::SetDrawBones(bool bones)
+{
+    draw_bones_ = bones;
 }

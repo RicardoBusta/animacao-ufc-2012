@@ -61,7 +61,7 @@
            <bool>true</bool>
           </property>
           <property name="currentIndex">
-           <number>1</number>
+           <number>2</number>
           </property>
           <widget class="QWidget" name="tab_animation">
            <property name="enabled">
@@ -519,10 +519,57 @@
             <string>Render</string>
            </attribute>
            <layout class="QFormLayout" name="formLayout_2">
-            <item row="0" column="0">
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_18">
+              <property name="text">
+               <string>Shader</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QComboBox" name="comboBox_shader">
+              <item>
+               <property name="text">
+                <string>Phong</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>Toon</string>
+               </property>
+              </item>
+              <item>
+               <property name="text">
+                <string>None</string>
+               </property>
+              </item>
+             </widget>
+            </item>
+            <item row="0" column="1">
              <widget class="QCheckBox" name="checkbox_render_box">
               <property name="text">
-               <string>Render Box Instead of Models</string>
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item row="0" column="0">
+             <widget class="QLabel" name="label_19">
+              <property name="text">
+               <string>Render Box</string>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="1">
+             <widget class="QCheckBox" name="checkBox_render_bones">
+              <property name="text">
+               <string/>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="0">
+             <widget class="QLabel" name="label_20">
+              <property name="text">
+               <string>Render Bones</string>
               </property>
              </widget>
             </item>
@@ -542,7 +589,6 @@
        <property name="autoFillBackground">
         <bool>true</bool>
        </property>
-       <zorder>label_17</zorder>
       </widget>
      </widget>
     </item>
@@ -560,7 +606,7 @@
          <string>...</string>
         </property>
         <property name="icon">
-         <iconset resource="Resources/Resources.qrc">
+         <iconset resource="Resources/buttons/buttons.qrc">
           <normaloff>:/buttons/stop.png</normaloff>:/buttons/stop.png</iconset>
         </property>
        </widget>
@@ -577,7 +623,7 @@
          <string>...</string>
         </property>
         <property name="icon">
-         <iconset resource="Resources/Resources.qrc">
+         <iconset resource="Resources/buttons/buttons.qrc">
           <normaloff>:/buttons/play.png</normaloff>:/buttons/play.png</iconset>
         </property>
        </widget>
@@ -652,7 +698,7 @@
   </customwidget>
  </customwidgets>
  <resources>
-  <include location="Resources/Resources.qrc"/>
+  <include location="Resources/buttons/buttons.qrc"/>
  </resources>
  <connections/>
 </ui>

@@ -1,0 +1,19 @@
+<RCC>
+    <qresource prefix="/models">
+        <file>arm_base.obj</file>
+        <file>arm_finger.obj</file>
+        <file>arm_hand.obj</file>
+        <file>arm_part1.obj</file>
+        <file>arm_part2.obj</file>
+        <file>face_eye.obj</file>
+        <file>ship.obj</file>
+        <file>face_brow.obj</file>
+        <file>face_eye_lid_back.obj</file>
+        <file>face_eye_lid_front.obj</file>
+        <file>face_head.obj</file>
+        <file>face_stache.obj</file>
+        <file>face_teeth_bot.obj</file>
+        <file>face_teeth_top.obj</file>
+        <file>face_hat.obj</file>
+    </qresource>
+</RCC>

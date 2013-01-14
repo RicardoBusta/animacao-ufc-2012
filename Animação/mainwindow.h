@@ -49,6 +49,7 @@ private slots:
     void UpdateCurrentPosition();
     void UpdateCurrentOrientation();
     void UpdateRenderBox(bool box);
+    void UpdateRenderBones(bool bones);
     void DisplayTrajectoryPosition(bool display);
     void DisplayTrajectoryOrientation(bool display);
     void UpdateSelectedInfo(Object3D *object);

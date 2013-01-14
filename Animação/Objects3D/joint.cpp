@@ -40,3 +40,20 @@ void Joint::DrawBoundingBox()
 {
     child_object_->DrawBoundingBox();
 }
+
+void Joint::DrawBone()
+{
+    glPushAttrib(GL_ALL_ATTRIB_BITS);
+    glDisable(GL_DEPTH_TEST);
+    glDisable(GL_LIGHTING);
+    glBegin(GL_LINES);
+
+    for(size_t i=0;i<children_joint_.size();i++){
+        qglviewer::Vec pos = children_joint_.at(i)->position();
+
+        glVertex3f(0,0,0);
+        glVertex3f(pos.x,pos.y,pos.z);
+    }
+    glEnd();
+    glPopAttrib();
+}

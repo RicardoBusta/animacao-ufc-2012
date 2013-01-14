@@ -1,6 +1,7 @@
-# Blender v2.63 (sub 0) OBJ File: 'arm.blend'
+# Blender v2.62 (sub 0) OBJ File: 'arm.blend'
 # www.blender.org
-o Sphere.014_Sphere.019
+mtllib arm_base.mtl
+o Sphere.015_Sphere.002
 v -1.459581 -0.767124 1.459581
 v -1.459581 -0.767124 -1.459581
 v 1.459581 -0.767124 -1.459581
@@ -1880,6 +1881,7 @@ vn -0.770779 0.632563 -0.075918
 vn -0.878612 0.469629 -0.086538
 vn -0.952718 0.289004 -0.093838
 vn -0.098012 0.995138 -0.009654
+usemtl _wooden.png
 s off
 f 2/1/1 1/2/1 5/3/1
 f 2/1/1 5/3/1 6/4/1

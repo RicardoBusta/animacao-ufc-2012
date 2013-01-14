@@ -61,7 +61,10 @@ FORMS += \
     mainwindow.ui
 
 RESOURCES += \
-    Resources/Resources.qrc
+    Resources/buttons/buttons.qrc \
+    Resources/textures/textures.qrc \
+    Resources/models/models.qrc \
+    Resources/shaders/shaders.qrc
 
 
 exists( /usr/lib/libQGLViewer.so ) {
@@ -75,8 +78,11 @@ DEPENDPATH += $$PWD/../../../../../../usr/include/QGLViewer
 unix:!macx: PRE_TARGETDEPS += $$PWD/../../../../../../usr/lib/x86_64-linux-gnu/libqglviewer-qt4.a
 
 
-RESOURCES += \
-    Resources/Resources.qrc
+RESOURCES +=
 
 OTHER_FILES += \
-    todo.txt
+    todo.txt \
+    Resources/shaders/toon.vert \
+    Resources/shaders/toon.frag \
+    Resources/shaders/phong.vert \
+    Resources/shaders/phong.frag

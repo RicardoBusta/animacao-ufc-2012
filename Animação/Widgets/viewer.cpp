@@ -22,6 +22,7 @@ Viewer::Viewer(QWidget* parent) :
 void Viewer::draw() {
 
     SceneContainer::DrawObjects();
+    SceneContainer::DrawExtras();
 
     this->drawText(10,10,QString("Frame: %1").arg(SceneContainer::current_frame()));
 
@@ -78,6 +79,50 @@ void Viewer::init() {
     setSceneRadius(10.0f);
 
     this->camera()->fitSphere(qglviewer::Vec(0,5,0),10);
+
+    //SHADER TEST
+
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_CULL_FACE);
+
+    glShadeModel(GL_SMOOTH);
+    glEnable(GL_COLOR_MATERIAL);
+
+    glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
+    glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
+    /*
+    /*static GLfloat light1pos[4] = { -0.892, 0.3, 0.9, 0.0 };
+    static GLfloat light1diffuse[] = { 0.8f, 0.8f, 0.8, 1.0f };
+    static GLfloat light1specular[] = { 0.5f, 0.5f, 0.5f, 1.0f };
+
+    static GLfloat light2pos[4] = { 0.588, 0.46, 0.248, 0.0 };
+    static GLfloat light2diffuse[] = { 0.498f, 0.5f, 0.6, 1.0f };
+    static GLfloat light2specular[] = { 0.2f, 0.2f, 0.2f, 1.0f };
+
+    static GLfloat light3pos[4] = { 0.216, -0.392, -0.216, 0.0 };
+    static GLfloat light3diffuse[] = { 0.798f, 0.838f, 1.0, 1.0f };
+    static GLfloat light3specular[] = { 0.06f, 0.0f, 0.0f, 1.0f };
+
+    glEnable(GL_LIGHTING);
+    //glEnable(GL_LIGHT0);
+    glEnable(GL_LIGHT1);
+    glEnable(GL_LIGHT2);
+
+    //glLightfv(GL_LIGHT0, GL_POSITION, light1pos);
+    //glLightfv(GL_LIGHT0, GL_DIFFUSE, light1diffuse);
+    //glLightfv(GL_LIGHT0, GL_SPECULAR, light1specular);
+
+    glLightfv(GL_LIGHT1, GL_POSITION, light2pos);
+    glLightfv(GL_LIGHT1, GL_DIFFUSE, light2diffuse);
+    glLightfv(GL_LIGHT1, GL_SPECULAR, light2specular);
+
+    glLightfv(GL_LIGHT2, GL_POSITION, light3pos);
+    glLightfv(GL_LIGHT2, GL_DIFFUSE, light3diffuse);
+    glLightfv(GL_LIGHT2, GL_SPECULAR, light3specular);*/
+
+    SetCurrentShader(0);
+    shader_enabled_ = true;
+    //SHADER TEST
 }
 
 void Viewer::postDraw(){
@@ -102,4 +147,35 @@ void Viewer::postDraw(){
 
 QString Viewer::helpString() const {
     return QString();
+}
+
+void Viewer::SetCurrentShader(int shader)
+{
+    shader_enabled_ = true;
+    shaderProgram.removeAllShaders();
+    switch(shader){
+    case 0:
+        shaderProgram.addShaderFromSourceFile(QGLShader::Vertex, ":/shaders/phong.vert");
+        shaderProgram.addShaderFromSourceFile(QGLShader::Fragment, ":/shaders/phong.frag");
+        break;
+    case 1:
+        shaderProgram.addShaderFromSourceFile(QGLShader::Vertex, ":/shaders/toon.vert");
+        shaderProgram.addShaderFromSourceFile(QGLShader::Fragment, ":/shaders/toon.frag");
+        break;
+    default:
+        shader_enabled_ = false;
+        break;
+    }
+    repaint();
+}
+
+void Viewer::ReleaseShader()
+{
+    shaderProgram.release();
+}
+
+void Viewer::BindShader(){
+    if(shader_enabled_){
+        shaderProgram.bind();
+    }
 }

@@ -10,6 +10,8 @@ class ObjectInfoTree;
 class Object3D;
 class Viewer;
 
+enum RENDER_OPTIONS{ RENDER_NONE=0, RENDER_SHADER=1, RENDER_OPT2=2, RENDER_OPT3=4, RENDER_OPT4=8, RENDER_OPT5=16, RENDER_OPT6=32, RENDER_OPT7=64, RENDER_OPT8=128 };
+
 class SceneContainer
 {
 public:
@@ -65,12 +67,16 @@ public:
     static bool RenderBox();
     static void SetRenderBox(bool box);
 
+    static bool RenderOptions(int options_mask);
+
 private:
     static Object3D* selected_object_;
     static bool animate_position_, animate_orientation_;
     static int start_frame_, end_frame_,current_frame_;
     static bool render_box_over_object_;
     static bool draw_bones_;
+
+    static unsigned int render_options_;
     static std::vector<ObjectAnimator*> animators_;
     static std::vector<Joint*> objects_;
     static std::vector<Object3D*> extras_;

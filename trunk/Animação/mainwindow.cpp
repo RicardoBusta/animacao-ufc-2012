@@ -119,9 +119,9 @@ void MainWindow::updateObjectsRecursive(QTreeWidgetItem *item, Joint* parent){
         updateObjectsRecursive(childitem, child);
         item_to_object_[childitem] = child;
     }
-    if(parent->ChildObject()!=NULL){
-       new QTreeWidgetItem(item,QStringList(QString(parent->ChildObject()->label().c_str())));
-    }
+//    if(parent->ChildObject()!=NULL){
+//       new QTreeWidgetItem(item,QStringList(QString(parent->ChildObject()->label().c_str())));
+//    }
 }
 
 void MainWindow::UpdateCurrentSelected(QTreeWidgetItem *item, int column) {

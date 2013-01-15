@@ -2,14 +2,16 @@
 
 #include <QtOpenGL>
 
+#include <Utils/scenecontainer.h>
+
 FileObj::FileObj()
 {
     label_ = "Untitled";
 }
 
-void FileObj::DrawObject(bool renderbox)
+void FileObj::DrawObject()
 {
-    if(!renderbox){
+    if(!SceneContainer::RenderBox()){
         glPushAttrib(GL_ALL_ATTRIB_BITS);
         glShadeModel(GL_SMOOTH);
         glEnable(GL_DEPTH_TEST);

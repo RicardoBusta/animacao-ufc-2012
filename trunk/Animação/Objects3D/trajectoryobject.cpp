@@ -62,7 +62,7 @@ void TrajectoryObject::Update(int start_frame, int end_frame) {
     }
 }
 
-void TrajectoryObject::DrawObject(bool) {
+void TrajectoryObject::DrawObject() {
     glPushMatrix();
 
     if(type_ == kOrientation){

@@ -30,16 +30,16 @@ public:
     inline qglviewer::Vec          position()    { return position_; }
     inline qglviewer::Quaternion   orientation() { return orientation_; }
 
-    void                           Draw(bool renderbox);
+    void                           Draw();
 
-    void                           SetAnimator(ObjectAnimator *animator);
+    void                           SetAnimator(ObjectAnimator *animator); // TODO remove
     ObjectAnimator*                GetAnimator();
 protected:
 
     void                           DefaultInitialisation();
     void                           DrawPositionParticle();
     void                           DrawOrientationAxes();
-    virtual void                   DrawObject(bool renderbox);
+    virtual void                   DrawObject();
     virtual void                   DrawBoundingBox();
     virtual void                   DrawBoxObject();
     virtual void                   DrawBone();

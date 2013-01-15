@@ -20,7 +20,7 @@ void RotationWidget::DrawCircle(double, qglviewer::Quaternion ori, int) {
     glPushMatrix();
     glMultMatrixd(ori.matrix());
     Torus t(0.96*radius_,1.04*radius_,64,36);
-    t.Draw(false);
+    t.Draw();
     glPopMatrix();
 }
 

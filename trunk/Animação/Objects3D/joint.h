@@ -16,13 +16,15 @@ public:
 
 
 protected:
-    virtual void DrawObject(bool renderbox);
+    virtual void DrawObject();
     virtual void DrawBoundingBox();
     virtual void DrawBone();
 
 private:
     Object3D* child_object_;
     std::vector<Joint*> children_joint_;
+
+    Joint *parent_joint_;
 };
 
 #endif // JOINT_H

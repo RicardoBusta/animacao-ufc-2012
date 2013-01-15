@@ -12,7 +12,6 @@
 #include "Objects3D/fileobj.h"
 
 #include <QQuaternion>
-
 Viewer* SceneContainer::viewer_reference_ = NULL;
 
 std::vector<Joint*> SceneContainer::objects_;
@@ -31,20 +30,33 @@ int SceneContainer::current_frame_ = 0;
 bool SceneContainer::render_box_over_object_ = false;
 bool SceneContainer::draw_bones_ = false;
 
+unsigned int SceneContainer::render_options_ = 0;
+
 SceneContainer::SceneContainer(){}
+
+#include <iostream>
+using namespace std;
 
 void SceneContainer::DrawObjects() {
     for(uint i = 0; i < objects_.size();i++){
         Joint *object = objects_.at(i);
-        object->Draw(render_box_over_object_);
+        render_options_ = RENDER_SHADER;
+        object->Draw();
     }
+
+    cout << "enum teste" << endl;
+    cout << RENDER_NONE << endl;
+    cout << RENDER_SHADER << endl;
+    cout << RENDER_OPT2 << endl;
+    cout << (RENDER_OPT2|RENDER_SHADER) << endl;
 }
 
 void SceneContainer::DrawExtras()
 {
     for(int i = 0 ; i < extras_.size() ; i++ ) {
         Object3D* object = extras_.at(i);
-        object->Draw(render_box_over_object_);
+        render_options_ = RENDER_NONE;
+        object->Draw();
     }
 }
 
@@ -75,7 +87,7 @@ void SceneContainer::CreateDefaultScene() {
     Joint* arm_part1 = AddObject("Part 1",":/models/arm_part1.obj",":/textures/wooden.png",QVector3D(0,0.25,0),QQuaternion(1,0,0,0),arm_base);
     Joint* arm_part2 = AddObject("Part 2",":/models/arm_part2.obj",":/textures/wooden.png",QVector3D(0,3.7,0),QQuaternion(1,0,0,0),arm_part1);
     Joint* arm_hand = AddObject("Hand",":/models/arm_hand.obj",":/textures/wooden.png",QVector3D(0,4.7,0),QQuaternion(1,0,0,0),arm_part2);
-//    Joint* arm_hand = AddObject("Hand",":/models/face_eye.obj",":/textures/eye.png",QVector3D(0,4.7,0),QQuaternion(1,0,0,0),arm_part2);
+    //    Joint* arm_hand = AddObject("Hand",":/models/face_eye.obj",":/textures/eye.png",QVector3D(0,4.7,0),QQuaternion(1,0,0,0),arm_part2);
 
 
 
@@ -165,7 +177,7 @@ void SceneContainer::CreateDefaultScene() {
 
     //Face Scene
     Joint* face_head = AddObject("Head",":/models/face_head.obj","://textures/wooden.png",QVector3D(0,3,0), QQuaternion(1,0,0,0), arm_hand);
-//    Joint* face_head = AddObject("Head",":/models/face_head.obj","://textures/wooden.png",QVector3D(-5,3,0), QQuaternion(1,0,0,0), NULL);
+    //    Joint* face_head = AddObject("Head",":/models/face_head.obj","://textures/wooden.png",QVector3D(-5,3,0), QQuaternion(1,0,0,0), NULL);
     Joint* face_teeth_top = AddObject("Teeth Up",":/models/face_teeth_top.obj",":/textures/stache_teeth.png",QVector3D(0,-1.5,1), QQuaternion(1,0,0,0), face_head);
     Joint* face_teeth_bot = AddObject("Teeth Down",":/models/face_teeth_bot.obj",":/textures/stache_teeth.png",QVector3D(0,-1.5,1), QQuaternion(1,0,0,0), face_head);
     Joint* face_eye_lid_back_left = AddObject("Eye Lid Back Left",":/models/face_eye_lid_back.obj",":/textures/wooden.png",QVector3D(0.7,0.5,1.7), QQuaternion(1,0,0,0), face_head);
@@ -214,7 +226,7 @@ void SceneContainer::CreateDefaultScene() {
     animate->AddKeyOrientation(75, 2.1,0,0);
     animate->AddKeyOrientation(100, 1.6,0,0);
 
- /*   Torus* ss = new Torus(2,3,36,36);
+    /*   Torus* ss = new Torus(2,3,36,36);
     Joint* joint0 = new Joint(ss);
 
     Torus* ss2 = new Torus(2,3,36,36);
@@ -263,7 +275,7 @@ void SceneContainer::CreateDefaultScene() {
     animteste->AddKeyOrientation(100, 0,0,0);
     */
 
-   /*animteste2->AddKeyPosition(0,qglviewer::Vec(0,0,0));
+    /*animteste2->AddKeyPosition(0,qglviewer::Vec(0,0,0));
     animteste2->AddKeyPosition(25,qglviewer::Vec(2,2,3));
     animteste2->AddKeyPosition(50,qglviewer::Vec(4,0,5));
     animteste2->AddKeyPosition(75,qglviewer::Vec(6,2,3));
@@ -275,11 +287,11 @@ void SceneContainer::CreateDefaultScene() {
     animteste2->AddKeyOrientation(75, 90,90,90);
     animteste2->AddKeyOrientation(100, 0,0,0);*/
 
-//    animteste->AddKeyOrientation(0,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(0,1,0)));
-//    animteste->AddKeyOrientation(25,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(1,0,1)));
-//    animteste->AddKeyOrientation(50,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(-1,0,1)));
-//    animteste->AddKeyOrientation(75,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(0,1,0)));
-//    animteste->AddKeyOrientation(100,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(1,0,0)));
+    //    animteste->AddKeyOrientation(0,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(0,1,0)));
+    //    animteste->AddKeyOrientation(25,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(1,0,1)));
+    //    animteste->AddKeyOrientation(50,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(-1,0,1)));
+    //    animteste->AddKeyOrientation(75,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(0,1,0)));
+    //    animteste->AddKeyOrientation(100,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(1,0,0)));
 
 
     /*animator->AddKeyOrientation(0,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(0,1,0)));
@@ -288,7 +300,7 @@ void SceneContainer::CreateDefaultScene() {
     animator->AddKeyOrientation(75,qglviewer::Quaternion(qglviewer::Vec(0,0,1),90));
     animator->AddKeyOrientation(100,qglviewer::Quaternion(qglviewer::Vec(0,0,1),0));*/
     //animteste->SetPosInterpolationType(PosInterpolator::kCatmullRoom);
-    //teste->SetDrawOrientationAxes(true);
+    //teste->SetRENDEROrientationAxes(true);
 
 }
 
@@ -463,4 +475,12 @@ bool SceneContainer::DrawBones()
 void SceneContainer::SetDrawBones(bool bones)
 {
     draw_bones_ = bones;
+}
+
+bool SceneContainer::RenderOptions(int options_mask)
+{
+    if( (options_mask & render_options_) > 0 )
+        return true;
+    else
+        return false;
 }

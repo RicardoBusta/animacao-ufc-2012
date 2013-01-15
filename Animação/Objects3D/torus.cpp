@@ -50,7 +50,7 @@ void Torus::CreateSlices()
     }
 }
 
-void Torus::DrawObject(bool) {
+void Torus::DrawObject() {
     for(int i = 0 ; i < torus_slices_.size()-1 ; i++ ) {
         glBegin(GL_TRIANGLE_STRIP);
         for(int j = 0 ; j < steps_ ; j++ ) {

@@ -68,17 +68,21 @@ void Object3D::DefaultInitialisation() {
 
 }
 
-void Object3D::Draw(bool options) {
-
+void Object3D::Draw() {
     glPushMatrix();
 
     glTranslated(position_.x,position_.y,position_.z);
     glMultMatrixd(orientation_.matrix());
 
-    SceneContainer::viewer_reference_->BindShader();
-    if(draw_object_)
-        DrawObject(options);
-    SceneContainer::viewer_reference_->ReleaseShader();
+    if(SceneContainer::RenderOptions(RENDER_SHADER)){
+        SceneContainer::viewer_reference_->BindShader();
+        if(draw_object_)
+            DrawObject();
+        SceneContainer::viewer_reference_->ReleaseShader();
+    }else{
+        if(draw_object_)
+            DrawObject();
+    }
     if(draw_position_particle_)
         DrawPositionParticle();
     if(draw_orientation_axes_)
@@ -122,7 +126,7 @@ void Object3D::DrawOrientationAxes() {
     glPopAttrib();
 }
 
-void Object3D::DrawObject(bool options) {
+void Object3D::DrawObject() {
 }
 
 void Object3D::SetAnimator(ObjectAnimator *animator)
@@ -232,12 +236,12 @@ void Object3D::DrawBoxObject()
 
 void Object3D::DrawBone()
 {
-//    glPushAttrib(GL_ALL_ATTRIB_BITS);
-//    glDisable(GL_LIGHTING);
-//    glDisable(GL_DEPTH_TEST);
-//    glBegin(GL_LINES);
-//    glVertex3f(0,0,0);
-//    glVertex3f(1,1,1);
-//    glEnd();
-//    glPopAttrib();
+    //    glPushAttrib(GL_ALL_ATTRIB_BITS);
+    //    glDisable(GL_LIGHTING);
+    //    glDisable(GL_DEPTH_TEST);
+    //    glBegin(GL_LINES);
+    //    glVertex3f(0,0,0);
+    //    glVertex3f(1,1,1);
+    //    glEnd();
+    //    glPopAttrib();
 }

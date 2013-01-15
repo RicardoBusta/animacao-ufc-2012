@@ -8,10 +8,13 @@ Joint::Joint(Object3D* child_object)
         label_ = "Empty Joint";
     }
     child_object_ = child_object;
+
+    parent_joint_ = NULL;
 }
 
 void Joint::AddChildJoint(Joint* child) {
     children_joint_.push_back(child);
+    child->parent_joint_ = this;
 }
 
 int Joint::HowManyChilds() {
@@ -23,11 +26,11 @@ Joint* Joint::ChildAt(int index) {
     return children_joint_.at(index);
 }
 
-void Joint::DrawObject(bool renderbox) {
-    child_object_->Draw(renderbox);
+void Joint::DrawObject() {
+    child_object_->Draw();
 
     for(size_t i = 0 ; i < children_joint_.size() ; i++ )
-        children_joint_.at(i)->Draw(renderbox);
+        children_joint_.at(i)->Draw();
 }
 
 

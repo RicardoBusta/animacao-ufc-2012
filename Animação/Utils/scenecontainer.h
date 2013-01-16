@@ -26,48 +26,51 @@ public:
     static int start_frame();
     static int end_frame();
     static int current_frame();
-    static void GoToNextFrame();
-    static void SetFrameRange(int start, int end);
-    static void SetCurrentFrame(int frame);
+    static void goToNextFrame();
+    static void setFrameRange(int start, int end);
+    static void setCurrentFrame(int frame);
 
     //! Objects management
-    static Joint* AddObject(QString label, QString objfile, QString texfile, QVector3D position, QQuaternion rotation, Joint *parent);
-    static unsigned int HowManyObjects();
-    static Joint* ObjectAt(int i);
-    static  ObjectInfoTree *GetObjects();
-    static bool DrawBones();
-    static void SetDrawBones(bool bones);
+    static Joint* addObject(QString label, QString objfile, QString texfile, QVector3D position, QQuaternion rotation, Joint *parent);
+    static unsigned int howManyObjects();
+    static Joint* objectAt(int i);
+    static  ObjectInfoTree *getObjects();
+    static bool drawBones();
+    static void setDrawBones(bool bones);
 
     //! Selected Object Management
-    static Object3D* SelectedObject();
-    static void SetSelectedObject(Object3D* selected);
-    static void SetSelectedPosition(qglviewer::Vec new_position);
-    static void SetSelectedOrientation(qglviewer::Quaternion new_orientation);
-    static void DisplaySelectedPositionTrajectory(bool display);
-    static void DisplaySelectedOrientationTrajectory(bool display);
-    static void AddCurrentPositionKeyframe();
-    static void AddCurrentOrientationKeyframe();
-    static void RemoveCurrentPositionKeyframe();
-    static void RemoveCurrentOrientationKeyframe();
-
-
+    static Object3D* selectedObject();
+    static void setSelectedObject(Object3D* selected);
+    static void setSelectedPosition(qglviewer::Vec new_position);
+    static void setSelectedOrientation(qglviewer::Quaternion new_orientation);
+    static void displaySelectedPositionTrajectory(bool display);
+    static void displaySelectedOrientationTrajectory(bool display);
+    static void addCurrentPositionKeyframe();
+    static void addCurrentOrientationKeyframe();
+    static void removeCurrentPositionKeyframe();
+    static void removeCurrentOrientationKeyframe();
 
     //! Which to animate
-    static void SetAnimated(bool animate_position, bool animate_orientation);
-    static void SetOrientationInterpolationType(OriInterpolator::InterpolationType type);
-    static void SetPositionInterpolationType(PosInterpolator::InterpolationType type);
-    static bool AnimatePosition();
-    static bool AnimateOrientation();
+    static void setAnimated(bool animate_position, bool animate_orientation);
+    static void setOrientationInterpolationType(OriInterpolator::InterpolationType type);
+    static void setPositionInterpolationType(PosInterpolator::InterpolationType type);
+    static bool animatePosition();
+    static bool animateOrientation();
 
     //! Drawing
-    static void DrawObjects();
-    static void DrawExtras();
+    static void drawObjects();
+    static void drawExtras();
 
     //! Rendering Parameters
-    static bool RenderBox();
-    static void SetRenderBox(bool box);
+    static bool renderBox();
+    static void setRenderBox(bool box);
 
-    static bool RenderOptions(int options_mask);
+    static bool renderOptions(int options_mask);
+
+    //! I/O
+    static QString genOutput();
+
+    static void clearScene();
 
 private:
     static Object3D* selected_object_;

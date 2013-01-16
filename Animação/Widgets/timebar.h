@@ -11,7 +11,7 @@ class TimeBar : public QWidget
 public:
     explicit TimeBar(QWidget *parent = 0);
     
-    void SetNumberOfFrames(int total);
+    void setNumberOfFrames(int total);
     void setKeyFrames(Object3D* object);
 private:
     int step_width_;
@@ -25,9 +25,9 @@ protected:
     virtual void paintEvent(QPaintEvent* event);
     virtual void mousePressEvent ( QMouseEvent * event );
 signals:
-    void SetSelectedFrame(int frame);
+    void setSelectedFrame(int frame);
 public slots:
-    void SetCurrentFrame(int frame);
+    void setCurrentFrame(int frame);
 };
 
 #endif // TIMEBAR_H

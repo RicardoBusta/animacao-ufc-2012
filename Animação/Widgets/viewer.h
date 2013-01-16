@@ -15,24 +15,24 @@ public:
     explicit Viewer(QWidget* parent = 0);
 
 protected :
-  virtual void draw();
-  virtual void init();
-  virtual QString helpString() const;
+    virtual void draw();
+    virtual void init();
+    virtual QString helpString() const;
 
 signals:
-    void CurrentFrame(int frame);
-    void SignalUpdateObjects();
+    void currentFrame(int frame);
+    void signalUpdateObjects();
 public slots:
-    void Play();
-    void Pause();
-    void Stop();
+    void play();
+    void pause();
+    void stop();
 
     virtual void animate();
-    void SetCurrentFrame(int frame);
+    void setCurrentFrame(int frame);
 
-    void SetCurrentShader(int shader);
-    void ReleaseShader();
-    void BindShader();
+    void setCurrentShader(int shader);
+    void releaseShader();
+    void bindShader();
 
 private:
     BezierQuadratic* nova_;

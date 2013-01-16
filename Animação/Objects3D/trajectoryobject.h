@@ -12,15 +12,15 @@ public:
     enum TrajectoryType {kPosition,kOrientation,kBoth};
     TrajectoryObject(ObjectAnimator* animator);
 
-    void Update();
-    void Update(int start_frame, int end_frame);
+    void update();
+    void update(int start_frame, int end_frame);
 
-    void SetType(TrajectoryType type);
+    void setType(TrajectoryType type);
 
 private:
-    void DrawObject();
+    void drawObject();
 
-    void DrawPositionsCurve();
+    void drawPositionsCurve();
 
     TrajectoryType type_;
     std::vector<qglviewer::Vec> positions_;

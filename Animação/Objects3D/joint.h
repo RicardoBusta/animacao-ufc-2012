@@ -8,17 +8,17 @@ class Joint : public Object3D
 public:
     Joint(Object3D* children_object);
 
-    void AddChildJoint(Joint* child);
+    void addChildJoint(Joint* child);
 
-    int HowManyChilds();
-    Joint* ChildAt(int index);
-    Object3D *ChildObject();
+    int howManyChilds();
+    Joint* childAt(int index);
+    Object3D *childObject();
 
 
 protected:
-    virtual void DrawObject();
-    virtual void DrawBoundingBox();
-    virtual void DrawBone();
+    virtual void drawObject();
+    virtual void drawBoundingBox();
+    virtual void drawBone();
 
 private:
     Object3D* child_object_;

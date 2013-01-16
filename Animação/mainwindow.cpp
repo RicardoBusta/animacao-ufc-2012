@@ -19,44 +19,44 @@ MainWindow::MainWindow(QWidget *parent) :
     SceneContainer::viewer_reference_ = ui->viewer;
 
     this->setWindowTitle(QString("Animation Studio"));
-    connect( ui->button_play, SIGNAL(clicked()), ui->viewer, SLOT(Play()) );
-    connect( ui->button_stop, SIGNAL(clicked()), ui->viewer, SLOT(Stop()));
-    connect( ui->button_stop, SIGNAL(clicked()), this, SLOT(Stop()));
+    connect( ui->button_play, SIGNAL(clicked()), ui->viewer, SLOT(play()) );
+    connect( ui->button_stop, SIGNAL(clicked()), ui->viewer, SLOT(stop()));
+    connect( ui->button_stop, SIGNAL(clicked()), this, SLOT(stop()));
 
-    connect(ui->button_play,SIGNAL(clicked()),this,SLOT(PlayPause()));
+    connect(ui->button_play,SIGNAL(clicked()),this,SLOT(playPause()));
 
-    connect(ui->viewer,SIGNAL(SignalUpdateObjects()),this,SLOT(UpdateObjects()));
+    connect(ui->viewer,SIGNAL(signalUpdateObjects()),this,SLOT(updateObjects()));
 
-    connect( ui->timebar, SIGNAL(SetSelectedFrame(int)), ui->viewer, SLOT(SetCurrentFrame(int)));
-    connect( ui->timebar, SIGNAL(SetSelectedFrame(int)), this, SLOT(SelectedFramePause()) );
-    connect( ui->viewer, SIGNAL(CurrentFrame(int)), ui->timebar, SLOT(SetCurrentFrame(int)));
+    connect( ui->timebar, SIGNAL(setSelectedFrame(int)), ui->viewer, SLOT(setCurrentFrame(int)));
+    connect( ui->timebar, SIGNAL(setSelectedFrame(int)), this, SLOT(selectedFramePause()) );
+    connect( ui->viewer, SIGNAL(currentFrame(int)), ui->timebar, SLOT(setCurrentFrame(int)));
 
-    connect( ui->spin_frame_count, SIGNAL(valueChanged(int)), this, SLOT(UpdateFrameCount(int)));
+    connect( ui->spin_frame_count, SIGNAL(valueChanged(int)), this, SLOT(updateFrameCount(int)));
 
-    connect( ui->combo_velocity_control, SIGNAL(activated(int)), this, SLOT(UpdateSpeedControl(int)));
+    connect( ui->combo_velocity_control, SIGNAL(activated(int)), this, SLOT(updateSpeedControl(int)));
 
-    connect( ui->combo_pos_interpolator, SIGNAL(activated(int)), this, SLOT(UpdatePositionInterpolation(int)));
-    connect( ui->combo_ori_interpolator, SIGNAL(activated(int)), this, SLOT(UpdateOrientationInterpolation(int)));
+    connect( ui->combo_pos_interpolator, SIGNAL(activated(int)), this, SLOT(updatePositionInterpolation(int)));
+    connect( ui->combo_ori_interpolator, SIGNAL(activated(int)), this, SLOT(updateOrientationInterpolation(int)));
 
-    connect( ui->checkbox_freeze_pos, SIGNAL(clicked()), this, SLOT(UpdateFreeze()));
-    connect( ui->checkbox_freeze_ori, SIGNAL(clicked()), this, SLOT(UpdateFreeze()));
+    connect( ui->checkbox_freeze_pos, SIGNAL(clicked()), this, SLOT(updateFreeze()));
+    connect( ui->checkbox_freeze_ori, SIGNAL(clicked()), this, SLOT(updateFreeze()));
 
     // Object 3D Manipulation
 
-    connect( ui->line_edit_label, SIGNAL(textChanged(QString)), this, SLOT(UpdateSelectedLabel(QString)));
+    connect( ui->line_edit_label, SIGNAL(textChanged(QString)), this, SLOT(updateSelectedLabel(QString)));
 
-    connect( ui->add_keyframe_pos, SIGNAL(pressed()), this, SLOT(AddPositionKeyframe()));
-    connect( ui->add_keyframe_ori, SIGNAL(pressed()), this, SLOT(AddOrientationKeyframe()));
-    connect( ui->rem_keyframe_pos, SIGNAL(pressed()), this, SLOT(RemovePositionKeyframe()));
-    connect( ui->rem_keyframe_ori, SIGNAL(pressed()), this, SLOT(RemoveOrientationKeyframe()));
+    connect( ui->add_keyframe_pos, SIGNAL(pressed()), this, SLOT(addPositionKeyframe()));
+    connect( ui->add_keyframe_ori, SIGNAL(pressed()), this, SLOT(addOrientationKeyframe()));
+    connect( ui->rem_keyframe_pos, SIGNAL(pressed()), this, SLOT(removePositionKeyframe()));
+    connect( ui->rem_keyframe_ori, SIGNAL(pressed()), this, SLOT(removeOrientationKeyframe()));
 
-    connect( ui->push_button_traj_pos, SIGNAL(toggled(bool)), this, SLOT(DisplayTrajectoryPosition(bool)));
-    connect( ui->push_button_traj_ori, SIGNAL(toggled(bool)), this, SLOT(DisplayTrajectoryOrientation(bool)));
+    connect( ui->push_button_traj_pos, SIGNAL(toggled(bool)), this, SLOT(displayTrajectoryPosition(bool)));
+    connect( ui->push_button_traj_ori, SIGNAL(toggled(bool)), this, SLOT(displayTrajectoryOrientation(bool)));
 
-    connect( ui->checkbox_render_box, SIGNAL(toggled(bool)), this, SLOT(UpdateRenderBox(bool)) );
-    connect( ui->checkBox_render_bones, SIGNAL(toggled(bool)), this, SLOT(UpdateRenderBones(bool)) );
+    connect( ui->checkbox_render_box, SIGNAL(toggled(bool)), this, SLOT(updateRenderBox(bool)) );
+    connect( ui->checkBox_render_bones, SIGNAL(toggled(bool)), this, SLOT(updateRenderBones(bool)) );
 
-    connect( ui->comboBox_shader, SIGNAL(currentIndexChanged(int)), ui->viewer, SLOT(SetCurrentShader(int)) );
+    connect( ui->comboBox_shader, SIGNAL(currentIndexChanged(int)), ui->viewer, SLOT(setCurrentShader(int)) );
 
     this->showMaximized();
 
@@ -70,36 +70,36 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::PlayPause(){
+void MainWindow::playPause(){
     if(play_or_pause_){
         play_or_pause_ = false;
         ui->button_play->setIcon(pause_icon);
-        ui->viewer->Play();
+        ui->viewer->play();
     }else{
         play_or_pause_ = true;
         ui->button_play->setIcon(play_icon);
-        ui->viewer->Pause();
+        ui->viewer->pause();
     }
 }
 
-void MainWindow::Stop() {
+void MainWindow::stop() {
     if(!play_or_pause_) {
         play_or_pause_ = true;
         ui->button_play->setIcon(play_icon);
     }
 }
 
-void MainWindow::SelectedFramePause()
+void MainWindow::selectedFramePause()
 {
     play_or_pause_ = true;
-    ui->viewer->Pause();
+    ui->viewer->pause();
 }
 
-void MainWindow::UpdateObjects(){
+void MainWindow::updateObjects(){
 
     item_to_object_.clear();
-    for( unsigned int i = 0 ; i < SceneContainer::HowManyObjects() ; i++ ) {
-        Joint* object =  SceneContainer::ObjectAt(i);
+    for( unsigned int i = 0 ; i < SceneContainer::howManyObjects() ; i++ ) {
+        Joint* object =  SceneContainer::objectAt(i);
         QTreeWidgetItem *item = new QTreeWidgetItem(QStringList(QString(object->label().c_str())));
         updateObjectsRecursive(item, object);
         ui->treeWidget->addTopLevelItem(item);
@@ -107,44 +107,44 @@ void MainWindow::UpdateObjects(){
     }
     ui->treeWidget->expandAll();
 
-    connect(ui->treeWidget, SIGNAL(itemClicked(QTreeWidgetItem*,int)), this, SLOT(UpdateCurrentSelected(QTreeWidgetItem*,int)));
+    connect(ui->treeWidget, SIGNAL(itemClicked(QTreeWidgetItem*,int)), this, SLOT(updateCurrentSelected(QTreeWidgetItem*,int)));
     //ui->timebar->setKeyFrames((Object3D*)SceneContainer::ObjectAt(0));
-    ui->timebar->update();    
+    ui->timebar->update();
 }
 
 void MainWindow::updateObjectsRecursive(QTreeWidgetItem *item, Joint* parent){
-    for(int i = 0 ; i < parent->HowManyChilds() ; i++ ) {
-        Joint *child = parent->ChildAt(i);
+    for(int i = 0 ; i < parent->howManyChilds() ; i++ ) {
+        Joint *child = parent->childAt(i);
         QTreeWidgetItem *childitem = new QTreeWidgetItem(item,QStringList(QString(child->label().c_str())));
         updateObjectsRecursive(childitem, child);
         item_to_object_[childitem] = child;
     }
-//    if(parent->ChildObject()!=NULL){
-//       new QTreeWidgetItem(item,QStringList(QString(parent->ChildObject()->label().c_str())));
-//    }
+    //    if(parent->ChildObject()!=NULL){
+    //       new QTreeWidgetItem(item,QStringList(QString(parent->ChildObject()->label().c_str())));
+    //    }
 }
 
-void MainWindow::UpdateCurrentSelected(QTreeWidgetItem *item, int column) {
+void MainWindow::updateCurrentSelected(QTreeWidgetItem *item, int column) {
     selected_item_ = item;
     if(item == NULL) return;
     if( item_to_object_.find(item) != item_to_object_.end() ) {
-        Joint* object = item_to_object_[item];    
-        UpdateSelectedInfo(object);
+        Joint* object = item_to_object_[item];
+        updateSelectedInfo(object);
         ui->timebar->setKeyFrames(object);
         ui->timebar->repaint();
     }
 }
 
-void MainWindow::UpdateFrameCount(int new_total) {
-    SceneContainer::SetFrameRange(0,new_total);
-    ui->timebar->SetNumberOfFrames(new_total+1);
+void MainWindow::updateFrameCount(int new_total) {
+    SceneContainer::setFrameRange(0,new_total);
+    ui->timebar->setNumberOfFrames(new_total+1);
     ui->timebar->repaint();
 }
 
-void MainWindow::UpdateFPS(int new_fps) {
+void MainWindow::updateFPS(int new_fps) {
 }
 
-void MainWindow::UpdateSpeedControl(int new_speed_control) {
+void MainWindow::updateSpeedControl(int new_speed_control) {
     switch(new_speed_control) {
     case 0:
         GenericInterpolator::setSpeedFunction(GenericInterpolator::SF_CONSTANT);
@@ -161,46 +161,46 @@ void MainWindow::UpdateSpeedControl(int new_speed_control) {
     }
 }
 
-void MainWindow::UpdatePositionInterpolation(int new_speed_interpolation) {
+void MainWindow::updatePositionInterpolation(int new_speed_interpolation) {
     switch(new_speed_interpolation) {
     case 0:
-        SceneContainer::SetPositionInterpolationType(PosInterpolator::kLinear);
+        SceneContainer::setPositionInterpolationType(PosInterpolator::kLinear);
         break;
     default:
-        SceneContainer::SetPositionInterpolationType(PosInterpolator::kCatmullRoom);
+        SceneContainer::setPositionInterpolationType(PosInterpolator::kCatmullRoom);
         break;
     }
 }
 
-void MainWindow::UpdateOrientationInterpolation(int new_orientation_interpolation) {
+void MainWindow::updateOrientationInterpolation(int new_orientation_interpolation) {
     switch(new_orientation_interpolation) {
     case 0:
-        SceneContainer::SetOrientationInterpolationType(OriInterpolator::kSlerp);
+        SceneContainer::setOrientationInterpolationType(OriInterpolator::kSlerp);
         break;
     default:
-        SceneContainer::SetOrientationInterpolationType(OriInterpolator::kBezier);
+        SceneContainer::setOrientationInterpolationType(OriInterpolator::kBezier);
         break;
     }
 }
 
-void MainWindow::UpdateFreeze() {
-    SceneContainer::SetAnimated(!ui->checkbox_freeze_pos->isChecked(),!ui->checkbox_freeze_ori->isChecked());
+void MainWindow::updateFreeze() {
+    SceneContainer::setAnimated(!ui->checkbox_freeze_pos->isChecked(),!ui->checkbox_freeze_ori->isChecked());
 }
 
-void MainWindow::UpdateSelectedInfo(Object3D* object) {
-    if(SceneContainer::SelectedObject()!=NULL){
-       SceneContainer::SelectedObject()->SetDrawBoundingBox(false);
-       SceneContainer::SelectedObject()->SetDrawOrientationAxes(false);
+void MainWindow::updateSelectedInfo(Object3D* object) {
+    if(SceneContainer::selectedObject()!=NULL){
+        SceneContainer::selectedObject()->setDrawBoundingBox(false);
+        SceneContainer::selectedObject()->setDrawOrientationAxes(false);
     }
-    SceneContainer::SetSelectedObject(object);
+    SceneContainer::setSelectedObject(object);
 
     if(object==NULL) {
         ui->tab_object->setEnabled(false);
         return;
     }
     ui->tab_object->setEnabled(false);
-    SceneContainer::SelectedObject()->SetDrawBoundingBox(true);
-    SceneContainer::SelectedObject()->SetDrawOrientationAxes(true);
+    SceneContainer::selectedObject()->setDrawBoundingBox(true);
+    SceneContainer::selectedObject()->setDrawOrientationAxes(true);
 
     disconnect( ui->spin_pos_x, 0, this, 0);
     disconnect( ui->spin_pos_y, 0, this, 0);
@@ -224,86 +224,86 @@ void MainWindow::UpdateSelectedInfo(Object3D* object) {
     ui->spin_ori_y->setValue((angle_ry*180.0)/(6.28));
     ui->spin_ori_z->setValue((angle_rz*180.0)/(6.28));
 
-    connect( ui->spin_pos_x, SIGNAL(valueChanged(double)), this, SLOT(UpdateCurrentPosition()));
-    connect( ui->spin_pos_y, SIGNAL(valueChanged(double)), this, SLOT(UpdateCurrentPosition()));
-    connect( ui->spin_pos_z, SIGNAL(valueChanged(double)), this, SLOT(UpdateCurrentPosition()));
+    connect( ui->spin_pos_x, SIGNAL(valueChanged(double)), this, SLOT(updateCurrentPosition()));
+    connect( ui->spin_pos_y, SIGNAL(valueChanged(double)), this, SLOT(updateCurrentPosition()));
+    connect( ui->spin_pos_z, SIGNAL(valueChanged(double)), this, SLOT(updateCurrentPosition()));
 
-    connect( ui->spin_ori_x, SIGNAL(valueChanged(double)), this, SLOT(UpdateCurrentOrientation()));
-    connect( ui->spin_ori_y, SIGNAL(valueChanged(double)), this, SLOT(UpdateCurrentOrientation()));
-    connect( ui->spin_ori_z, SIGNAL(valueChanged(double)), this, SLOT(UpdateCurrentOrientation()));
+    connect( ui->spin_ori_x, SIGNAL(valueChanged(double)), this, SLOT(updateCurrentOrientation()));
+    connect( ui->spin_ori_y, SIGNAL(valueChanged(double)), this, SLOT(updateCurrentOrientation()));
+    connect( ui->spin_ori_z, SIGNAL(valueChanged(double)), this, SLOT(updateCurrentOrientation()));
 
     ui->tab_object->setEnabled(true);
     ui->viewer->updateGL();
 }
 
-void MainWindow::UpdateSelectedLabel(QString label){
+void MainWindow::updateSelectedLabel(QString label){
     if(selected_item_ !=NULL) {
         selected_item_->setText(0,label);
     }
-    if(SceneContainer::SelectedObject()!=NULL)
-        SceneContainer::SelectedObject()->SetLabel(label.toStdString().c_str());
+    if(SceneContainer::selectedObject()!=NULL)
+        SceneContainer::selectedObject()->setLabel(label.toStdString().c_str());
 
 }
 
-void MainWindow::UpdateCurrentPosition() {
+void MainWindow::updateCurrentPosition() {
     qglviewer::Vec current_p(ui->spin_pos_x->value(),ui->spin_pos_y->value(),ui->spin_pos_z->value());
-    SceneContainer::SetSelectedPosition(current_p);
+    SceneContainer::setSelectedPosition(current_p);
     ui->viewer->updateGL();
 }
 
-void MainWindow::UpdateCurrentOrientation() {
+void MainWindow::updateCurrentOrientation() {
     qglviewer::Quaternion a,b,c,d;
     a.setAxisAngle(qglviewer::Vec(1,0,0),ui->spin_ori_x->value());
     b.setAxisAngle(qglviewer::Vec(0,1,0),ui->spin_ori_y->value());
     c.setAxisAngle(qglviewer::Vec(0,0,1),ui->spin_ori_y->value());
     d = a*b*c;
     d.normalize();
-    SceneContainer::SetSelectedOrientation(d);
+    SceneContainer::setSelectedOrientation(d);
     ui->viewer->updateGL();
 }
 
-void MainWindow::DisplayTrajectoryPosition(bool display) {
-    SceneContainer::DisplaySelectedPositionTrajectory(display);
+void MainWindow::displayTrajectoryPosition(bool display) {
+    SceneContainer::displaySelectedPositionTrajectory(display);
     ui->viewer->updateGL();
 }
 
-void MainWindow::DisplayTrajectoryOrientation(bool display) {
-    SceneContainer::DisplaySelectedOrientationTrajectory(display);
+void MainWindow::displayTrajectoryOrientation(bool display) {
+    SceneContainer::displaySelectedOrientationTrajectory(display);
     ui->viewer->updateGL();
 }
 
-void  MainWindow::AddPositionKeyframe() {
-    SceneContainer::AddCurrentPositionKeyframe();
-    ui->timebar->setKeyFrames(SceneContainer::SelectedObject());
+void  MainWindow::addPositionKeyframe() {
+    SceneContainer::addCurrentPositionKeyframe();
+    ui->timebar->setKeyFrames(SceneContainer::selectedObject());
     ui->timebar->repaint();
 }
 
-void  MainWindow::AddOrientationKeyframe() {
-    SceneContainer::AddCurrentOrientationKeyframe();
-    ui->timebar->setKeyFrames(SceneContainer::SelectedObject());
+void  MainWindow::addOrientationKeyframe() {
+    SceneContainer::addCurrentOrientationKeyframe();
+    ui->timebar->setKeyFrames(SceneContainer::selectedObject());
     ui->timebar->repaint();
 }
 
-void  MainWindow::RemovePositionKeyframe() {
-    SceneContainer::RemoveCurrentPositionKeyframe();
-    ui->timebar->setKeyFrames(SceneContainer::SelectedObject());
+void  MainWindow::removePositionKeyframe() {
+    SceneContainer::removeCurrentPositionKeyframe();
+    ui->timebar->setKeyFrames(SceneContainer::selectedObject());
     ui->timebar->repaint();
 }
 
-void  MainWindow::RemoveOrientationKeyframe() {
-    SceneContainer::RemoveCurrentOrientationKeyframe();
-    ui->timebar->setKeyFrames(SceneContainer::SelectedObject());
+void  MainWindow::removeOrientationKeyframe() {
+    SceneContainer::removeCurrentOrientationKeyframe();
+    ui->timebar->setKeyFrames(SceneContainer::selectedObject());
     ui->timebar->repaint();
 }
 
-void MainWindow::UpdateRenderBox(bool box)
+void MainWindow::updateRenderBox(bool box)
 {
-    SceneContainer::SetRenderBox(box);
+    SceneContainer::setRenderBox(box);
     ui->viewer->repaint();
 }
 
-void MainWindow::UpdateRenderBones(bool bones)
+void MainWindow::updateRenderBones(bool bones)
 {
-    SceneContainer::SetDrawBones(bones);
+    SceneContainer::setDrawBones(bones);
     ui->viewer->repaint();
 }

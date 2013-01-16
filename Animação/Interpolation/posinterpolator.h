@@ -18,27 +18,27 @@ public:
 
     PosInterpolator();
 
-    void SetInterpolationType(InterpolationType type);
-    void SetStartFrame(int start_frame);
-    void SetLastFrame(int last_frame);
+    void setInterpolationType(InterpolationType type);
+    void setStartFrame(int start_frame);
+    void setLastFrame(int last_frame);
 
-    qglviewer::Vec GetPositionAt(int frame, bool *valid = NULL);
+    qglviewer::Vec getPositionAt(int frame, bool *valid = NULL);
 
-    void LoadPoints(std::vector<PositionStep>& steps);
-    void AddPoint(PositionStep new_step);
+    void loadPoints(std::vector<PositionStep>& steps);
+    void addPoint(PositionStep new_step);
 
 protected:
-    virtual void GenerateMainCurve();
-    void GenerateLinearMainCurve();
-    void GenerateBezierMainCurve();
-    void GenerateCatmullRoomMainCurve() ;
-    void AddCurve(Curve* curve);
+    virtual void generateMainCurve();
+    void generateLinearMainCurve();
+    void generateBezierMainCurve();
+    void generateCatmullRoomMainCurve() ;
+    void addCurve(Curve* curve);
 
     std::vector<PositionStep> steps_;
     InterpolationType interpolation_type_;
 private:
-    void CleanCurvesAndLengths();
-    int ChooseInterval(int frame, InterpolationPolicy policy = kFrameBased);
+    void cleanCurvesAndLengths();
+    int chooseInterval(int frame, InterpolationPolicy policy = kFrameBased);
 
     int start_frame_, last_frame_;
 

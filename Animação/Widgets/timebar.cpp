@@ -14,9 +14,9 @@ TimeBar::TimeBar(QWidget *parent) :
     current_frame_ = 0;
     step_width_ = 10;
 
-    SetNumberOfFrames(number_of_frames_);
+    setNumberOfFrames(number_of_frames_);
 }
-void TimeBar::SetNumberOfFrames(int total) {
+void TimeBar::setNumberOfFrames(int total) {
     number_of_frames_ = total;
 
     //int const_height = 50;
@@ -24,8 +24,8 @@ void TimeBar::SetNumberOfFrames(int total) {
     //this->setFixedSize((number_of_frames_)*(step_width_-1)+1,const_height);
     this->setMinimumWidth((number_of_frames_)*(step_width_-1)+1);
     if(current_frame_ >= number_of_frames_) {
-        SetCurrentFrame(number_of_frames_ -1);
-        emit SetSelectedFrame(current_frame_);
+        setCurrentFrame(number_of_frames_ -1);
+        emit setSelectedFrame(current_frame_);
     }
 
 }
@@ -99,12 +99,12 @@ void TimeBar::mousePressEvent ( QMouseEvent * event ) {
         if(select < number_of_frames_) {
             current_frame_ = select;
             update();
-            emit SetSelectedFrame(current_frame_);
+            emit setSelectedFrame(current_frame_);
         }
     }
 }
 
-void TimeBar::SetCurrentFrame(int frame) {
+void TimeBar::setCurrentFrame(int frame) {
     current_frame_ = frame < number_of_frames_ ? frame : number_of_frames_-1;
     update();
 }
@@ -118,13 +118,13 @@ void TimeBar::setKeyFrames(Object3D *object)
     //std::vector<OrientationStep> *orivec = &object->GetAnimator()->GetKeyOrientations();
     //std::vector<PositionStep> *posvec = &object->GetAnimator()->GetKeyPositions();
 
-    if(object->GetAnimator()==NULL) return;
+    if(object->getAnimator()==NULL) return;
 
-    for(int i=0;i<object->GetAnimator()->GetKeyOrientations()->size();i++){
-        ori_key_frames_.push_back(object->GetAnimator()->GetKeyOrientations()->at(i).frame_);
+    for(int i=0;i<object->getAnimator()->getKeyOrientations()->size();i++){
+        ori_key_frames_.push_back(object->getAnimator()->getKeyOrientations()->at(i).frame_);
     }
-    for(int i=0;i<object->GetAnimator()->GetKeyPositions()->size();i++){
-        pos_key_frames_.push_back(object->GetAnimator()->GetKeyPositions()->at(i).frame_);
+    for(int i=0;i<object->getAnimator()->getKeyPositions()->size();i++){
+        pos_key_frames_.push_back(object->getAnimator()->getKeyPositions()->at(i).frame_);
     }
 
     /*pos_key_frames_.push_back(1);

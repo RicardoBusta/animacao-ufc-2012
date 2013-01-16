@@ -8,7 +8,7 @@
 
 Object3D::Object3D()
 { 
-    DefaultInitialisation();
+    defaultInitialisation();
 
     animator = NULL;
 
@@ -22,19 +22,19 @@ Object3D::Object3D()
 Object3D::Object3D(qglviewer::Vec pos) :
     position_(pos)
 {
-    DefaultInitialisation();
+    defaultInitialisation();
 }
 
 Object3D::Object3D(qglviewer::Quaternion ori) :
     orientation_(ori)
 {
-    DefaultInitialisation();
+    defaultInitialisation();
 }
 
 Object3D::Object3D(qglviewer::Vec pos, qglviewer::Quaternion ori) :
     position_(pos), orientation_(ori)
 {
-    DefaultInitialisation();
+    defaultInitialisation();
 }
 
 Object3D::~Object3D() {
@@ -46,7 +46,7 @@ std::string Object3D::label() {
     return label_;
 }
 
-void Object3D::SetLabel(std::string label) {
+void Object3D::setLabel(std::string label) {
     label_ = label;
 }
 
@@ -54,7 +54,7 @@ int Object3D::id() {
     return id_;
 }
 
-void Object3D::DefaultInitialisation() {
+void Object3D::defaultInitialisation() {
     quadric_ = NULL;
     draw_object_ = true;
     draw_position_particle_ = false;
@@ -68,34 +68,34 @@ void Object3D::DefaultInitialisation() {
 
 }
 
-void Object3D::Draw() {
+void Object3D::draw() {
     glPushMatrix();
 
     glTranslated(position_.x,position_.y,position_.z);
     glMultMatrixd(orientation_.matrix());
 
-    if(SceneContainer::RenderOptions(RENDER_SHADER)){
-        SceneContainer::viewer_reference_->BindShader();
+    if(SceneContainer::renderOptions(RENDER_SHADER)){
+        SceneContainer::viewer_reference_->bindShader();
         if(draw_object_)
-            DrawObject();
-        SceneContainer::viewer_reference_->ReleaseShader();
+            drawObject();
+        SceneContainer::viewer_reference_->releaseShader();
     }else{
         if(draw_object_)
-            DrawObject();
+            drawObject();
     }
     if(draw_position_particle_)
-        DrawPositionParticle();
+        drawPositionParticle();
     if(draw_orientation_axes_)
-        DrawOrientationAxes();
+        drawOrientationAxes();
     if(draw_bounding_box_)
-        DrawBoundingBox();
-    if(SceneContainer::DrawBones())
-        DrawBone();
+        drawBoundingBox();
+    if(SceneContainer::drawBones())
+        drawBone();
 
     glPopMatrix();
 }
 
-void Object3D::DrawPositionParticle() {
+void Object3D::drawPositionParticle() {
     if(quadric_ == NULL)
         quadric_ = gluNewQuadric();
 
@@ -105,7 +105,7 @@ void Object3D::DrawPositionParticle() {
     /*glPopAttrib();*/
 }
 
-void Object3D::DrawOrientationAxes() {
+void Object3D::drawOrientationAxes() {
 
     double radius = 2.0;
     glPushAttrib(GL_ALL_ATTRIB_BITS);
@@ -126,20 +126,20 @@ void Object3D::DrawOrientationAxes() {
     glPopAttrib();
 }
 
-void Object3D::DrawObject() {
+void Object3D::drawObject() {
 }
 
-void Object3D::SetAnimator(ObjectAnimator *animator)
+void Object3D::setAnimator(ObjectAnimator *animator)
 {
     this->animator = animator;
 }
 
-ObjectAnimator *Object3D::GetAnimator()
+ObjectAnimator *Object3D::getAnimator()
 {
     return animator;
 }
 
-void Object3D::DrawBoundingBox()
+void Object3D::drawBoundingBox()
 {
     glPushAttrib(GL_ALL_ATTRIB_BITS);
     glDisable(GL_LIGHTING);
@@ -175,7 +175,7 @@ void Object3D::DrawBoundingBox()
     glPopAttrib();
 }
 
-void Object3D::DrawBoxObject()
+void Object3D::drawBoxObject()
 {
     glPushAttrib(GL_ALL_ATTRIB_BITS);
 
@@ -234,7 +234,7 @@ void Object3D::DrawBoxObject()
 }
 
 
-void Object3D::DrawBone()
+void Object3D::drawBone()
 {
     //    glPushAttrib(GL_ALL_ATTRIB_BITS);
     //    glDisable(GL_LIGHTING);

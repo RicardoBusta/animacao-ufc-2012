@@ -3,7 +3,7 @@
 
 RotationWidget::RotationWidget(Object3D* to_rotate)
 {
-    SetNewPosition(to_rotate->position());
+    setNewPosition(to_rotate->position());
     to_rotate_ = to_rotate;
     quadric_ = gluNewQuadric();
 }
@@ -12,32 +12,32 @@ RotationWidget::~RotationWidget() {
     gluDeleteQuadric(quadric_);
 }
 
-void RotationWidget::SetClick(qglviewer::Vec) {
+void RotationWidget::setClick(qglviewer::Vec) {
 
 }
 
-void RotationWidget::DrawCircle(double, qglviewer::Quaternion ori, int) {
+void RotationWidget::drawCircle(double, qglviewer::Quaternion ori, int) {
     glPushMatrix();
     glMultMatrixd(ori.matrix());
     Torus t(0.96*radius_,1.04*radius_,64,36);
-    t.Draw();
+    t.draw();
     glPopMatrix();
 }
 
-void RotationWidget::DrawObject() {
+void RotationWidget::drawObject() {
     int steps = 40;
     radius_ = 0.5;
     glPushAttrib(GL_ALL_ATTRIB_BITS);
 
     glDisable(GL_LIGHTING);
     glColor3d(1.0,0.0,0.0);
-    DrawCircle(radius_,qglviewer::Quaternion(qglviewer::Vec(0.0,1.0,0.0),qglviewer::Vec(1.0,0.0,0.0)),steps);
+    drawCircle(radius_,qglviewer::Quaternion(qglviewer::Vec(0.0,1.0,0.0),qglviewer::Vec(1.0,0.0,0.0)),steps);
 
     glColor3d(0.0,1.0,0.0);
-    DrawCircle(radius_,qglviewer::Quaternion(qglviewer::Vec(0.0,1.0,0.0),qglviewer::Vec(0.0,1.0,0.0)),steps);
+    drawCircle(radius_,qglviewer::Quaternion(qglviewer::Vec(0.0,1.0,0.0),qglviewer::Vec(0.0,1.0,0.0)),steps);
 
     glColor3d(0.0,0.0,1.0);
-    DrawCircle(radius_,qglviewer::Quaternion(qglviewer::Vec(0.0,1.0,0.0),qglviewer::Vec(0.0,0.0,1.0)),steps);
+    drawCircle(radius_,qglviewer::Quaternion(qglviewer::Vec(0.0,1.0,0.0),qglviewer::Vec(0.0,0.0,1.0)),steps);
 
     glEnable(GL_LIGHTING);
     glColor3d(1.0,1.0,1.0);

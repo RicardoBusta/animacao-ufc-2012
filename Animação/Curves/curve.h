@@ -5,7 +5,7 @@
 
 class Curve {
 public:
-    virtual qglviewer::Vec Evaluate(double t) const = 0;
+    virtual qglviewer::Vec evaluate(double t) const = 0;
 };
 
 //! Some simple curve implementation examples -----------------------------------
@@ -16,7 +16,7 @@ public:
         : p_a(a), p_b(b) {
     }
 
-    qglviewer::Vec Evaluate(double t) const {
+    qglviewer::Vec evaluate(double t) const {
         return p_a*(1.0 - t) + p_b*(t);
     }
 
@@ -31,7 +31,7 @@ public:
         : p_a(a), p_b(b), p_c(c) {
     }
 
-    qglviewer::Vec Evaluate(double t) const {
+    qglviewer::Vec evaluate(double t) const {
 
         double c_a  = (1.0-t);
         return p_a*c_a*c_a + p_b*2.0*c_a*t +p_c*t*t;
@@ -49,7 +49,7 @@ public:
         : p_a(a), p_b(b), p_c(c), p_d(d) {
     }
 
-    qglviewer::Vec Evaluate(double t) const {
+    qglviewer::Vec evaluate(double t) const {
 
         double c_a  = (1.0-t);
         return p_a*c_a*c_a*c_a + p_b*3.0*c_a*c_a*t +p_c*3.0*c_a*t*t+p_d*t*t*t;
@@ -67,16 +67,16 @@ public:
         : p_a(a), p_b(b), p_c(c), p_d(d) {
     }
 
-    qglviewer::Vec Evaluate(double t) const {
+    qglviewer::Vec evaluate(double t) const {
 
         LinearCurve a(p_a,p_b);
         LinearCurve b(p_b,p_c);
         LinearCurve c(p_c,p_d);
-        LinearCurve d(a.Evaluate(t),b.Evaluate(t));
-        LinearCurve e(b.Evaluate(t),c.Evaluate(t));
-        LinearCurve f(d.Evaluate(t),e.Evaluate(t));
+        LinearCurve d(a.evaluate(t),b.evaluate(t));
+        LinearCurve e(b.evaluate(t),c.evaluate(t));
+        LinearCurve f(d.evaluate(t),e.evaluate(t));
 
-        return f.Evaluate(t);
+        return f.evaluate(t);
     }
 
 protected:
@@ -91,7 +91,7 @@ public:
         : p_a(a), p_b(b), t_a(ta), t_b(tb) {
     }
 
-    qglviewer::Vec Evaluate(double t) const {
+    qglviewer::Vec evaluate(double t) const {
         double t_square = t*t;
         double t_cubic = t_square*t;
         return p_a*(2.0*t_cubic - 3.0*t_square + 1.0) + t_a*(t_cubic - 2.0*t_square + t) +

@@ -21,8 +21,8 @@ Viewer::Viewer(QWidget* parent) :
 
 void Viewer::draw() {
 
-    SceneContainer::DrawObjects();
-    SceneContainer::DrawExtras();
+    SceneContainer::drawObjects();
+    SceneContainer::drawExtras();
 
     this->drawText(10,10,QString("Frame: %1").arg(SceneContainer::current_frame()));
 
@@ -31,24 +31,24 @@ void Viewer::draw() {
 
 
 
-void Viewer::Play() {
+void Viewer::play() {
     if(!animationIsStarted()) {
         startAnimation();
     }
 }
 
-void Viewer::Stop() {
+void Viewer::stop() {
     if(animationIsStarted()) {
         stopAnimation();
     }
     if(SceneContainer::current_frame()!=0) {
-        SceneContainer::SetCurrentFrame(0);
-        emit CurrentFrame(0);
+        SceneContainer::setCurrentFrame(0);
+        emit currentFrame(0);
         updateGL();
     }
 }
 
-void Viewer::Pause() {
+void Viewer::pause() {
     if(animationIsStarted()) {
         stopAnimation();
     }
@@ -56,21 +56,21 @@ void Viewer::Pause() {
 
 void Viewer::animate() {
 
-    SceneContainer::GoToNextFrame();
-    emit CurrentFrame(SceneContainer::current_frame());
+    SceneContainer::goToNextFrame();
+    emit currentFrame(SceneContainer::current_frame());
 }
 
-void  Viewer::SetCurrentFrame(int frame) {
-    SceneContainer::SetCurrentFrame(frame);
+void  Viewer::setCurrentFrame(int frame) {
+    SceneContainer::setCurrentFrame(frame);
     updateGL();
 }
 
 void Viewer::init() {
     SceneContainer::CreateDefaultScene();
-    emit SignalUpdateObjects();
+    emit signalUpdateObjects();
 
-    SceneContainer::SetFrameRange(0,100);
-    SceneContainer::SetCurrentFrame(0);
+    SceneContainer::setFrameRange(0,100);
+    SceneContainer::setCurrentFrame(0);
 
     this->setBackgroundColor(QColor(45,45,45));
     this->setGridIsDrawn(true);
@@ -120,7 +120,7 @@ void Viewer::init() {
     glLightfv(GL_LIGHT2, GL_DIFFUSE, light3diffuse);
     glLightfv(GL_LIGHT2, GL_SPECULAR, light3specular);*/
 
-    SetCurrentShader(0);
+    setCurrentShader(0);
     shader_enabled_ = true;
     //SHADER TEST
 }
@@ -149,7 +149,7 @@ QString Viewer::helpString() const {
     return QString();
 }
 
-void Viewer::SetCurrentShader(int shader)
+void Viewer::setCurrentShader(int shader)
 {
     shader_enabled_ = true;
     shaderProgram.removeAllShaders();
@@ -169,12 +169,12 @@ void Viewer::SetCurrentShader(int shader)
     repaint();
 }
 
-void Viewer::ReleaseShader()
+void Viewer::releaseShader()
 {
     shaderProgram.release();
 }
 
-void Viewer::BindShader(){
+void Viewer::bindShader(){
     if(shader_enabled_){
         shaderProgram.bind();
     }

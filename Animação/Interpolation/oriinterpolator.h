@@ -12,22 +12,22 @@ public:
     enum InterpolationType {kSlerp,kBezier};
     OriInterpolator();
 
-    void SetStartFrame(int start_frame);
-    void SetLastFrame(int last_frame);
+    void setStartFrame(int start_frame);
+    void setLastFrame(int last_frame);
 
     qglviewer::Quaternion GetOrientationAt(int frame, bool *valid = NULL);
 
-    void LoadOrientations(std::vector<OrientationStep>& steps);
-    void AddOrientation(OrientationStep new_step);
+    void loadOrientations(std::vector<OrientationStep>& steps);
+    void addOrientation(OrientationStep new_step);
 
-    void SetInterpolationType(InterpolationType type);
+    void setInterpolationType(InterpolationType type);
 protected:
-    void GenerateMainCurve();
-    void GenerateLinearCurve();
-    void GenerateBezierCurve();
-    void ClearAll();
+    void generateMainCurve();
+    void generateLinearCurve();
+    void generateBezierCurve();
+    void clearAll();
 
-    int ChooseInterval(int frame);
+    int chooseInterval(int frame);
 
     qglviewer::Quaternion Bisect(qglviewer::Quaternion a, qglviewer::Quaternion b);
     qglviewer::Quaternion Double(qglviewer::Quaternion a, qglviewer::Quaternion b);

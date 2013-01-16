@@ -9,11 +9,11 @@ public:
     RotationWidget(Object3D* to_rotate);
     ~RotationWidget();
 
-    void SetClick(qglviewer::Vec click_position);
+    void setClick(qglviewer::Vec click_position);
 
 private:
-    void DrawCircle(double radius, qglviewer::Quaternion ori, int steps);
-    void DrawObject();
+    void drawCircle(double radius, qglviewer::Quaternion ori, int steps);
+    void drawObject();
 
     Object3D* to_rotate_;
 

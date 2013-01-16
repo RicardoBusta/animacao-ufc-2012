@@ -6,7 +6,7 @@ CasteljauQuaternion::CasteljauQuaternion(qglviewer::Quaternion a,qglviewer::Quat
     : p_a(a), p_b(b), p_c(c), p_d(d) {
 }
 
-Quaternion CasteljauQuaternion::Evaluate(double t) const {
+Quaternion CasteljauQuaternion::evaluate(double t) const {
 
     Quaternion ab = Quaternion::slerp(p_a,p_b,t);
     Quaternion bc = Quaternion::slerp(p_b,p_c,t);

@@ -9,9 +9,9 @@ FileObj::FileObj()
     label_ = "Untitled";
 }
 
-void FileObj::DrawObject()
+void FileObj::drawObject()
 {
-    if(!SceneContainer::RenderBox()){
+    if(!SceneContainer::renderBox()){
         glPushAttrib(GL_ALL_ATTRIB_BITS);
         glShadeModel(GL_SMOOTH);
         glEnable(GL_DEPTH_TEST);
@@ -31,7 +31,7 @@ void FileObj::DrawObject()
         glEnd();
         glPopAttrib();
     }else{
-        DrawBoxObject();
+        drawBoxObject();
     }
 }
 

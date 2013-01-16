@@ -8,7 +8,7 @@ ArcLength::ArcLength(Curve* to_parameterize) :
 {
 }
 
-void ArcLength::AdaptativeGaussianPrecalculation() {
+void ArcLength::adaptativeGaussianPrecalculation() {
     if(precomputed_) return;
 
     std::vector<double> points;
@@ -46,7 +46,7 @@ void ArcLength::AdaptativeGaussianPrecalculation() {
         start.u_end_ = slice_size*((double)(i+1));
         start.start_length_ = last_calculated;
         start.error_ = acceptable_error_;
-        start.length_ = GaussianLegendreToInterval(start.u_start_, start.u_end_, points, weights);
+        start.length_ = gaussianLegendreToInterval(start.u_start_, start.u_end_, points, weights);
 
 
         std::vector<LengthInterval> to_consider;
@@ -59,8 +59,8 @@ void ArcLength::AdaptativeGaussianPrecalculation() {
 
             double midpoint = (current.u_start_ + current.u_end_)/2.0;
 
-            double first_interval_integral = GaussianLegendreToInterval(current.u_start_, midpoint, points, weights);
-            double second_interval_integral = GaussianLegendreToInterval(midpoint, current.u_end_, points, weights);
+            double first_interval_integral = gaussianLegendreToInterval(current.u_start_, midpoint, points, weights);
+            double second_interval_integral = gaussianLegendreToInterval(midpoint, current.u_end_, points, weights);
 
             if( current.length_ - first_interval_integral - second_interval_integral > current.error_ ) {
                 LengthInterval interval_a,interval_b;
@@ -95,21 +95,21 @@ void ArcLength::AdaptativeGaussianPrecalculation() {
 
 }
 
-qglviewer::Vec ArcLength::GetByNormalizedS(double s) const {
+qglviewer::Vec ArcLength::getByNormalizedS(double s) const {
     double real_length = s * total_length_;
 #ifdef DEBUG_TEXT
     std::cout << "Input: " << s << std::endl;
 #endif
-    return GetByS(real_length);
+    return getByS(real_length);
 }
 
-qglviewer::Vec ArcLength::GetByS(double constant_length) const {
+qglviewer::Vec ArcLength::getByS(double constant_length) const {
 
     double x0 = constant_length/total_length_;
     double x1;
 
 
-    double current_result = FunctionToGetRoot(x0,constant_length);
+    double current_result = functionToGetRoot(x0,constant_length);
     current_result = MODULUS(current_result);
 #ifdef DEBUG_TEXT
     std::cout << "f(x0): " << FunctionToGetRoot(x0,constant_length) << std::endl;
@@ -122,10 +122,10 @@ qglviewer::Vec ArcLength::GetByS(double constant_length) const {
     int iteration = 0;
     while( (current_result > possible_error) && (iteration<max_iteration) ) {
         iteration++;
-        x1 = x0 - (FunctionToGetRoot(x0,constant_length)/NumericalDerivative(x0,constant_length));
+        x1 = x0 - (functionToGetRoot(x0,constant_length)/numericalDerivative(x0,constant_length));
         x0 = x1;
 
-        double new_result = FunctionToGetRoot(x0,constant_length);
+        double new_result = functionToGetRoot(x0,constant_length);
         new_result = MODULUS(new_result);
 
         double delta = new_result - current_result;
@@ -148,11 +148,11 @@ qglviewer::Vec ArcLength::GetByS(double constant_length) const {
 #endif
 
 
-    qglviewer::Vec result = curve_->Evaluate(x0);
+    qglviewer::Vec result = curve_->evaluate(x0);
     return result;
 }
 
-double ArcLength::GetLength(double t) const {
+double ArcLength::getLength(double t) const {
 
     int s = 0;
     int e = precalculated_length_.size()-1;
@@ -187,29 +187,29 @@ double ArcLength::GetLength(double t) const {
     // ------------ --------------------------------- ---------------------------------
 
     ULength ps = precalculated_length_[s];
-    double result = ps.length_ + GaussianLegendreToInterval(ps.u_, t, points, weights);
+    double result = ps.length_ + gaussianLegendreToInterval(ps.u_, t, points, weights);
     return result;
 }
 
-double ArcLength::GetTotalLength() const {
+double ArcLength::getTotalLength() const {
     return total_length_;
 }
 
-double ArcLength::FunctionToGetRoot(double x, double constant_length) const {
-    return constant_length - GetLength(x);
+double ArcLength::functionToGetRoot(double x, double constant_length) const {
+    return constant_length - getLength(x);
 }
 
-double ArcLength::NumericalDerivative(double x, double constant_length) const {
+double ArcLength::numericalDerivative(double x, double constant_length) const {
     double h = 0.01;
     bool finished = false;
     while(!finished){
         finished = true;
         if(x-h >=0.0 && x+h<=1.0)
-            return (FunctionToGetRoot(x+h,constant_length) - FunctionToGetRoot(x-h,constant_length))/(2.0*h);
+            return (functionToGetRoot(x+h,constant_length) - functionToGetRoot(x-h,constant_length))/(2.0*h);
         else if(x-h >=0.0)
-            return (FunctionToGetRoot(x,constant_length) - FunctionToGetRoot(x-h,constant_length))/(h);
+            return (functionToGetRoot(x,constant_length) - functionToGetRoot(x-h,constant_length))/(h);
         else if(x+h<=1.0)
-            return (FunctionToGetRoot(x+h,constant_length) - FunctionToGetRoot(x,constant_length))/(h);
+            return (functionToGetRoot(x+h,constant_length) - functionToGetRoot(x,constant_length))/(h);
         else
             finished = false;
         h = h/10.0;
@@ -218,17 +218,17 @@ double ArcLength::NumericalDerivative(double x, double constant_length) const {
     return 0.0;
 }
 
-qglviewer::Vec ArcLength::NumericalVectorDerivative(double x) const {
+qglviewer::Vec ArcLength::numericalVectorDerivative(double x) const {
     double h = 0.01;
     bool finished = false;
     while(!finished){
         finished = true;
         if(x-h >=0.0 && x+h<=1.0)
-            return (curve_->Evaluate(x+h) - curve_->Evaluate(x-h))/(2.0*h);
+            return (curve_->evaluate(x+h) - curve_->evaluate(x-h))/(2.0*h);
         else if(x-h >=0.0)
-            return (curve_->Evaluate(x) - curve_->Evaluate(x-h))/(h);
+            return (curve_->evaluate(x) - curve_->evaluate(x-h))/(h);
         else if(x+h<=1.0)
-            return (curve_->Evaluate(x+h) - curve_->Evaluate(x))/(h);
+            return (curve_->evaluate(x+h) - curve_->evaluate(x))/(h);
         else
             finished = false;
         h = h/10.0;
@@ -237,13 +237,13 @@ qglviewer::Vec ArcLength::NumericalVectorDerivative(double x) const {
     return qglviewer::Vec();
 }
 
-double ArcLength::GaussianLegendreToInterval(double a, double b, std::vector<double>& points, std::vector<double>& weights) const {
+double ArcLength::gaussianLegendreToInterval(double a, double b, std::vector<double>& points, std::vector<double>& weights) const {
     double interval_constant = (b-a)/2.0;
     //
     double integral = 0;
     for(size_t i = 0 ; i < points.size() ; i++ ) {
         double parametized_input = ((b-a)*points[i] + b + a)/2;
-        integral += (weights[i]*(NumericalVectorDerivative(parametized_input).norm()));
+        integral += (weights[i]*(numericalVectorDerivative(parametized_input).norm()));
     }
 
     return interval_constant*integral;

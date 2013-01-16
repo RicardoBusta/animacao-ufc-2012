@@ -11,7 +11,7 @@ public:
     qglviewer::Vec Step(int index);
 
 private:
-    void CreateSlice();
+    void createSlice();
 
     int steps_;
     double radius_;
@@ -31,8 +31,8 @@ private:
     double outer_radius_;
     std::vector<Slice> torus_slices_;
 
-    void CreateSlices();
-    void DrawObject();
+    void createSlices();
+    void drawObject();
     
 };
 

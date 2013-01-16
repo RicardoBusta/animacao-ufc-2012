@@ -9,7 +9,7 @@ TrajectoryObject::TrajectoryObject(ObjectAnimator* animator)
     radius_     = 3.0;
 }
 
-void TrajectoryObject::SetType(TrajectoryType type) {
+void TrajectoryObject::setType(TrajectoryType type) {
     type_ = type;
     if(type_ == kOrientation){
         if(quadric_ == NULL)
@@ -20,11 +20,11 @@ void TrajectoryObject::SetType(TrajectoryType type) {
     }
 }
 
-void TrajectoryObject::Update() {
-    Update(SceneContainer::start_frame(), SceneContainer::end_frame());
+void TrajectoryObject::update() {
+    update(SceneContainer::start_frame(), SceneContainer::end_frame());
 }
 
-void TrajectoryObject::Update(int start_frame, int end_frame) {
+void TrajectoryObject::update(int start_frame, int end_frame) {
     keyframes_.clear();
 
     positions_.clear();
@@ -36,17 +36,17 @@ void TrajectoryObject::Update(int start_frame, int end_frame) {
 
     if(type_ == kPosition){
         for(int i = start_frame ; i <= end_frame ; i++ ) {
-            positions_.push_back(animator_->PositionAt(i));
+            positions_.push_back(animator_->positionAt(i));
         }
-        for(uint i=0; i < animator_->GetKeyPositions()->size(); i++){
-            PositionStep pos = animator_->GetKeyPositions()->at(i);
+        for(uint i=0; i < animator_->getKeyPositions()->size(); i++){
+            PositionStep pos = animator_->getKeyPositions()->at(i);
             keyframes_.push_back( pos.position_ );
         }
     }else{
         qglviewer::Vec over(0,radius_,0);
         for(int current_frame = start_frame ; current_frame <= end_frame ; current_frame++ ) {
             //std::cout <<" CURRENT_FRAME: " << current_frame << " of " << end_frame << std::endl;
-            qglviewer::Quaternion ori = animator_->OrientationAt(current_frame);
+            qglviewer::Quaternion ori = animator_->orientationAt(current_frame);
             qglviewer::Vec pos = ori.rotate(over);
 #ifdef DEBUG_TEXT
             std::cout <<" OVER ROTATED i:" << i <<"(" <<pos.x << ", "<< pos.y << ", " << pos.z << ")" << std::endl;
@@ -54,19 +54,19 @@ void TrajectoryObject::Update(int start_frame, int end_frame) {
 #endif
             positions_.push_back( pos );
         }
-        for(uint i=0; i < animator_->GetKeyOrientations()->size(); i++){
-            OrientationStep ori = animator_->GetKeyOrientations()->at(i);
+        for(uint i=0; i < animator_->getKeyOrientations()->size(); i++){
+            OrientationStep ori = animator_->getKeyOrientations()->at(i);
             qglviewer::Vec pos = ori.orientation_.rotate(over);
             keyframes_.push_back( pos );
         }
     }
 }
 
-void TrajectoryObject::DrawObject() {
+void TrajectoryObject::drawObject() {
     glPushMatrix();
 
     if(type_ == kOrientation){
-        qglviewer::Vec pos = animator_->PositionAt(SceneContainer::current_frame());
+        qglviewer::Vec pos = animator_->positionAt(SceneContainer::current_frame());
         glTranslated(pos.x,pos.y,pos.z);
         glPushAttrib(GL_ALL_ATTRIB_BITS);
         glEnable(GL_BLEND);
@@ -76,11 +76,11 @@ void TrajectoryObject::DrawObject() {
         glPopAttrib();
 
     }
-    DrawPositionsCurve();
+    drawPositionsCurve();
     glPopMatrix();
 }
 
-void TrajectoryObject::DrawPositionsCurve() {
+void TrajectoryObject::drawPositionsCurve() {
     glPushAttrib(GL_ALL_ATTRIB_BITS);
     glDisable(GL_LIGHTING);
 

@@ -6,7 +6,7 @@ CurveObject::CurveObject(Curve* curve)
     curve_ = curve;
 }
 
-void CurveObject::DrawObject() {
+void CurveObject::drawObject() {
     int steps = 25;
     double delta = (1.0)/((double)(steps-1.0));
 
@@ -16,7 +16,7 @@ void CurveObject::DrawObject() {
     glColor3d(1,0,0);
     double current = 0;
     for(int i = 0 ; i < steps ; i++ ) {
-        qglviewer::Vec pos = curve_->Evaluate(current);
+        qglviewer::Vec pos = curve_->evaluate(current);
         current += delta;
         glVertex3d(pos.x,pos.y,pos.z);
     }
@@ -27,7 +27,7 @@ void CurveObject::DrawObject() {
     glColor3d(0,1,0);
     current = 0;
     for(int i = 0 ; i < steps ; i++ ) {
-        qglviewer::Vec pos = curve_->Evaluate(current);
+        qglviewer::Vec pos = curve_->evaluate(current);
         current += delta;
         glVertex3d(pos.x,pos.y,pos.z);
     }

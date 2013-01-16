@@ -30,20 +30,20 @@ class ArcLength
 public:
     ArcLength(Curve* to_parameterize);
 
-    void AdaptativeGaussianPrecalculation(); // Must be called before anything else
+    void adaptativeGaussianPrecalculation(); // Must be called before anything else
 
-    qglviewer::Vec GetByS(double s) const; /* belongs to [0;total_length_]*/
-    qglviewer::Vec GetByNormalizedS(double s) const; /* belongs to [0;1]*/
+    qglviewer::Vec getByS(double s) const; /* belongs to [0;total_length_]*/
+    qglviewer::Vec getByNormalizedS(double s) const; /* belongs to [0;1]*/
 
-    double GetLength(double t) const;
-    double GetTotalLength() const;
+    double getLength(double t) const;
+    double getTotalLength() const;
 
 protected:
 
-    double GaussianLegendreToInterval(double a, double b, std::vector<double>& points, std::vector<double>& weights) const;
-    double FunctionToGetRoot(double x, double constant_length) const;
-    double NumericalDerivative(double x, double constant_length) const;
-    qglviewer::Vec NumericalVectorDerivative(double x) const;
+    double gaussianLegendreToInterval(double a, double b, std::vector<double>& points, std::vector<double>& weights) const;
+    double functionToGetRoot(double x, double constant_length) const;
+    double numericalDerivative(double x, double constant_length) const;
+    qglviewer::Vec numericalVectorDerivative(double x) const;
 
     Curve* curve_;
     double acceptable_error_;

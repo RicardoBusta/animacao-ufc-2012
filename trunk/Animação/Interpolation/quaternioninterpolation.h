@@ -5,7 +5,7 @@
 
 class QuaternionInterpolator {
 public:
-    virtual qglviewer::Quaternion Evaluate(double t) const = 0;
+    virtual qglviewer::Quaternion evaluate(double t) const = 0;
 };
 
 class SlerpQuaternion : public QuaternionInterpolator {
@@ -15,7 +15,7 @@ public:
 
     }
 
-    qglviewer::Quaternion Evaluate(double t) const {
+    qglviewer::Quaternion evaluate(double t) const {
         return qglviewer::Quaternion::slerp(p_a,p_b,t);
     }
 protected:
@@ -27,7 +27,7 @@ class CasteljauQuaternion : public QuaternionInterpolator  {
 public:
     CasteljauQuaternion(qglviewer::Quaternion a,qglviewer::Quaternion b, qglviewer::Quaternion c, qglviewer::Quaternion d);
 
-    qglviewer::Quaternion Evaluate(double t) const;
+    qglviewer::Quaternion evaluate(double t) const;
 
 protected:
     qglviewer::Quaternion p_a,p_b,p_c,p_d;

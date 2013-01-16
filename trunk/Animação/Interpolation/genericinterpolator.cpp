@@ -22,7 +22,7 @@ double GenericInterpolator::speedControl(double step){
     case SF_EASE_OUT_ROOT:
         return sqrt(step);
         break;
-    default:    
+    default:
         break;
     }
     return step;

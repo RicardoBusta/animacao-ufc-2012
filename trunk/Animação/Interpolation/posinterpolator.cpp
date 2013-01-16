@@ -7,26 +7,26 @@ PosInterpolator::PosInterpolator() : GenericInterpolator(),
     interpolation_type_ = kLinear;
 }
 
-void PosInterpolator::SetInterpolationType(InterpolationType type) {
+void PosInterpolator::setInterpolationType(InterpolationType type) {
     interpolation_type_ = type;
 }
 
-void PosInterpolator::SetStartFrame(int start_frame) {
+void PosInterpolator::setStartFrame(int start_frame) {
     start_frame_ = start_frame;
 }
 
-void PosInterpolator::SetLastFrame(int last_frame) {
+void PosInterpolator::setLastFrame(int last_frame) {
     last_frame_ = last_frame;
 }
 
-qglviewer::Vec PosInterpolator::GetPositionAt(int frame, bool* valid) {
+qglviewer::Vec PosInterpolator::getPositionAt(int frame, bool* valid) {
 
     if(frame<start_frame_ or frame>last_frame_){
         if(valid!=NULL) *valid = false;
         return qglviewer::Vec();
     }
 
-    int interval = ChooseInterval(frame,PosInterpolator::kFrameBased);
+    int interval = chooseInterval(frame,PosInterpolator::kFrameBased);
     if(interval==-1 or interval==0){
         if(valid!=NULL) *valid = false;
         return qglviewer::Vec();
@@ -41,10 +41,10 @@ qglviewer::Vec PosInterpolator::GetPositionAt(int frame, bool* valid) {
 
     std::pair<Curve*,ArcLength*> curve_and_length = curves_.at(interval-1);
     if(valid!=NULL) *valid = true;
-    return curve_and_length.second->GetByNormalizedS(current_step);
+    return curve_and_length.second->getByNormalizedS(current_step);
 }
 
-int PosInterpolator::ChooseInterval(int frame, InterpolationPolicy policy ) {
+int PosInterpolator::chooseInterval(int frame, InterpolationPolicy policy ) {
     if(PosInterpolator::kConstantSpeed == policy) {
         double length = (((double)(frame)) - ((double)(start_frame_)))/((double)(last_frame_ - start_frame_));
         double real_length = length * total_length_;
@@ -69,16 +69,16 @@ int PosInterpolator::ChooseInterval(int frame, InterpolationPolicy policy ) {
 
 }
 
-void PosInterpolator::LoadPoints(std::vector<PositionStep>& steps) {
+void PosInterpolator::loadPoints(std::vector<PositionStep>& steps) {
     steps_.clear();
     for(size_t i = 0 ; i < steps.size() ; i++ )
         steps_.push_back(steps.at(i));
 
-    CleanCurvesAndLengths();
-    GenerateMainCurve();
+    cleanCurvesAndLengths();
+    generateMainCurve();
 }
 
-void PosInterpolator::AddPoint(PositionStep new_step) {
+void PosInterpolator::addPoint(PositionStep new_step) {
     bool recreate = false;
     for(size_t i = 0 ; i < steps_.size() ; i++ ) {
         if(steps_.at(i).frame_ > new_step.frame_) {
@@ -90,28 +90,28 @@ void PosInterpolator::AddPoint(PositionStep new_step) {
     }
 
     if(recreate) {
-        CleanCurvesAndLengths();
-        GenerateMainCurve();
+        cleanCurvesAndLengths();
+        generateMainCurve();
     }
 }
 
-void PosInterpolator::GenerateMainCurve() {
+void PosInterpolator::generateMainCurve() {
     switch(interpolation_type_) {
     case kBezier:
-        GenerateBezierMainCurve();
+        generateBezierMainCurve();
         break;
     case kCatmullRoom:
-        GenerateCatmullRoomMainCurve();
+        generateCatmullRoomMainCurve();
         break;
     default:
-        GenerateLinearMainCurve();
+        generateLinearMainCurve();
     }
 
 }
 
-void PosInterpolator::GenerateCatmullRoomMainCurve() {
+void PosInterpolator::generateCatmullRoomMainCurve() {
     if(steps_.size() <= 2) {
-        GenerateLinearMainCurve();
+        generateLinearMainCurve();
         return;
     }
 
@@ -126,19 +126,19 @@ void PosInterpolator::GenerateCatmullRoomMainCurve() {
             aux = steps_.at(i-1).position_ + delta;
             tb = (aux - steps_.at(i-1).position_)*(0.5);*/
             tb = (steps_.at(i-1).position_*2.0 - steps_.at(i-2).position_ - steps_.at(i).position_)*(0.5);
-            AddCurve(new Hermite(steps_.at(i-1).position_,ta,steps_.at(i).position_,tb));
+            addCurve(new Hermite(steps_.at(i-1).position_,ta,steps_.at(i).position_,tb));
         }else {
             tb = (steps_.at(i+1).position_ - steps_.at(i-1).position_)*(0.5);
-            AddCurve(new Hermite(steps_.at(i-1).position_,ta,steps_.at(i).position_,tb));
+            addCurve(new Hermite(steps_.at(i-1).position_,ta,steps_.at(i).position_,tb));
             ta = tb;
 
         }
     }
 }
 
-void PosInterpolator::GenerateBezierMainCurve() {
+void PosInterpolator::generateBezierMainCurve() {
     if(steps_.size() <= 2) {
-        GenerateLinearMainCurve();
+        generateLinearMainCurve();
         return;
     }
     qglviewer::Vec a,b,pa;
@@ -151,7 +151,7 @@ void PosInterpolator::GenerateBezierMainCurve() {
             delta = steps_.at(i-1).position_ - steps_.at(i-2).position_;
             b = steps_.at(i-1).position_ + delta;
             //curves.push_back(new BezierCubic(points.at(i-1),pa,b,points.at(i)));
-            AddCurve(new BezierQuadratic(steps_.at(i-1).position_,pa,steps_.at(i).position_));
+            addCurve(new BezierQuadratic(steps_.at(i-1).position_,pa,steps_.at(i).position_));
         }else {
             delta = steps_.at(i).position_ - steps_.at(i-1).position_;
             a = steps_.at(i).position_ + delta;
@@ -159,9 +159,9 @@ void PosInterpolator::GenerateBezierMainCurve() {
             delta = steps_.at(i).position_ - a;
             b = steps_.at(i).position_ + delta;
             if( i == 1) {
-                AddCurve(new BezierQuadratic(steps_.at(i-1).position_,b,steps_.at(i).position_));
+                addCurve(new BezierQuadratic(steps_.at(i-1).position_,b,steps_.at(i).position_));
             }else{
-                AddCurve(new BezierCubic(steps_.at(i-1).position_,pa,b,steps_.at(i).position_));
+                addCurve(new BezierCubic(steps_.at(i-1).position_,pa,b,steps_.at(i).position_));
             }
             pa = a;
 
@@ -169,25 +169,25 @@ void PosInterpolator::GenerateBezierMainCurve() {
     }
 }
 
-void PosInterpolator::GenerateLinearMainCurve() {
+void PosInterpolator::generateLinearMainCurve() {
     for(size_t i = 1 ; i < steps_.size() ; i++ ) {
         Curve* curve = new LinearCurve(steps_.at(i-1).position_,steps_.at(i).position_);
-        AddCurve(curve);
+        addCurve(curve);
     }
 }
 
-void PosInterpolator::AddCurve(Curve* curve) {
+void PosInterpolator::addCurve(Curve* curve) {
     std::pair<Curve*,ArcLength*> curve_and_length;
     ArcLength* arc_length = new ArcLength(curve);
 
-    arc_length->AdaptativeGaussianPrecalculation();
+    arc_length->adaptativeGaussianPrecalculation();
 
     curve_and_length.first = curve;
     curve_and_length.second = arc_length;
 
     curves_.push_back(curve_and_length);
 
-    double total_length = arc_length->GetTotalLength();
+    double total_length = arc_length->getTotalLength();
     total_length_ += total_length;
 
     if(curves_lengths_.size() > 0)
@@ -196,7 +196,7 @@ void PosInterpolator::AddCurve(Curve* curve) {
     curves_lengths_.push_back(total_length);
 }
 
-void PosInterpolator::CleanCurvesAndLengths() {
+void PosInterpolator::cleanCurvesAndLengths() {
     for(size_t i = 0 ; i < curves_.size() ; i++ ) {
         std::pair<Curve*,ArcLength*> curve_and_length = curves_.at(i);
         delete curve_and_length.first;

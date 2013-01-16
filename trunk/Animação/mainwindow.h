@@ -6,7 +6,7 @@
 #include <QTreeWidgetItem>
 
 namespace Ui {
-    class MainWindow;
+class MainWindow;
 }
 
 class Joint;
@@ -32,31 +32,31 @@ private:
     std::map<QTreeWidgetItem*, Joint*> item_to_object_;
 
 public slots:
-    void PlayPause();
-    void Stop();
-    void SelectedFramePause();
-    void UpdateObjects();
+    void playPause();
+    void stop();
+    void selectedFramePause();
+    void updateObjects();
 
 private slots:
-    void UpdateFrameCount(int new_total);
-    void UpdateFPS(int new_fps);
-    void UpdateSpeedControl(int new_speed_control);
-    void UpdatePositionInterpolation(int new_speed_interpolation);
-    void UpdateOrientationInterpolation(int new_orientation_interpolation);
-    void UpdateFreeze();
-    void UpdateCurrentSelected(QTreeWidgetItem *item, int column);
-    void UpdateSelectedLabel(QString label);
-    void UpdateCurrentPosition();
-    void UpdateCurrentOrientation();
-    void UpdateRenderBox(bool box);
-    void UpdateRenderBones(bool bones);
-    void DisplayTrajectoryPosition(bool display);
-    void DisplayTrajectoryOrientation(bool display);
-    void UpdateSelectedInfo(Object3D *object);
-    void AddPositionKeyframe();
-    void AddOrientationKeyframe();
-    void RemovePositionKeyframe();
-    void RemoveOrientationKeyframe();
+    void updateFrameCount(int new_total);
+    void updateFPS(int new_fps);
+    void updateSpeedControl(int new_speed_control);
+    void updatePositionInterpolation(int new_speed_interpolation);
+    void updateOrientationInterpolation(int new_orientation_interpolation);
+    void updateFreeze();
+    void updateCurrentSelected(QTreeWidgetItem *item, int column);
+    void updateSelectedLabel(QString label);
+    void updateCurrentPosition();
+    void updateCurrentOrientation();
+    void updateRenderBox(bool box);
+    void updateRenderBones(bool bones);
+    void displayTrajectoryPosition(bool display);
+    void displayTrajectoryOrientation(bool display);
+    void updateSelectedInfo(Object3D *object);
+    void addPositionKeyframe();
+    void addOrientationKeyframe();
+    void removePositionKeyframe();
+    void removeOrientationKeyframe();
 };
 
 #endif // MAINWINDOW_H

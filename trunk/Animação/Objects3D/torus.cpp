@@ -4,7 +4,7 @@ using namespace qglviewer;
 Slice::Slice(double radius, qglviewer::Vec original_point, qglviewer::Vec axis, int steps) :
     radius_(radius), original_point_(original_point), axis_(axis), steps_(steps)
 {
-    CreateSlice();
+    createSlice();
 }
 
 qglviewer::Vec Slice::Step(int index)
@@ -12,7 +12,7 @@ qglviewer::Vec Slice::Step(int index)
     return slice_.at(index);
 }
 
-void Slice::CreateSlice()
+void Slice::createSlice()
 {
     double PI =  3.14159265;
     double angle = (2.0*PI)/((double)(steps_-1));
@@ -27,10 +27,10 @@ void Slice::CreateSlice()
 Torus::Torus(double inner_radius, double outer_radius, int slices, int steps) :
     inner_radius_(inner_radius), outer_radius_(outer_radius), slices_(slices), steps_(steps)
 {
-    CreateSlices();
+    createSlices();
 }
 
-void Torus::CreateSlices()
+void Torus::createSlices()
 {
     if(inner_radius_ > outer_radius_) {
         double tmp = outer_radius_;
@@ -50,7 +50,7 @@ void Torus::CreateSlices()
     }
 }
 
-void Torus::DrawObject() {
+void Torus::drawObject() {
     for(int i = 0 ; i < torus_slices_.size()-1 ; i++ ) {
         glBegin(GL_TRIANGLE_STRIP);
         for(int j = 0 ; j < steps_ ; j++ ) {

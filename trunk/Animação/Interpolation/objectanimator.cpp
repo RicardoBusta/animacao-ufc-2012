@@ -7,7 +7,7 @@
 ObjectAnimator::ObjectAnimator(Object3D* child)
 {
     child_object_ = child;
-    child->SetAnimator(this);
+    child->setAnimator(this);
     original_position_    = child->position();
     original_orientation_ = child->orientation();
     update_positions_ = true;
@@ -16,50 +16,50 @@ ObjectAnimator::ObjectAnimator(Object3D* child)
     oriTrajectory = NULL;
 }
 
-void ObjectAnimator::SetFrameRange(int start, int end) {
-    pos_interpolator_.SetStartFrame(start);
-    pos_interpolator_.SetLastFrame(end);
-    ori_interpolator_.SetStartFrame(start);
-    ori_interpolator_.SetLastFrame(end);
+void ObjectAnimator::setFrameRange(int start, int end) {
+    pos_interpolator_.setStartFrame(start);
+    pos_interpolator_.setLastFrame(end);
+    ori_interpolator_.setStartFrame(start);
+    ori_interpolator_.setLastFrame(end);
 }
 
-void ObjectAnimator::SetCurrentFrame(int frame) {
-    PositionsUpdate();
-    OrientationsUpdate();
+void ObjectAnimator::setCurrentFrame(int frame) {
+    positionsUpdate();
+    orientationsUpdate();
 
-    if(SceneContainer::AnimatePosition()) {
+    if(SceneContainer::animatePosition()) {
         bool is_valid;
-        qglviewer::Vec pos = pos_interpolator_.GetPositionAt(frame,&is_valid);
-        child_object_->SetNewPosition(is_valid? pos : child_object_->position());
+        qglviewer::Vec pos = pos_interpolator_.getPositionAt(frame,&is_valid);
+        child_object_->setNewPosition(is_valid? pos : child_object_->position());
     }
 
-    if(SceneContainer::AnimateOrientation()) {
+    if(SceneContainer::animateOrientation()) {
         bool is_valid;
         qglviewer::Quaternion ori = ori_interpolator_.GetOrientationAt(frame,&is_valid);
-        child_object_->SetNewOrientation(is_valid? ori : child_object_->orientation());
+        child_object_->setNewOrientation(is_valid? ori : child_object_->orientation());
     }
 
 }
 
-qglviewer::Vec ObjectAnimator::PositionAt(int frame) {
-    PositionsUpdate();
+qglviewer::Vec ObjectAnimator::positionAt(int frame) {
+    positionsUpdate();
     bool is_valid;
-    qglviewer::Vec pos = pos_interpolator_.GetPositionAt(frame,&is_valid);
-    return is_valid && SceneContainer::AnimatePosition()? pos : child_object_->position();
+    qglviewer::Vec pos = pos_interpolator_.getPositionAt(frame,&is_valid);
+    return is_valid && SceneContainer::animatePosition()? pos : child_object_->position();
 }
 
-qglviewer::Quaternion ObjectAnimator::OrientationAt(int frame) {
-    OrientationsUpdate();
+qglviewer::Quaternion ObjectAnimator::orientationAt(int frame) {
+    orientationsUpdate();
     bool is_valid;
     qglviewer::Quaternion ori = ori_interpolator_.GetOrientationAt(frame,&is_valid);
-    return is_valid && SceneContainer::AnimatePosition()? ori : child_object_->orientation();
+    return is_valid && SceneContainer::animatePosition()? ori : child_object_->orientation();
 }
 
-void ObjectAnimator::AddKeyPosition(int frame, qglviewer::Vec pos) {
+void ObjectAnimator::addKeyPosition(int frame, qglviewer::Vec pos) {
     PositionStep key_frame(pos,frame);
 
     bool new_step = true;
-    for(int i = 0 ; i < key_positions_.size() ; i++ ) {
+    for(unsigned int i = 0 ; i < key_positions_.size() ; i++ ) {
         if(key_positions_.at(i).frame_ == key_frame.frame_) {
             key_positions_.at(i).position_ = key_frame.position_;
             new_step = false;
@@ -69,7 +69,7 @@ void ObjectAnimator::AddKeyPosition(int frame, qglviewer::Vec pos) {
     if(new_step){
         if(key_positions_.size() == 0)
             key_positions_.push_back(key_frame);
-        else for(int i = 0 ; i < key_positions_.size() ; i++ ) {
+        else for(unsigned int i = 0 ; i < key_positions_.size() ; i++ ) {
             if(key_positions_.at(i).frame_ > key_frame.frame_ ) {
                 key_positions_.insert(key_positions_.begin()+i,key_frame);
                 break;
@@ -83,11 +83,11 @@ void ObjectAnimator::AddKeyPosition(int frame, qglviewer::Vec pos) {
     update_positions_ = true;
 }
 
-void ObjectAnimator::AddKeyOrientation(int frame, qglviewer::Quaternion ori) {
+void ObjectAnimator::addKeyOrientation(int frame, qglviewer::Quaternion ori) {
     OrientationStep key_frame(ori,frame);
 
     bool new_step = true;
-    for(int i = 0 ; i < key_orientations_.size() ; i++ ) {
+    for(unsigned int i = 0 ; i < key_orientations_.size() ; i++ ) {
         if(key_orientations_.at(i).frame_ == key_frame.frame_) {
             key_orientations_.at(i).orientation_ = key_frame.orientation_;
             new_step = false;
@@ -97,7 +97,7 @@ void ObjectAnimator::AddKeyOrientation(int frame, qglviewer::Quaternion ori) {
     if(new_step){
         if(key_orientations_.size() == 0)
             key_orientations_.push_back(key_frame);
-        else for(int i = 0 ; i < key_orientations_.size() ; i++ ) {
+        else for(unsigned int i = 0 ; i < key_orientations_.size() ; i++ ) {
             if(key_orientations_.at(i).frame_ > key_frame.frame_ ) {
                 key_orientations_.insert(key_orientations_.begin()+i,key_frame);
                 break;
@@ -111,7 +111,7 @@ void ObjectAnimator::AddKeyOrientation(int frame, qglviewer::Quaternion ori) {
     update_orientations_ = true;
 }
 
-void ObjectAnimator::AddKeyOrientation(int frame, float x, float y, float z)
+void ObjectAnimator::addKeyOrientation(int frame, float x, float y, float z)
 {
     qglviewer::Quaternion qx = qglviewer::Quaternion( qglviewer::Vec(1,0,0), x );
     qglviewer::Quaternion qy = qglviewer::Quaternion( qglviewer::Vec(0,1,0), y );
@@ -120,10 +120,10 @@ void ObjectAnimator::AddKeyOrientation(int frame, float x, float y, float z)
     qglviewer::Quaternion qaux = (qy*qz);
     qglviewer::Quaternion q = (qx*qaux);
 
-    AddKeyOrientation( frame, q );
+    addKeyOrientation( frame, q );
 }
 
-void ObjectAnimator::RemoveKeyPosition(int frame) {
+void ObjectAnimator::removeKeyPosition(int frame) {
     for(size_t i = 0 ; i < key_positions_.size() ; i++ ) {
         if(key_positions_.at(i).frame_ == frame) {
             key_positions_.erase(key_positions_.begin()+i);
@@ -133,7 +133,7 @@ void ObjectAnimator::RemoveKeyPosition(int frame) {
     }
 }
 
-void ObjectAnimator::RemoveKeyOrientation(int frame) {
+void ObjectAnimator::removeKeyOrientation(int frame) {
     for(size_t i = 0 ; i < key_orientations_.size() ; i++ ) {
         if(key_orientations_.at(i).frame_ == frame) {
             key_orientations_.erase(key_orientations_.begin()+i);
@@ -143,55 +143,55 @@ void ObjectAnimator::RemoveKeyOrientation(int frame) {
     }
 }
 
-void ObjectAnimator::SetPosInterpolationType(PosInterpolator::InterpolationType type) {
-    pos_interpolator_.SetInterpolationType(type);
+void ObjectAnimator::setPosInterpolationType(PosInterpolator::InterpolationType type) {
+    pos_interpolator_.setInterpolationType(type);
     update_positions_ = true;
 }
 
-void ObjectAnimator::SetOriInterpolationType(OriInterpolator::InterpolationType type) {
-    ori_interpolator_.SetInterpolationType(type);
+void ObjectAnimator::setOriInterpolationType(OriInterpolator::InterpolationType type) {
+    ori_interpolator_.setInterpolationType(type);
     update_orientations_ = true;
 }
 
-void ObjectAnimator::CalculateTrajectory(TrajectoryObject::TrajectoryType type) {
+void ObjectAnimator::calculateTrajectory(TrajectoryObject::TrajectoryType type) {
     oriTrajectory = new TrajectoryObject(this);
-    oriTrajectory->SetType(type);
-    oriTrajectory->Update();
+    oriTrajectory->setType(type);
+    oriTrajectory->update();
 }
 
-Object3D* ObjectAnimator::GetTrajectory(){
+Object3D* ObjectAnimator::getTrajectory(){
     return oriTrajectory;
 }
 
-void  ObjectAnimator::PositionsUpdate() {
+void  ObjectAnimator::positionsUpdate() {
     if(update_positions_) {
-        pos_interpolator_.LoadPoints(key_positions_);
+        pos_interpolator_.loadPoints(key_positions_);
         update_positions_ = false;
     }
 }
 
-void  ObjectAnimator::OrientationsUpdate() {
+void  ObjectAnimator::orientationsUpdate() {
     if(update_orientations_) {
-        ori_interpolator_.LoadOrientations(key_orientations_);
+        ori_interpolator_.loadOrientations(key_orientations_);
         update_orientations_ = false;
     }
 }
 
-void ObjectAnimator::SetParent(ObjectAnimator* parent) {
+void ObjectAnimator::setParent(ObjectAnimator* parent) {
     parent_ = parent;
 }
 
-ObjectAnimator* ObjectAnimator::Parent() {
+ObjectAnimator* ObjectAnimator::parent() {
     return parent_;
 }
 
-Object3D* ObjectAnimator::GetChild()
+Object3D* ObjectAnimator::getChild()
 {
     return child_object_;
 }
 
 
-void ObjectAnimator::DeleteTrajectory()
+void ObjectAnimator::deleteTrajectory()
 {
     if(oriTrajectory!=NULL){
         delete oriTrajectory;
@@ -200,13 +200,13 @@ void ObjectAnimator::DeleteTrajectory()
 }
 
 
-std::vector<PositionStep> *ObjectAnimator::GetKeyPositions()
+std::vector<PositionStep> *ObjectAnimator::getKeyPositions()
 {
     return &key_positions_;
 }
 
 
-std::vector<OrientationStep> *ObjectAnimator::GetKeyOrientations()
+std::vector<OrientationStep> *ObjectAnimator::getKeyOrientations()
 {
     return &key_orientations_;
 }

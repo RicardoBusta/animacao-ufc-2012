@@ -7,11 +7,11 @@ OriInterpolator::OriInterpolator():GenericInterpolator()
     type_ = kSlerp;
 }
 
-void OriInterpolator::SetStartFrame(int start_frame) {
+void OriInterpolator::setStartFrame(int start_frame) {
     start_frame_ = start_frame;
 }
 
-void OriInterpolator::SetLastFrame(int last_frame) {
+void OriInterpolator::setLastFrame(int last_frame) {
     last_frame_ = last_frame;
 }
 
@@ -22,7 +22,7 @@ qglviewer::Quaternion OriInterpolator::GetOrientationAt(int frame, bool* valid) 
         return qglviewer::Quaternion();
     }
 
-    int interval = ChooseInterval(frame);
+    int interval = chooseInterval(frame);
 
     if((interval == -1) or (interval==0)) {
         if(valid!=NULL) *valid = false;
@@ -36,10 +36,10 @@ qglviewer::Quaternion OriInterpolator::GetOrientationAt(int frame, bool* valid) 
     t = speedControl(t);
 
     if(valid!=NULL) *valid = true;
-    return interpolator->Evaluate(t);
+    return interpolator->evaluate(t);
 }
 
-int OriInterpolator::ChooseInterval(int frame) {
+int OriInterpolator::chooseInterval(int frame) {
     for(size_t i = 0 ; i < steps_.size() ; i++ ) {
         if( steps_.at(i).frame_ > frame)
             return i;
@@ -48,7 +48,7 @@ int OriInterpolator::ChooseInterval(int frame) {
     return steps_.size() - 1;
 }
 
-void OriInterpolator::SetInterpolationType(InterpolationType type) {
+void OriInterpolator::setInterpolationType(InterpolationType type) {
     type_ = type;
 }
 
@@ -68,18 +68,18 @@ qglviewer::Quaternion OriInterpolator::Double(qglviewer::Quaternion a, qglviewer
     return qglviewer::Quaternion(q[0],q[1],q[2],q[3]);
 }
 
-void OriInterpolator::GenerateMainCurve() {
+void OriInterpolator::generateMainCurve() {
     switch(type_) {
     case kBezier:
-        GenerateBezierCurve();
+        generateBezierCurve();
         break;
     default:
-        GenerateLinearCurve();
+        generateLinearCurve();
         break;
     }
 }
 
-void OriInterpolator::GenerateLinearCurve() {
+void OriInterpolator::generateLinearCurve() {
     if(steps_.size() <= 1) return;
 
     for(size_t i = 0 ; i < steps_.size()-1 ; i++ ) {
@@ -88,9 +88,9 @@ void OriInterpolator::GenerateLinearCurve() {
     }
 }
 
-void OriInterpolator::GenerateBezierCurve() {
+void OriInterpolator::generateBezierCurve() {
     if(steps_.size() <= 2) {
-        GenerateLinearCurve();
+        generateLinearCurve();
         return;
     }
 
@@ -109,22 +109,22 @@ void OriInterpolator::GenerateBezierCurve() {
     }
 }
 
-void OriInterpolator::ClearAll() {
+void OriInterpolator::clearAll() {
     steps_.clear();
     for(size_t i = 0 ; i < quaternions_curves_.size() ; i++ )
         delete quaternions_curves_.at(i);
     quaternions_curves_.clear();
 }
 
-void OriInterpolator::LoadOrientations(std::vector<OrientationStep>& steps) {
-    ClearAll();
+void OriInterpolator::loadOrientations(std::vector<OrientationStep>& steps) {
+    clearAll();
 
     for(size_t i = 0 ; i < steps.size() ; i++ )
         steps_.push_back(steps.at(i));
 
-    GenerateMainCurve();
+    generateMainCurve();
 }
 
-void OriInterpolator::AddOrientation(OrientationStep) {
+void OriInterpolator::addOrientation(OrientationStep) {
 
 }

@@ -17,32 +17,32 @@ public:
     ~Object3D();
 
     std::string                    label();
-    void                           SetLabel(std::string label);
+    void                           setLabel(std::string label);
 
     int                            id();
-    inline void                    SetDrawObject          (bool draw) { draw_object_ = draw; }
-    inline void                    SetDrawPositionParticle(bool draw) { draw_position_particle_ = draw; }
-    inline void                    SetDrawOrientationAxes (bool draw) { draw_orientation_axes_  = draw; }
-    inline void                    SetDrawBoundingBox     (bool draw) { draw_bounding_box_ = draw; }
+    inline void                    setDrawObject          (bool draw) { draw_object_ = draw; }
+    inline void                    setDrawPositionParticle(bool draw) { draw_position_particle_ = draw; }
+    inline void                    setDrawOrientationAxes (bool draw) { draw_orientation_axes_  = draw; }
+    inline void                    setDrawBoundingBox     (bool draw) { draw_bounding_box_ = draw; }
 
-    inline void                    SetNewPosition(qglviewer::Vec position) { position_ = position; }
-    inline void                    SetNewOrientation(qglviewer::Quaternion orientation) { orientation_ = orientation; }
+    inline void                    setNewPosition(qglviewer::Vec position) { position_ = position; }
+    inline void                    setNewOrientation(qglviewer::Quaternion orientation) { orientation_ = orientation; }
     inline qglviewer::Vec          position()    { return position_; }
     inline qglviewer::Quaternion   orientation() { return orientation_; }
 
-    void                           Draw();
+    void                           draw();
 
-    void                           SetAnimator(ObjectAnimator *animator); // TODO remove
-    ObjectAnimator*                GetAnimator();
+    void                           setAnimator(ObjectAnimator* animator);
+    ObjectAnimator*                getAnimator();
 protected:
 
-    void                           DefaultInitialisation();
-    void                           DrawPositionParticle();
-    void                           DrawOrientationAxes();
-    virtual void                   DrawObject();
-    virtual void                   DrawBoundingBox();
-    virtual void                   DrawBoxObject();
-    virtual void                   DrawBone();
+    void                           defaultInitialisation();
+    void                           drawPositionParticle();
+    void                           drawOrientationAxes();
+    virtual void                   drawObject();
+    virtual void                   drawBoundingBox();
+    virtual void                   drawBoxObject();
+    virtual void                   drawBone();
     friend class Joint;
 
     std::string label_;

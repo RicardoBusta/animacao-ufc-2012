@@ -70,9 +70,9 @@ public:
     //! Scene Manipulation
     static void createMonkeyHeadScene();
     static void createArmScene();
-    static void createArmMonkeyScene();
+    static void createMonkeySnakeScene();
     static void createRobotScene();
-    static void CreateDefaultScene(int scene);
+    static void updateCurrentScene(int scene);
 
     static void clearScene();
 

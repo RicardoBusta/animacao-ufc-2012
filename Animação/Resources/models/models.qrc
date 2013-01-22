@@ -15,5 +15,6 @@
         <file>face_teeth_bot.obj</file>
         <file>face_teeth_top.obj</file>
         <file>face_hat.obj</file>
+        <file>body.obj</file>
     </qresource>
 </RCC>

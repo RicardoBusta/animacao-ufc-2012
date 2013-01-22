@@ -66,7 +66,7 @@ void  Viewer::setCurrentFrame(int frame) {
 }
 
 void Viewer::init() {
-    SceneContainer::CreateDefaultScene(0);
+    SceneContainer::updateCurrentScene(1);
     emit signalUpdateObjects();
 
     SceneContainer::setFrameRange(0,100);

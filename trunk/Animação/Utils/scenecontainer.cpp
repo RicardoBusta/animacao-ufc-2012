@@ -30,6 +30,8 @@ int SceneContainer::current_frame_ = 0;
 bool SceneContainer::render_box_over_object_ = false;
 bool SceneContainer::draw_bones_ = false;
 
+bool SceneContainer::draw_with_names_ = false;
+
 unsigned int SceneContainer::render_options_ = 0;
 
 SceneContainer::SceneContainer(){}
@@ -554,7 +556,42 @@ void SceneContainer::createRobotScene(){
     /*Joint* face_stache =*/ addObject("Stache",":/models/face_stache.obj",":/textures/stache_teeth.png",QVector3D(0,-0.5,2), QQuaternion(1,0,0,0), face_head);
     /*Joint* face_hat =*/ addObject("Hat",":/models/face_hat.obj",":/textures/wooden.png",QVector3D(0,1.4,0), QQuaternion(1,0,0,0), face_head);
 
-    //! Hand
+    //! Left Hand
+    Joint* left_arm_part1 = addObject("Part 1",":/models/arm_part1.obj",":/textures/wooden.png",QVector3D(1.8,2.6,0),QQuaternion(cos(-M_PI_4),0,0,sin(-M_PI_4)),body);
+    Joint* left_arm_part2 = addObject("Part 2",":/models/arm_part1.obj",":/textures/wooden.png",QVector3D(0,3.7,0),QQuaternion(1,0,0,0),left_arm_part1);
+    Joint* left_arm_hand = addObject("Hand",":/models/arm_hand.obj",":/textures/wooden.png",QVector3D(0,3.7,0),QQuaternion(1,0,0,0),left_arm_part2);
+
+    Joint* left_arm_finger_5_1 = addObject("Finger 5 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0.5,1.4,0),QQuaternion(1,0,0,0),left_arm_hand);
+    Joint* left_arm_finger_4_1 = addObject("Finger 4 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0.2,1.5,0),QQuaternion(1,0,0,0),left_arm_hand);
+    Joint* left_arm_finger_3_1 = addObject("Finger 3 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(-0.1,1.6,0),QQuaternion(1,0,0,0),left_arm_hand);
+    Joint* left_arm_finger_2_1 = addObject("Finger 2 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(-0.4,1.5,0),QQuaternion(1,0,0,0),left_arm_hand);
+    Joint* left_arm_finger_1_1 = addObject("Finger 1 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(-0.6,1,0),QQuaternion(1,0,0,0),left_arm_hand);
+
+    Joint* left_arm_finger_5_2 = addObject("Finger 5 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),left_arm_finger_5_1);
+    Joint* left_arm_finger_4_2 = addObject("Finger 4 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),left_arm_finger_4_1);
+    Joint* left_arm_finger_3_2 = addObject("Finger 3 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),left_arm_finger_3_1);
+    Joint* left_arm_finger_2_2 = addObject("Finger 2 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),left_arm_finger_2_1);
+    Joint* left_arm_finger_1_2 = addObject("Finger 1 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),left_arm_finger_1_1);
+
+    //! Right Hand
+    Joint* right_arm_part1 = addObject("Part 1",":/models/arm_part1.obj",":/textures/wooden.png",QVector3D(-1.8,2.6,0),QQuaternion(cos(M_PI_4),0,0,sin(M_PI_4)),body);
+    Joint* right_arm_part2 = addObject("Part 2",":/models/arm_part1.obj",":/textures/wooden.png",QVector3D(0,3.7,0),QQuaternion(1,0,0,0),right_arm_part1);
+    Joint* right_arm_hand = addObject("Hand",":/models/arm_hand.obj",":/textures/wooden.png",QVector3D(0,3.7,0),QQuaternion(cos(M_PI_2),0,sin(M_PI_2),0),right_arm_part2);
+
+    Joint* right_arm_finger_5_1 = addObject("Finger 5 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0.5,1.4,0),QQuaternion(1,0,0,0),right_arm_hand);
+    Joint* right_arm_finger_4_1 = addObject("Finger 4 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0.2,1.5,0),QQuaternion(1,0,0,0),right_arm_hand);
+    Joint* right_arm_finger_3_1 = addObject("Finger 3 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(-0.1,1.6,0),QQuaternion(1,0,0,0),right_arm_hand);
+    Joint* right_arm_finger_2_1 = addObject("Finger 2 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(-0.4,1.5,0),QQuaternion(1,0,0,0),right_arm_hand);
+    Joint* right_arm_finger_1_1 = addObject("Finger 1 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(-0.6,1,0),QQuaternion(1,0,0,0),right_arm_hand);
+
+    Joint* right_arm_finger_5_2 = addObject("Finger 5 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),right_arm_finger_5_1);
+    Joint* right_arm_finger_4_2 = addObject("Finger 4 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),right_arm_finger_4_1);
+    Joint* right_arm_finger_3_2 = addObject("Finger 3 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),right_arm_finger_3_1);
+    Joint* right_arm_finger_2_2 = addObject("Finger 2 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),right_arm_finger_2_1);
+    Joint* right_arm_finger_1_2 = addObject("Finger 1 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),right_arm_finger_1_1);
+
+    //! Left Leg
+    //Hand Scene
     Joint* arm_base = addObject("Arm Base",":/models/arm_base.obj",":/textures/wooden.png",QVector3D(0,0.75,0), QQuaternion(1,0,0,0), body);
     Joint* arm_part1 = addObject("Part 1",":/models/arm_part1.obj",":/textures/wooden.png",QVector3D(0,0.25,0),QQuaternion(1,0,0,0),arm_base);
     Joint* arm_part2 = addObject("Part 2",":/models/arm_part2.obj",":/textures/wooden.png",QVector3D(0,3.7,0),QQuaternion(1,0,0,0),arm_part1);
@@ -571,6 +608,8 @@ void SceneContainer::createRobotScene(){
     Joint* arm_finger_3_2 = addObject("Finger 3 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),arm_finger_3_1);
     Joint* arm_finger_2_2 = addObject("Finger 2 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),arm_finger_2_1);
     Joint* arm_finger_1_2 = addObject("Finger 1 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),arm_finger_1_1);
+
+    //! Right Leg
 
     ObjectAnimator *animate;
 
@@ -601,3 +640,14 @@ void SceneContainer::createRobotScene(){
     animate->addKeyOrientation(50, 2.1,0,0);
     animate->addKeyOrientation(100, 1.6,0,0);
 }
+
+bool SceneContainer::getDrawWithNames()
+{
+    return draw_with_names_;
+}
+
+void SceneContainer::setDrawWithNames(bool draw_with_names)
+{
+    draw_with_names_ = draw_with_names;
+}
+

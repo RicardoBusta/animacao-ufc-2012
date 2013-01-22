@@ -62,6 +62,8 @@ MainWindow::MainWindow(QWidget *parent) :
     //scene
     connect( ui->comboBox_scene, SIGNAL(currentIndexChanged(int)), this, SLOT(updateCurrentScene(int)) );
 
+    connect( ui->viewer, SIGNAL(updateSelected(int)), this, SLOT(setSelectedByID(int)) );
+
 
     // interface
     this->showMaximized();
@@ -110,10 +112,11 @@ void MainWindow::updateObjects(){
         updateObjectsRecursive(item, object);
         ui->treeWidget->addTopLevelItem(item);
         item_to_object_[item] = object;
+        object_to_item_[object]  = item;
     }
     ui->treeWidget->expandAll();
 
-    connect(ui->treeWidget, SIGNAL(itemClicked(QTreeWidgetItem*,int)), this, SLOT(updateCurrentSelected(QTreeWidgetItem*,int)));
+    connect(ui->treeWidget, SIGNAL(currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)), this, SLOT(updateCurrentSelected(QTreeWidgetItem*,QTreeWidgetItem*)));
     //ui->timebar->setKeyFrames((Object3D*)SceneContainer::ObjectAt(0));
     ui->timebar->update();
 }
@@ -124,17 +127,18 @@ void MainWindow::updateObjectsRecursive(QTreeWidgetItem *item, Joint* parent){
         QTreeWidgetItem *childitem = new QTreeWidgetItem(item,QStringList(QString(child->label().c_str())));
         updateObjectsRecursive(childitem, child);
         item_to_object_[childitem] = child;
+        object_to_item_[child]  = childitem;
     }
     //    if(parent->ChildObject()!=NULL){
     //       new QTreeWidgetItem(item,QStringList(QString(parent->ChildObject()->label().c_str())));
     //    }
 }
 
-void MainWindow::updateCurrentSelected(QTreeWidgetItem *item, int column) {
+void MainWindow::updateCurrentSelected(QTreeWidgetItem *item, QTreeWidgetItem* other) {
     selected_item_ = item;
     if(item == NULL) return;
     if( item_to_object_.find(item) != item_to_object_.end() ) {
-        Joint* object = item_to_object_[item];
+        Object3D* object = item_to_object_[item];
         updateSelectedInfo(object);
         ui->timebar->setKeyFrames(object);
         ui->timebar->repaint();
@@ -226,9 +230,9 @@ void MainWindow::updateSelectedInfo(Object3D* object) {
     double angle_ry = asin(2.0*(q[3]*q[1] - q[2]*q[0]));
     double angle_rz = atan2(2.0*(q[3]*q[2] + q[0]*q[1]),1.0-2.0*(q[1]*q[1] + q[2]*q[2]));
 
-    ui->spin_ori_x->setValue((angle_rx*180.0)/(6.28));
-    ui->spin_ori_y->setValue((angle_ry*180.0)/(6.28));
-    ui->spin_ori_z->setValue((angle_rz*180.0)/(6.28));
+    ui->spin_ori_x->setValue((angle_rx*180.0)/(M_PI));
+    ui->spin_ori_y->setValue((angle_ry*180.0)/(M_PI));
+    ui->spin_ori_z->setValue((angle_rz*180.0)/(M_PI));
 
     connect( ui->spin_pos_x, SIGNAL(valueChanged(double)), this, SLOT(updateCurrentPosition()));
     connect( ui->spin_pos_y, SIGNAL(valueChanged(double)), this, SLOT(updateCurrentPosition()));
@@ -259,9 +263,9 @@ void MainWindow::updateCurrentPosition() {
 
 void MainWindow::updateCurrentOrientation() {
     qglviewer::Quaternion a,b,c,d;
-    a.setAxisAngle(qglviewer::Vec(1,0,0),ui->spin_ori_x->value());
-    b.setAxisAngle(qglviewer::Vec(0,1,0),ui->spin_ori_y->value());
-    c.setAxisAngle(qglviewer::Vec(0,0,1),ui->spin_ori_y->value());
+    a.setAxisAngle(qglviewer::Vec(1,0,0),(ui->spin_ori_x->value()*(M_PI/180.0)));
+    b.setAxisAngle(qglviewer::Vec(0,1,0),(ui->spin_ori_y->value()*(M_PI/180.0)));
+    c.setAxisAngle(qglviewer::Vec(0,0,1),(ui->spin_ori_z->value()*(M_PI/180.0)));
     d = a*b*c;
     d.normalize();
     SceneContainer::setSelectedOrientation(d);
@@ -321,3 +325,15 @@ void MainWindow::updateCurrentScene(int scene){
     SceneContainer::setCurrentFrame(0);
     ui->viewer->repaint();
 }
+
+
+void MainWindow::setSelectedByID(int id)
+{
+    Object3D *obj = Object3D::getObjectByID(id);
+    selected_item_ = object_to_item_[obj];
+//    updateSelectedInfo(obj);
+
+
+    ui->treeWidget->setCurrentItem(selected_item_);
+}
+

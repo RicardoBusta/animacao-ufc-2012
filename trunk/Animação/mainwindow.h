@@ -29,7 +29,8 @@ private:
 
     void updateObjectsRecursive(QTreeWidgetItem *item, Joint* parent);
 
-    std::map<QTreeWidgetItem*, Joint*> item_to_object_;
+    std::map<QTreeWidgetItem*, Object3D*> item_to_object_;
+    std::map<Object3D*, QTreeWidgetItem*> object_to_item_;
 
 public slots:
     void playPause();
@@ -44,7 +45,7 @@ private slots:
     void updatePositionInterpolation(int new_speed_interpolation);
     void updateOrientationInterpolation(int new_orientation_interpolation);
     void updateFreeze();
-    void updateCurrentSelected(QTreeWidgetItem *item, int column);
+    void updateCurrentSelected(QTreeWidgetItem *item, QTreeWidgetItem * other);
     void updateSelectedLabel(QString label);
     void updateCurrentPosition();
     void updateCurrentOrientation();
@@ -58,6 +59,7 @@ private slots:
     void addOrientationKeyframe();
     void removePositionKeyframe();
     void removeOrientationKeyframe();
+    void setSelectedByID(int);
 };
 
 #endif // MAINWINDOW_H

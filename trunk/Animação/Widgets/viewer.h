@@ -16,12 +16,17 @@ public:
 
 protected :
     virtual void draw();
+    virtual void drawWithNames();
     virtual void init();
     virtual QString helpString() const;
+
+    virtual void postSelection(const QPoint &point);
 
 signals:
     void currentFrame(int frame);
     void signalUpdateObjects();
+
+    void updateSelected(int);
 public slots:
     void play();
     void pause();
@@ -34,6 +39,7 @@ public slots:
     void releaseShader();
     void bindShader();
 
+    virtual void mousePressEvent(QMouseEvent *event);
 private:
     BezierQuadratic* nova_;
 

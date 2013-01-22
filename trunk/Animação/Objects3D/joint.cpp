@@ -1,9 +1,13 @@
 #include "joint.h"
 
+#include <QString>
+
+#include <Utils/scenecontainer.h>
+
 Joint::Joint(Object3D* child_object)
 {
     if(child_object!=NULL){
-        label_ = (child_object->label() + " Joint");
+        label_ = (QString::number(id()).toStdString() + " " + child_object->label() + " Joint");
     }else{
         label_ = "Empty Joint";
     }
@@ -38,10 +42,20 @@ Joint* Joint::childAt(int index) {
 }
 
 void Joint::drawObject() {
+
+    if(SceneContainer::getDrawWithNames()){
+        glPushName(id());
+    }
+
     child_object_->draw();
+    if(SceneContainer::getDrawWithNames()){
+        glPopName();
+    }
 
     for(size_t i = 0 ; i < children_joint_.size() ; i++ )
         children_joint_.at(i)->draw();
+
+
 }
 
 

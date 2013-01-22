@@ -53,11 +53,17 @@ MainWindow::MainWindow(QWidget *parent) :
     connect( ui->push_button_traj_pos, SIGNAL(toggled(bool)), this, SLOT(displayTrajectoryPosition(bool)));
     connect( ui->push_button_traj_ori, SIGNAL(toggled(bool)), this, SLOT(displayTrajectoryOrientation(bool)));
 
+    //render
     connect( ui->checkbox_render_box, SIGNAL(toggled(bool)), this, SLOT(updateRenderBox(bool)) );
     connect( ui->checkBox_render_bones, SIGNAL(toggled(bool)), this, SLOT(updateRenderBones(bool)) );
 
     connect( ui->comboBox_shader, SIGNAL(currentIndexChanged(int)), ui->viewer, SLOT(setCurrentShader(int)) );
 
+    //scene
+    connect( ui->comboBox_scene, SIGNAL(currentIndexChanged(int)), this, SLOT(updateCurrentScene(int)) );
+
+
+    // interface
     this->showMaximized();
 
     play_icon = QIcon(QPixmap::fromImage(QImage(":/buttons/play.png")));
@@ -96,7 +102,7 @@ void MainWindow::selectedFramePause()
 }
 
 void MainWindow::updateObjects(){
-
+    ui->treeWidget->clear();
     item_to_object_.clear();
     for( unsigned int i = 0 ; i < SceneContainer::howManyObjects() ; i++ ) {
         Joint* object =  SceneContainer::objectAt(i);
@@ -305,5 +311,13 @@ void MainWindow::updateRenderBox(bool box)
 void MainWindow::updateRenderBones(bool bones)
 {
     SceneContainer::setDrawBones(bones);
+    ui->viewer->repaint();
+}
+
+void MainWindow::updateCurrentScene(int scene){
+    SceneContainer::updateCurrentScene(scene);
+    updateObjects();
+    SceneContainer::setFrameRange(0,100);
+    SceneContainer::setCurrentFrame(0);
     ui->viewer->repaint();
 }

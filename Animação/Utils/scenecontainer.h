@@ -76,6 +76,9 @@ public:
 
     static void clearScene();
 
+    static bool getDrawWithNames();
+    static void setDrawWithNames(bool draw_with_names);
+
 private:
     static Object3D* selected_object_;
     static bool animate_position_, animate_orientation_;
@@ -84,6 +87,9 @@ private:
     static bool draw_bones_;
 
     static unsigned int render_options_;
+
+    static bool draw_with_names_;
+
     static std::vector<ObjectAnimator*> animators_;
     static std::vector<Joint*> objects_;
     static std::vector<Object3D*> extras_;

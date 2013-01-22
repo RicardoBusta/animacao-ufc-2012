@@ -4,12 +4,15 @@
 #include <QGLViewer/vec.h>
 #include <QGLViewer/quaternion.h>
 #include <GL/glu.h>
+#include <map>
 
 class ObjectAnimator;
 class Joint;
 
 class Object3D {
 public:
+    static Object3D* getObjectByID(int id);
+
     Object3D();
     Object3D(qglviewer::Vec pos);
     Object3D(qglviewer::Quaternion ori);
@@ -60,6 +63,8 @@ private:
     int id_;
 
     ObjectAnimator *animator;
+
+    static std::map<int,Object3D*> object_reference_;
 };
 
 

@@ -29,7 +29,11 @@ void Viewer::draw() {
     //rotation->Draw();
 }
 
-
+void Viewer::drawWithNames(){
+    SceneContainer::setDrawWithNames(true);
+    SceneContainer::drawObjects();
+    SceneContainer::setDrawWithNames(false);
+}
 
 void Viewer::play() {
     if(!animationIsStarted()) {
@@ -66,7 +70,7 @@ void  Viewer::setCurrentFrame(int frame) {
 }
 
 void Viewer::init() {
-    SceneContainer::updateCurrentScene(1);
+    SceneContainer::updateCurrentScene(0);
     emit signalUpdateObjects();
 
     SceneContainer::setFrameRange(0,100);
@@ -84,6 +88,8 @@ void Viewer::init() {
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
+ setSelectRegionWidth(5);
+ setSelectRegionHeight(5);
 
     glShadeModel(GL_SMOOTH);
     glEnable(GL_COLOR_MATERIAL);
@@ -177,5 +183,24 @@ void Viewer::releaseShader()
 void Viewer::bindShader(){
     if(shader_enabled_){
         shaderProgram.bind();
+    }
+}
+
+void Viewer::postSelection(const QPoint &point)
+{
+    //std::cout << selectedName() << std::endl;
+    if(selectedName()>=0){
+        emit updateSelected(selectedName());
+    }
+}
+
+#include <QMouseEvent>
+
+void Viewer::mousePressEvent(QMouseEvent *event)
+{
+    if(event->modifiers()&Qt::ControlModifier){
+        select(event->pos());
+    }else{
+        QGLViewer::mousePressEvent(event);
     }
 }

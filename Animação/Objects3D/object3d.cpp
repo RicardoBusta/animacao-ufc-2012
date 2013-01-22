@@ -6,17 +6,11 @@
 #include "Utils/scenecontainer.h"
 #include "Widgets/viewer.h"
 
+std::map<int,Object3D*> Object3D::object_reference_;
+
 Object3D::Object3D()
 { 
     defaultInitialisation();
-
-    animator = NULL;
-
-    color_ = qglviewer::Vec(1,1,1);
-
-    draw_bounding_box_ = false;
-    bounding_box_max_ = qglviewer::Vec(0.5,0.5,0.5);
-    bounding_box_min_ = qglviewer::Vec(-0.5,-0.5,-0.5);
 }
 
 Object3D::Object3D(qglviewer::Vec pos) :
@@ -40,6 +34,8 @@ Object3D::Object3D(qglviewer::Vec pos, qglviewer::Quaternion ori) :
 Object3D::~Object3D() {
     if(quadric_!=NULL)
         gluDeleteQuadric(quadric_);
+
+    object_reference_.erase(id_);
 }
 
 std::string Object3D::label() {
@@ -64,8 +60,17 @@ void Object3D::defaultInitialisation() {
     id_ = next_id;
     next_id++;
 
+    object_reference_[id_] = this;
+
     label_ = "-";
 
+    animator = NULL;
+
+    color_ = qglviewer::Vec(1,1,1);
+
+    draw_bounding_box_ = false;
+    bounding_box_max_ = qglviewer::Vec(0.5,0.5,0.5);
+    bounding_box_min_ = qglviewer::Vec(-0.5,-0.5,-0.5);
 }
 
 void Object3D::draw() {
@@ -236,12 +241,13 @@ void Object3D::drawBoxObject()
 
 void Object3D::drawBone()
 {
-    //    glPushAttrib(GL_ALL_ATTRIB_BITS);
-    //    glDisable(GL_LIGHTING);
-    //    glDisable(GL_DEPTH_TEST);
-    //    glBegin(GL_LINES);
-    //    glVertex3f(0,0,0);
-    //    glVertex3f(1,1,1);
-    //    glEnd();
-    //    glPopAttrib();
+}
+
+Object3D *Object3D::getObjectByID(int id)
+{
+    if(object_reference_.find(id)!=object_reference_.end()){
+        return object_reference_[id];
+    }
+    return NULL;
+
 }

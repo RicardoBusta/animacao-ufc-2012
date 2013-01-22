@@ -7,6 +7,10 @@ SpaceShipObject::SpaceShipObject()
     shiptex = QGLWidget::convertToGLFormat( QImage(":ship.png") );
 }
 
+SpaceShipObject::~SpaceShipObject(){
+
+}
+
 void SpaceShipObject::drawObject() {
     /*double height = 3.0;
     qglviewer::Quaternion orientation = qglviewer::Quaternion(qglviewer::Vec(0,0,1),qglviewer::Vec(0,1,0));

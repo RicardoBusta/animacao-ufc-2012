@@ -12,6 +12,17 @@ Joint::Joint(Object3D* child_object)
     parent_joint_ = NULL;
 }
 
+Joint::~Joint(){
+    if(child_object_ != NULL){
+        delete child_object_;
+    }
+
+    while(!children_joint_.empty()){
+        delete children_joint_.back();
+        children_joint_.pop_back();
+    }
+}
+
 void Joint::addChildJoint(Joint* child) {
     children_joint_.push_back(child);
     child->parent_joint_ = this;

@@ -8,6 +8,7 @@ class SpaceShipObject : public Object3D
 {
 public:
     SpaceShipObject();
+    virtual ~SpaceShipObject();
 
 private:
     void drawObject();

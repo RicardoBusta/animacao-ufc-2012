@@ -9,6 +9,10 @@ TrajectoryObject::TrajectoryObject(ObjectAnimator* animator)
     radius_     = 3.0;
 }
 
+TrajectoryObject::~TrajectoryObject(){
+
+}
+
 void TrajectoryObject::setType(TrajectoryType type) {
     type_ = type;
     if(type_ == kOrientation){

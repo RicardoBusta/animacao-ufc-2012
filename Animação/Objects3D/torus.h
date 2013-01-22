@@ -24,6 +24,7 @@ class Torus : public Object3D
 {
 public:
     explicit Torus(double inner_radius, double outer_radius, int slices, int steps);
+    virtual ~Torus();
     
 private:
     int slices_, steps_;

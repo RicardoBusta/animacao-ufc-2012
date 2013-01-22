@@ -72,227 +72,8 @@ Joint* SceneContainer::addObject(QString label, QString objfile, QString texfile
     return newjoint;
 }
 
-void SceneContainer::CreateDefaultScene() {
-    //Hand Scene
-    Joint* arm_base = addObject("Arm Base",":/models/arm_base.obj",":/textures/wooden.png",QVector3D(0,0.75,0), QQuaternion(1,0,0,0), NULL);
-    Joint* arm_part1 = addObject("Part 1",":/models/arm_part1.obj",":/textures/wooden.png",QVector3D(0,0.25,0),QQuaternion(1,0,0,0),arm_base);
-    Joint* arm_part2 = addObject("Part 2",":/models/arm_part2.obj",":/textures/wooden.png",QVector3D(0,3.7,0),QQuaternion(1,0,0,0),arm_part1);
-    Joint* arm_hand = addObject("Hand",":/models/arm_hand.obj",":/textures/wooden.png",QVector3D(0,4.7,0),QQuaternion(1,0,0,0),arm_part2);
-    //    Joint* arm_hand = AddObject("Hand",":/models/face_eye.obj",":/textures/eye.png",QVector3D(0,4.7,0),QQuaternion(1,0,0,0),arm_part2);
-
-
-
-    Joint* arm_finger_5_1 = addObject("Finger 5 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0.5,1.4,0),QQuaternion(1,0,0,0),arm_hand);
-    Joint* arm_finger_4_1 = addObject("Finger 4 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0.2,1.5,0),QQuaternion(1,0,0,0),arm_hand);
-    Joint* arm_finger_3_1 = addObject("Finger 3 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(-0.1,1.6,0),QQuaternion(1,0,0,0),arm_hand);
-    Joint* arm_finger_2_1 = addObject("Finger 2 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(-0.4,1.5,0),QQuaternion(1,0,0,0),arm_hand);
-    Joint* arm_finger_1_1 = addObject("Finger 1 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(-0.6,1,0),QQuaternion(1,0,0,0),arm_hand);
-
-    Joint* arm_finger_5_2 = addObject("Finger 5 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),arm_finger_5_1);
-    Joint* arm_finger_4_2 = addObject("Finger 4 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),arm_finger_4_1);
-    Joint* arm_finger_3_2 = addObject("Finger 3 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),arm_finger_3_1);
-    Joint* arm_finger_2_2 = addObject("Finger 2 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),arm_finger_2_1);
-    Joint* arm_finger_1_2 = addObject("Finger 1 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),arm_finger_1_1);
-
-    ObjectAnimator *animate;
-
-    animate = arm_base->getAnimator();
-
-    animate->addKeyPosition(0,qglviewer::Vec(0,0,0));
-    animate->addKeyPosition(25,qglviewer::Vec(2,2,3));
-    animate->addKeyPosition(50,qglviewer::Vec(4,0,5));
-    animate->addKeyPosition(75,qglviewer::Vec(6,2,3));
-    animate->addKeyPosition(100,qglviewer::Vec(8,0,0));
-
-    animate->addKeyOrientation(0, 0,0,0);
-    animate->addKeyOrientation(25, 90,0,0);
-    animate->addKeyOrientation(50, 90,90,30);
-    animate->addKeyOrientation(75, 90,90,90);
-    animate->addKeyOrientation(100, 0,0,0);
-
-    animate = arm_part1->getAnimator();
-    animate->addKeyOrientation(0, 0,0,0);
-    animate->addKeyOrientation(25, 90,0,0);
-    animate->addKeyOrientation(50, 90,90,30);
-    animate->addKeyOrientation(75, 90,90,90);
-    animate->addKeyOrientation(100, 0,0,0);
-
-    animate = arm_part2->getAnimator();
-    animate->addKeyOrientation(0, 0,0,0);
-    animate->addKeyOrientation(25, 90,0,0);
-    animate->addKeyOrientation(50, 90,90,30);
-    animate->addKeyOrientation(75, 90,90,90);
-    animate->addKeyOrientation(100, 0,0,0);
-
-    animate = arm_hand->getAnimator();
-    animate->addKeyOrientation(0, 0,0,0);
-    animate->addKeyOrientation(25, 90,0,0);
-    animate->addKeyOrientation(50, 90,90,30);
-    animate->addKeyOrientation(75, 90,90,90);
-    animate->addKeyOrientation(100, 0,0,0);
-
-    animate = arm_finger_1_1->getAnimator();
-    animate->addKeyOrientation(0, 0,0,0);
-    animate->addKeyOrientation(25, 90,0,0);
-    animate->addKeyOrientation(50, 90,90,30);
-    animate->addKeyOrientation(75, 90,90,90);
-    animate->addKeyOrientation(100, 0,0,0);
-
-    animate = arm_finger_2_1->getAnimator();
-    animate->addKeyOrientation(0, 0,0,0);
-    animate->addKeyOrientation(25, 90,0,0);
-    animate->addKeyOrientation(50, 90,90,30);
-    animate->addKeyOrientation(75, 90,90,90);
-    animate->addKeyOrientation(100, 0,0,0);
-
-    animate = arm_finger_3_1->getAnimator();
-    animate->addKeyOrientation(0, 0,0,0);
-    animate->addKeyOrientation(25, 90,0,0);
-    animate->addKeyOrientation(50, 90,90,30);
-    animate->addKeyOrientation(75, 90,90,90);
-    animate->addKeyOrientation(100, 0,0,0);
-
-    animate = arm_finger_4_1->getAnimator();
-    animate->addKeyOrientation(0, 0,0,0);
-    animate->addKeyOrientation(25, 90,0,0);
-    animate->addKeyOrientation(50, 90,90,30);
-    animate->addKeyOrientation(75, 90,90,90);
-    animate->addKeyOrientation(100, 0,0,0);
-
-    animate = arm_finger_5_1->getAnimator();
-    animate->addKeyOrientation(0, 0,0,0);
-    animate->addKeyOrientation(25, 90,0,0);
-    animate->addKeyOrientation(50, 90,90,30);
-    animate->addKeyOrientation(75, 90,90,90);
-    animate->addKeyOrientation(100, 0,0,0);//*/
-
-    //Face Scene
-    Joint* face_head = addObject("Head",":/models/face_head.obj","://textures/wooden.png",QVector3D(0,3,0), QQuaternion(1,0,0,0), arm_hand);
-    //    Joint* face_head = AddObject("Head",":/models/face_head.obj","://textures/wooden.png",QVector3D(-5,3,0), QQuaternion(1,0,0,0), NULL);
-    Joint* face_teeth_top = addObject("Teeth Up",":/models/face_teeth_top.obj",":/textures/stache_teeth.png",QVector3D(0,-1.5,1), QQuaternion(1,0,0,0), face_head);
-    Joint* face_teeth_bot = addObject("Teeth Down",":/models/face_teeth_bot.obj",":/textures/stache_teeth.png",QVector3D(0,-1.5,1), QQuaternion(1,0,0,0), face_head);
-    Joint* face_eye_lid_back_left = addObject("Eye Lid Back Left",":/models/face_eye_lid_back.obj",":/textures/wooden.png",QVector3D(0.7,0.5,1.7), QQuaternion(1,0,0,0), face_head);
-    Joint* face_eye_lid_back_right = addObject("Eye Lid Back Right",":/models/face_eye_lid_back.obj",":/textures/wooden.png",QVector3D(-0.7,0.5,1.7), QQuaternion(1,0,0,0), face_head);
-    Joint* face_eye_left = addObject("Eye Left",":/models/face_eye.obj",":/textures/eye.png",QVector3D(0,0,0), QQuaternion(1,0,0,0), face_eye_lid_back_left);
-    Joint* face_eye_right = addObject("Eye Right",":/models/face_eye.obj",":/textures/eye.png",QVector3D(0,0,0), QQuaternion(1,0,0,0), face_eye_lid_back_right);
-    Joint* face_eye_lid_top_left = addObject("Eye Lid Top Left",":/models/face_eye_lid_front.obj",":/textures/wooden.png",QVector3D(0,0,0), QQuaternion(1,0,0,0), face_eye_lid_back_left);
-    Joint* face_eye_lid_top_right = addObject("Eye Lid Top Right",":/models/face_eye_lid_front.obj",":/textures/wooden.png",QVector3D(0,0,0), QQuaternion(1,0,0,0), face_eye_lid_back_right);
-    Joint* face_eye_lid_bot_left = addObject("Eye Lid Bot Left",":/models/face_eye_lid_front.obj",":/textures/wooden.png",QVector3D(0,0,0), QQuaternion(cos(M_PI_4),sin(M_PI_4),0,0), face_eye_lid_back_left);
-    Joint* face_eye_lid_bot_right = addObject("Eye Lid Bot Right",":/models/face_eye_lid_front.obj",":/textures/wooden.png",QVector3D(0,0,0), QQuaternion(cos(M_PI_4),sin(M_PI_4),0,0), face_eye_lid_back_right);
-    Joint* face_brow_left = addObject("Eye Brow Left",":/models/face_brow.obj",":/textures/wooden.png",QVector3D(0.3,1,0), QQuaternion(1,0,0,0), face_eye_lid_back_left);
-    Joint* face_brow_right = addObject("Eye Brow Right",":/models/face_brow.obj",":/textures/wooden.png",QVector3D(-0.3,1,0), QQuaternion(1,0,0,0), face_eye_lid_back_right);
-    Joint* face_stache = addObject("Stache",":/models/face_stache.obj",":/textures/stache_teeth.png",QVector3D(0,-0.5,2), QQuaternion(1,0,0,0), face_head);
-    Joint* face_hat = addObject("Hat",":/models/face_hat.obj",":/textures/wooden.png",QVector3D(0,1.4,0), QQuaternion(1,0,0,0), face_head);
-
-    animate = face_teeth_bot->getAnimator();
-    animate->addKeyOrientation(0, 0,0,0);
-    animate->addKeyOrientation(50, 0.5,0,0);
-    animate->addKeyOrientation(100, 0,0,0);
-
-    animate = face_eye_lid_top_left->getAnimator();
-    animate->addKeyOrientation(0, 0,0,0);
-    animate->addKeyOrientation(25, -0.5,0,0);
-    animate->addKeyOrientation(50, 0,0,0);
-    animate->addKeyOrientation(75, -0.5,0,0);
-    animate->addKeyOrientation(100, 0,0,0);
-
-    animate = face_eye_lid_bot_left->getAnimator();
-    animate->addKeyOrientation(0, 1.6,0,0);
-    animate->addKeyOrientation(25, 2.1,0,0);
-    animate->addKeyOrientation(50, 1.6,0,0);
-    animate->addKeyOrientation(75, 2.1,0,0);
-    animate->addKeyOrientation(100, 1.6,0,0);
-
-    animate = face_eye_lid_top_right->getAnimator();
-    animate->addKeyOrientation(0, 0,0,0);
-    animate->addKeyOrientation(25, -0.5,0,0);
-    animate->addKeyOrientation(50, 0,0,0);
-    animate->addKeyOrientation(75, -0.5,0,0);
-    animate->addKeyOrientation(100, 0,0,0);
-
-    animate = face_eye_lid_bot_right->getAnimator();
-    animate->addKeyOrientation(0, 1.6,0,0);
-    animate->addKeyOrientation(25, 2.1,0,0);
-    animate->addKeyOrientation(50, 1.6,0,0);
-    animate->addKeyOrientation(75, 2.1,0,0);
-    animate->addKeyOrientation(100, 1.6,0,0);
-
-    /*   Torus* ss = new Torus(2,3,36,36);
-    Joint* joint0 = new Joint(ss);
-
-    Torus* ss2 = new Torus(2,3,36,36);
-    Joint* joint_1 = new Joint(ss2);
-    joint_1->AddChildJoint(joint0);
-    //joint0->SetNewPosition(qglviewer::Vec(0,2,0));
-
-    objects_.push_back(joint0);*/
-
-    /*
-    FileObj* obj = new FileObj();
-    Object3D *teste = obj;
-    obj->loadFile(":/models/ship.obj");
-    obj->loadTex(":/textures/ship.png");
-    Joint *joint = new Joint(teste);
-    joint->SetNewPosition(qglviewer::Vec(-1,0,0));
-
-
-    ObjectAnimator *animteste = new ObjectAnimator(joint);
-
-
-    FileObj* obj2 = new FileObj();
-    obj2->loadFile(":/models/ship.obj");
-    obj2->loadTex(":/textures/ship.png");
-    Object3D *teste2 = obj2;
-    Joint *joint2 = new Joint(teste2);
-    joint2->SetNewPosition(qglviewer::Vec(1,2,0));
-    joint->AddChildJoint(joint2);
-
-    ObjectAnimator *animteste2 = new ObjectAnimator(joint2);
-
-    SceneContainer::objects_.push_back(joint);
-    SceneContainer::animators_.push_back(animteste);
-    SceneContainer::animators_.push_back(animteste2);
-
-    animteste->AddKeyPosition(0,qglviewer::Vec(0,0,0));
-    animteste->AddKeyPosition(25,qglviewer::Vec(2,2,3));
-    animteste->AddKeyPosition(50,qglviewer::Vec(4,0,5));
-    animteste->AddKeyPosition(75,qglviewer::Vec(6,2,3));
-    animteste->AddKeyPosition(100,qglviewer::Vec(8,0,0));
-
-    animteste->AddKeyOrientation(0, 0,0,0);
-    animteste->AddKeyOrientation(25, 90,0,0);
-    animteste->AddKeyOrientation(50, 90,90,30);
-    animteste->AddKeyOrientation(75, 90,90,90);
-    animteste->AddKeyOrientation(100, 0,0,0);
-    */
-
-    /*animteste2->AddKeyPosition(0,qglviewer::Vec(0,0,0));
-    animteste2->AddKeyPosition(25,qglviewer::Vec(2,2,3));
-    animteste2->AddKeyPosition(50,qglviewer::Vec(4,0,5));
-    animteste2->AddKeyPosition(75,qglviewer::Vec(6,2,3));
-    animteste2->AddKeyPosition(100,qglviewer::Vec(8,0,0));*/
-
-    /*animteste2->AddKeyOrientation(0, 0,0,0);
-    animteste2->AddKeyOrientation(25, 90,0,0);
-    animteste2->AddKeyOrientation(50, 90,90,30);
-    animteste2->AddKeyOrientation(75, 90,90,90);
-    animteste2->AddKeyOrientation(100, 0,0,0);*/
-
-    //    animteste->AddKeyOrientation(0,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(0,1,0)));
-    //    animteste->AddKeyOrientation(25,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(1,0,1)));
-    //    animteste->AddKeyOrientation(50,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(-1,0,1)));
-    //    animteste->AddKeyOrientation(75,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(0,1,0)));
-    //    animteste->AddKeyOrientation(100,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(1,0,0)));
-
-
-    /*animator->AddKeyOrientation(0,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(0,1,0)));
-    animator->AddKeyOrientation(25,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(0,0,1)));
-    animator->AddKeyOrientation(50,qglviewer::Quaternion(qglviewer::Vec(0,1,0),qglviewer::Vec(1,0,0)));
-    animator->AddKeyOrientation(75,qglviewer::Quaternion(qglviewer::Vec(0,0,1),90));
-    animator->AddKeyOrientation(100,qglviewer::Quaternion(qglviewer::Vec(0,0,1),0));*/
-    //animteste->SetPosInterpolationType(PosInterpolator::kCatmullRoom);
-    //teste->SetRENDEROrientationAxes(true);
-
+void SceneContainer::CreateDefaultScene(int scene) {
+    createMonkeyHeadScene();
 }
 
 int SceneContainer::start_frame() {
@@ -480,4 +261,309 @@ QString SceneContainer::genOutput()
 {
     QString output;
     return "";
+}
+
+void SceneContainer::clearScene()
+{
+    while(animators_.size()>0){
+        delete animators_.back();
+        animators_.pop_back();
+    }
+    while(objects_.size()>0){
+        delete objects_.back();
+        objects_.pop_back();
+    }
+}
+
+void SceneContainer::createMonkeyHeadScene(){
+    //Face Scene
+    Joint* face_head = addObject("Head",":/models/face_head.obj","://textures/wooden.png",QVector3D(0,2,0), QQuaternion(1,0,0,0), NULL);
+    Joint* face_teeth_top = addObject("Teeth Up",":/models/face_teeth_top.obj",":/textures/stache_teeth.png",QVector3D(0,-1.5,1), QQuaternion(1,0,0,0), face_head);
+    Joint* face_teeth_bot = addObject("Teeth Down",":/models/face_teeth_bot.obj",":/textures/stache_teeth.png",QVector3D(0,-1.5,1), QQuaternion(1,0,0,0), face_head);
+    Joint* face_eye_lid_back_left = addObject("Eye Lid Back Left",":/models/face_eye_lid_back.obj",":/textures/wooden.png",QVector3D(0.7,0.5,1.7), QQuaternion(1,0,0,0), face_head);
+    Joint* face_eye_lid_back_right = addObject("Eye Lid Back Right",":/models/face_eye_lid_back.obj",":/textures/wooden.png",QVector3D(-0.7,0.5,1.7), QQuaternion(1,0,0,0), face_head);
+    Joint* face_eye_left = addObject("Eye Left",":/models/face_eye.obj",":/textures/eye.png",QVector3D(0,0,0), QQuaternion(1,0,0,0), face_eye_lid_back_left);
+    Joint* face_eye_right = addObject("Eye Right",":/models/face_eye.obj",":/textures/eye.png",QVector3D(0,0,0), QQuaternion(1,0,0,0), face_eye_lid_back_right);
+    Joint* face_eye_lid_top_left = addObject("Eye Lid Top Left",":/models/face_eye_lid_front.obj",":/textures/wooden.png",QVector3D(0,0,0), QQuaternion(1,0,0,0), face_eye_lid_back_left);
+    Joint* face_eye_lid_top_right = addObject("Eye Lid Top Right",":/models/face_eye_lid_front.obj",":/textures/wooden.png",QVector3D(0,0,0), QQuaternion(1,0,0,0), face_eye_lid_back_right);
+    Joint* face_eye_lid_bot_left = addObject("Eye Lid Bot Left",":/models/face_eye_lid_front.obj",":/textures/wooden.png",QVector3D(0,0,0), QQuaternion(cos(M_PI_4),sin(M_PI_4),0,0), face_eye_lid_back_left);
+    Joint* face_eye_lid_bot_right = addObject("Eye Lid Bot Right",":/models/face_eye_lid_front.obj",":/textures/wooden.png",QVector3D(0,0,0), QQuaternion(cos(M_PI_4),sin(M_PI_4),0,0), face_eye_lid_back_right);
+    Joint* face_brow_left = addObject("Eye Brow Left",":/models/face_brow.obj",":/textures/wooden.png",QVector3D(0.3,1,0), QQuaternion(1,0,0,0), face_eye_lid_back_left);
+    Joint* face_brow_right = addObject("Eye Brow Right",":/models/face_brow.obj",":/textures/wooden.png",QVector3D(-0.3,1,0), QQuaternion(1,0,0,0), face_eye_lid_back_right);
+    Joint* face_stache = addObject("Stache",":/models/face_stache.obj",":/textures/stache_teeth.png",QVector3D(0,-0.5,2), QQuaternion(1,0,0,0), face_head);
+    Joint* face_hat = addObject("Hat",":/models/face_hat.obj",":/textures/wooden.png",QVector3D(0,1.4,0), QQuaternion(1,0,0,0), face_head);
+
+    ObjectAnimator *animate;
+
+    animate = face_teeth_bot->getAnimator();
+    animate->addKeyOrientation(0, 0,0,0);
+    animate->addKeyOrientation(50, 0.5,0,0);
+    animate->addKeyOrientation(100, 0,0,0);
+
+    animate = face_eye_lid_top_left->getAnimator();
+    animate->addKeyOrientation(0, 0,0,0);
+    animate->addKeyOrientation(25, -0.5,0,0);
+    animate->addKeyOrientation(50, 0,0,0);
+    animate->addKeyOrientation(75, -0.5,0,0);
+    animate->addKeyOrientation(100, 0,0,0);
+
+    animate = face_eye_lid_bot_left->getAnimator();
+    animate->addKeyOrientation(0, 1.6,0,0);
+    animate->addKeyOrientation(25, 2.1,0,0);
+    animate->addKeyOrientation(50, 1.6,0,0);
+    animate->addKeyOrientation(75, 2.1,0,0);
+    animate->addKeyOrientation(100, 1.6,0,0);
+
+    animate = face_eye_lid_top_right->getAnimator();
+    animate->addKeyOrientation(0, 0,0,0);
+    animate->addKeyOrientation(25, -0.5,0,0);
+    animate->addKeyOrientation(50, 0,0,0);
+    animate->addKeyOrientation(75, -0.5,0,0);
+    animate->addKeyOrientation(100, 0,0,0);
+
+    animate = face_eye_lid_bot_right->getAnimator();
+    animate->addKeyOrientation(0, 1.6,0,0);
+    animate->addKeyOrientation(25, 2.1,0,0);
+    animate->addKeyOrientation(50, 1.6,0,0);
+    animate->addKeyOrientation(75, 2.1,0,0);
+    animate->addKeyOrientation(100, 1.6,0,0);
+}
+
+void SceneContainer::createArmScene(){
+    //Hand Scene
+    Joint* arm_base = addObject("Arm Base",":/models/arm_base.obj",":/textures/wooden.png",QVector3D(0,0.75,0), QQuaternion(1,0,0,0), NULL);
+    Joint* arm_part1 = addObject("Part 1",":/models/arm_part1.obj",":/textures/wooden.png",QVector3D(0,0.25,0),QQuaternion(1,0,0,0),arm_base);
+    Joint* arm_part2 = addObject("Part 2",":/models/arm_part2.obj",":/textures/wooden.png",QVector3D(0,3.7,0),QQuaternion(1,0,0,0),arm_part1);
+    Joint* arm_hand = addObject("Hand",":/models/arm_hand.obj",":/textures/wooden.png",QVector3D(0,4.7,0),QQuaternion(1,0,0,0),arm_part2);
+
+    Joint* arm_finger_5_1 = addObject("Finger 5 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0.5,1.4,0),QQuaternion(1,0,0,0),arm_hand);
+    Joint* arm_finger_4_1 = addObject("Finger 4 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0.2,1.5,0),QQuaternion(1,0,0,0),arm_hand);
+    Joint* arm_finger_3_1 = addObject("Finger 3 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(-0.1,1.6,0),QQuaternion(1,0,0,0),arm_hand);
+    Joint* arm_finger_2_1 = addObject("Finger 2 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(-0.4,1.5,0),QQuaternion(1,0,0,0),arm_hand);
+    Joint* arm_finger_1_1 = addObject("Finger 1 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(-0.6,1,0),QQuaternion(1,0,0,0),arm_hand);
+
+    Joint* arm_finger_5_2 = addObject("Finger 5 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),arm_finger_5_1);
+    Joint* arm_finger_4_2 = addObject("Finger 4 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),arm_finger_4_1);
+    Joint* arm_finger_3_2 = addObject("Finger 3 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),arm_finger_3_1);
+    Joint* arm_finger_2_2 = addObject("Finger 2 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),arm_finger_2_1);
+    Joint* arm_finger_1_2 = addObject("Finger 1 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),arm_finger_1_1);
+
+    ObjectAnimator *animate;
+
+    animate = arm_base->getAnimator();
+
+    animate->addKeyPosition(0,qglviewer::Vec(0,0,0));
+    animate->addKeyPosition(25,qglviewer::Vec(2,2,3));
+    animate->addKeyPosition(50,qglviewer::Vec(4,0,5));
+    animate->addKeyPosition(75,qglviewer::Vec(6,2,3));
+    animate->addKeyPosition(100,qglviewer::Vec(8,0,0));
+
+    animate->addKeyOrientation(0, 0,0,0);
+    animate->addKeyOrientation(25, 90,0,0);
+    animate->addKeyOrientation(50, 90,90,30);
+    animate->addKeyOrientation(75, 90,90,90);
+    animate->addKeyOrientation(100, 0,0,0);
+
+    animate = arm_part1->getAnimator();
+    animate->addKeyOrientation(0, 0,0,0);
+    animate->addKeyOrientation(25, 90,0,0);
+    animate->addKeyOrientation(50, 90,90,30);
+    animate->addKeyOrientation(75, 90,90,90);
+    animate->addKeyOrientation(100, 0,0,0);
+
+    animate = arm_part2->getAnimator();
+    animate->addKeyOrientation(0, 0,0,0);
+    animate->addKeyOrientation(25, 90,0,0);
+    animate->addKeyOrientation(50, 90,90,30);
+    animate->addKeyOrientation(75, 90,90,90);
+    animate->addKeyOrientation(100, 0,0,0);
+
+    animate = arm_hand->getAnimator();
+    animate->addKeyOrientation(0, 0,0,0);
+    animate->addKeyOrientation(25, 90,0,0);
+    animate->addKeyOrientation(50, 90,90,30);
+    animate->addKeyOrientation(75, 90,90,90);
+    animate->addKeyOrientation(100, 0,0,0);
+
+    animate = arm_finger_1_1->getAnimator();
+    animate->addKeyOrientation(0, 0,0,0);
+    animate->addKeyOrientation(25, 90,0,0);
+    animate->addKeyOrientation(50, 90,90,30);
+    animate->addKeyOrientation(75, 90,90,90);
+    animate->addKeyOrientation(100, 0,0,0);
+
+    animate = arm_finger_2_1->getAnimator();
+    animate->addKeyOrientation(0, 0,0,0);
+    animate->addKeyOrientation(25, 90,0,0);
+    animate->addKeyOrientation(50, 90,90,30);
+    animate->addKeyOrientation(75, 90,90,90);
+    animate->addKeyOrientation(100, 0,0,0);
+
+    animate = arm_finger_3_1->getAnimator();
+    animate->addKeyOrientation(0, 0,0,0);
+    animate->addKeyOrientation(25, 90,0,0);
+    animate->addKeyOrientation(50, 90,90,30);
+    animate->addKeyOrientation(75, 90,90,90);
+    animate->addKeyOrientation(100, 0,0,0);
+
+    animate = arm_finger_4_1->getAnimator();
+    animate->addKeyOrientation(0, 0,0,0);
+    animate->addKeyOrientation(25, 90,0,0);
+    animate->addKeyOrientation(50, 90,90,30);
+    animate->addKeyOrientation(75, 90,90,90);
+    animate->addKeyOrientation(100, 0,0,0);
+
+    animate = arm_finger_5_1->getAnimator();
+    animate->addKeyOrientation(0, 0,0,0);
+    animate->addKeyOrientation(25, 90,0,0);
+    animate->addKeyOrientation(50, 90,90,30);
+    animate->addKeyOrientation(75, 90,90,90);
+    animate->addKeyOrientation(100, 0,0,0);
+}
+void SceneContainer::createArmMonkeyScene(){
+    Joint* arm_base = addObject("Arm Base",":/models/arm_base.obj",":/textures/wooden.png",QVector3D(0,0.75,0), QQuaternion(1,0,0,0), NULL);
+    Joint* arm_part1 = addObject("Part 1",":/models/arm_part1.obj",":/textures/wooden.png",QVector3D(0,0.25,0),QQuaternion(1,0,0,0),arm_base);
+    Joint* arm_part2 = addObject("Part 2",":/models/arm_part2.obj",":/textures/wooden.png",QVector3D(0,3.7,0),QQuaternion(1,0,0,0),arm_part1);
+    Joint* arm_hand = addObject("Hand",":/models/arm_hand.obj",":/textures/wooden.png",QVector3D(0,4.7,0),QQuaternion(1,0,0,0),arm_part2);
+
+    ObjectAnimator *animate;
+
+    animate = arm_base->getAnimator();
+
+    animate->addKeyPosition(0,qglviewer::Vec(0,0,0));
+    animate->addKeyPosition(25,qglviewer::Vec(2,2,3));
+    animate->addKeyPosition(50,qglviewer::Vec(4,0,5));
+    animate->addKeyPosition(75,qglviewer::Vec(6,2,3));
+    animate->addKeyPosition(100,qglviewer::Vec(8,0,0));
+
+    animate->addKeyOrientation(0, 0,0,0);
+    animate->addKeyOrientation(25, 90,0,0);
+    animate->addKeyOrientation(50, 90,90,30);
+    animate->addKeyOrientation(75, 90,90,90);
+    animate->addKeyOrientation(100, 0,0,0);
+
+    animate = arm_part1->getAnimator();
+    animate->addKeyOrientation(0, 0,0,0);
+    animate->addKeyOrientation(25, 90,0,0);
+    animate->addKeyOrientation(50, 90,90,30);
+    animate->addKeyOrientation(75, 90,90,90);
+    animate->addKeyOrientation(100, 0,0,0);
+
+    animate = arm_part2->getAnimator();
+    animate->addKeyOrientation(0, 0,0,0);
+    animate->addKeyOrientation(25, 90,0,0);
+    animate->addKeyOrientation(50, 90,90,30);
+    animate->addKeyOrientation(75, 90,90,90);
+    animate->addKeyOrientation(100, 0,0,0);
+
+    animate = arm_hand->getAnimator();
+    animate->addKeyOrientation(0, 0,0,0);
+    animate->addKeyOrientation(25, 90,0,0);
+    animate->addKeyOrientation(50, 90,90,30);
+    animate->addKeyOrientation(75, 90,90,90);
+    animate->addKeyOrientation(100, 0,0,0);
+
+    //Face Scene
+    Joint* face_head = addObject("Head",":/models/face_head.obj","://textures/wooden.png",QVector3D(0,2,0), QQuaternion(1,0,0,0), arm_hand);
+    Joint* face_teeth_top = addObject("Teeth Up",":/models/face_teeth_top.obj",":/textures/stache_teeth.png",QVector3D(0,-1.5,1), QQuaternion(1,0,0,0), face_head);
+    Joint* face_teeth_bot = addObject("Teeth Down",":/models/face_teeth_bot.obj",":/textures/stache_teeth.png",QVector3D(0,-1.5,1), QQuaternion(1,0,0,0), face_head);
+    Joint* face_eye_lid_back_left = addObject("Eye Lid Back Left",":/models/face_eye_lid_back.obj",":/textures/wooden.png",QVector3D(0.7,0.5,1.7), QQuaternion(1,0,0,0), face_head);
+    Joint* face_eye_lid_back_right = addObject("Eye Lid Back Right",":/models/face_eye_lid_back.obj",":/textures/wooden.png",QVector3D(-0.7,0.5,1.7), QQuaternion(1,0,0,0), face_head);
+    Joint* face_eye_left = addObject("Eye Left",":/models/face_eye.obj",":/textures/eye.png",QVector3D(0,0,0), QQuaternion(1,0,0,0), face_eye_lid_back_left);
+    Joint* face_eye_right = addObject("Eye Right",":/models/face_eye.obj",":/textures/eye.png",QVector3D(0,0,0), QQuaternion(1,0,0,0), face_eye_lid_back_right);
+    Joint* face_eye_lid_top_left = addObject("Eye Lid Top Left",":/models/face_eye_lid_front.obj",":/textures/wooden.png",QVector3D(0,0,0), QQuaternion(1,0,0,0), face_eye_lid_back_left);
+    Joint* face_eye_lid_top_right = addObject("Eye Lid Top Right",":/models/face_eye_lid_front.obj",":/textures/wooden.png",QVector3D(0,0,0), QQuaternion(1,0,0,0), face_eye_lid_back_right);
+    Joint* face_eye_lid_bot_left = addObject("Eye Lid Bot Left",":/models/face_eye_lid_front.obj",":/textures/wooden.png",QVector3D(0,0,0), QQuaternion(cos(M_PI_4),sin(M_PI_4),0,0), face_eye_lid_back_left);
+    Joint* face_eye_lid_bot_right = addObject("Eye Lid Bot Right",":/models/face_eye_lid_front.obj",":/textures/wooden.png",QVector3D(0,0,0), QQuaternion(cos(M_PI_4),sin(M_PI_4),0,0), face_eye_lid_back_right);
+    Joint* face_brow_left = addObject("Eye Brow Left",":/models/face_brow.obj",":/textures/wooden.png",QVector3D(0.3,1,0), QQuaternion(1,0,0,0), face_eye_lid_back_left);
+    Joint* face_brow_right = addObject("Eye Brow Right",":/models/face_brow.obj",":/textures/wooden.png",QVector3D(-0.3,1,0), QQuaternion(1,0,0,0), face_eye_lid_back_right);
+    Joint* face_stache = addObject("Stache",":/models/face_stache.obj",":/textures/stache_teeth.png",QVector3D(0,-0.5,2), QQuaternion(1,0,0,0), face_head);
+    Joint* face_hat = addObject("Hat",":/models/face_hat.obj",":/textures/wooden.png",QVector3D(0,1.4,0), QQuaternion(1,0,0,0), face_head);
+
+    animate = face_teeth_bot->getAnimator();
+    animate->addKeyOrientation(0, 0,0,0);
+    animate->addKeyOrientation(50, 0.5,0,0);
+    animate->addKeyOrientation(100, 0,0,0);
+
+    animate = face_eye_lid_top_left->getAnimator();
+    animate->addKeyOrientation(0, 0,0,0);
+    animate->addKeyOrientation(25, -0.5,0,0);
+    animate->addKeyOrientation(50, 0,0,0);
+    animate->addKeyOrientation(75, -0.5,0,0);
+    animate->addKeyOrientation(100, 0,0,0);
+
+    animate = face_eye_lid_bot_left->getAnimator();
+    animate->addKeyOrientation(0, 1.6,0,0);
+    animate->addKeyOrientation(25, 2.1,0,0);
+    animate->addKeyOrientation(50, 1.6,0,0);
+    animate->addKeyOrientation(75, 2.1,0,0);
+    animate->addKeyOrientation(100, 1.6,0,0);
+
+    animate = face_eye_lid_top_right->getAnimator();
+    animate->addKeyOrientation(0, 0,0,0);
+    animate->addKeyOrientation(25, -0.5,0,0);
+    animate->addKeyOrientation(50, 0,0,0);
+    animate->addKeyOrientation(75, -0.5,0,0);
+    animate->addKeyOrientation(100, 0,0,0);
+
+    animate = face_eye_lid_bot_right->getAnimator();
+    animate->addKeyOrientation(0, 1.6,0,0);
+    animate->addKeyOrientation(25, 2.1,0,0);
+    animate->addKeyOrientation(50, 1.6,0,0);
+    animate->addKeyOrientation(75, 2.1,0,0);
+    animate->addKeyOrientation(100, 1.6,0,0);
+}
+
+void SceneContainer::createRobotScene(){
+    //Face Scene
+    Joint* face_head = addObject("Head",":/models/face_head.obj","://textures/wooden.png",QVector3D(0,2,0), QQuaternion(1,0,0,0), NULL);
+    Joint* face_teeth_top = addObject("Teeth Up",":/models/face_teeth_top.obj",":/textures/stache_teeth.png",QVector3D(0,-1.5,1), QQuaternion(1,0,0,0), face_head);
+    Joint* face_teeth_bot = addObject("Teeth Down",":/models/face_teeth_bot.obj",":/textures/stache_teeth.png",QVector3D(0,-1.5,1), QQuaternion(1,0,0,0), face_head);
+    Joint* face_eye_lid_back_left = addObject("Eye Lid Back Left",":/models/face_eye_lid_back.obj",":/textures/wooden.png",QVector3D(0.7,0.5,1.7), QQuaternion(1,0,0,0), face_head);
+    Joint* face_eye_lid_back_right = addObject("Eye Lid Back Right",":/models/face_eye_lid_back.obj",":/textures/wooden.png",QVector3D(-0.7,0.5,1.7), QQuaternion(1,0,0,0), face_head);
+    Joint* face_eye_left = addObject("Eye Left",":/models/face_eye.obj",":/textures/eye.png",QVector3D(0,0,0), QQuaternion(1,0,0,0), face_eye_lid_back_left);
+    Joint* face_eye_right = addObject("Eye Right",":/models/face_eye.obj",":/textures/eye.png",QVector3D(0,0,0), QQuaternion(1,0,0,0), face_eye_lid_back_right);
+    Joint* face_eye_lid_top_left = addObject("Eye Lid Top Left",":/models/face_eye_lid_front.obj",":/textures/wooden.png",QVector3D(0,0,0), QQuaternion(1,0,0,0), face_eye_lid_back_left);
+    Joint* face_eye_lid_top_right = addObject("Eye Lid Top Right",":/models/face_eye_lid_front.obj",":/textures/wooden.png",QVector3D(0,0,0), QQuaternion(1,0,0,0), face_eye_lid_back_right);
+    Joint* face_eye_lid_bot_left = addObject("Eye Lid Bot Left",":/models/face_eye_lid_front.obj",":/textures/wooden.png",QVector3D(0,0,0), QQuaternion(cos(M_PI_4),sin(M_PI_4),0,0), face_eye_lid_back_left);
+    Joint* face_eye_lid_bot_right = addObject("Eye Lid Bot Right",":/models/face_eye_lid_front.obj",":/textures/wooden.png",QVector3D(0,0,0), QQuaternion(cos(M_PI_4),sin(M_PI_4),0,0), face_eye_lid_back_right);
+    Joint* face_brow_left = addObject("Eye Brow Left",":/models/face_brow.obj",":/textures/wooden.png",QVector3D(0.3,1,0), QQuaternion(1,0,0,0), face_eye_lid_back_left);
+    Joint* face_brow_right = addObject("Eye Brow Right",":/models/face_brow.obj",":/textures/wooden.png",QVector3D(-0.3,1,0), QQuaternion(1,0,0,0), face_eye_lid_back_right);
+    Joint* face_stache = addObject("Stache",":/models/face_stache.obj",":/textures/stache_teeth.png",QVector3D(0,-0.5,2), QQuaternion(1,0,0,0), face_head);
+    Joint* face_hat = addObject("Hat",":/models/face_hat.obj",":/textures/wooden.png",QVector3D(0,1.4,0), QQuaternion(1,0,0,0), face_head);
+
+    ObjectAnimator *animate;
+
+    animate = face_teeth_bot->getAnimator();
+    animate->addKeyOrientation(0, 0,0,0);
+    animate->addKeyOrientation(50, 0.5,0,0);
+    animate->addKeyOrientation(100, 0,0,0);
+
+    animate = face_eye_lid_top_left->getAnimator();
+    animate->addKeyOrientation(0, 0,0,0);
+    animate->addKeyOrientation(25, -0.5,0,0);
+    animate->addKeyOrientation(50, 0,0,0);
+    animate->addKeyOrientation(75, -0.5,0,0);
+    animate->addKeyOrientation(100, 0,0,0);
+
+    animate = face_eye_lid_bot_left->getAnimator();
+    animate->addKeyOrientation(0, 1.6,0,0);
+    animate->addKeyOrientation(25, 2.1,0,0);
+    animate->addKeyOrientation(50, 1.6,0,0);
+    animate->addKeyOrientation(75, 2.1,0,0);
+    animate->addKeyOrientation(100, 1.6,0,0);
+
+    animate = face_eye_lid_top_right->getAnimator();
+    animate->addKeyOrientation(0, 0,0,0);
+    animate->addKeyOrientation(25, -0.5,0,0);
+    animate->addKeyOrientation(50, 0,0,0);
+    animate->addKeyOrientation(75, -0.5,0,0);
+    animate->addKeyOrientation(100, 0,0,0);
+
+    animate = face_eye_lid_bot_right->getAnimator();
+    animate->addKeyOrientation(0, 1.6,0,0);
+    animate->addKeyOrientation(25, 2.1,0,0);
+    animate->addKeyOrientation(50, 1.6,0,0);
+    animate->addKeyOrientation(75, 2.1,0,0);
+    animate->addKeyOrientation(100, 1.6,0,0);
 }

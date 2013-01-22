@@ -29,6 +29,7 @@ private:
 public:
 
     FileObj();
+    virtual ~FileObj();
 
     GLuint texID;
 

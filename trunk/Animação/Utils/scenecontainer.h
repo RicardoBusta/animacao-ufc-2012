@@ -19,9 +19,6 @@ public:
 
     static Viewer *viewer_reference_;
 
-    //! Scene definition
-    static void CreateDefaultScene();
-
     //! Animation parameters
     static int start_frame();
     static int end_frame();
@@ -69,6 +66,13 @@ public:
 
     //! I/O
     static QString genOutput();
+
+    //! Scene Manipulation
+    static void createMonkeyHeadScene();
+    static void createArmScene();
+    static void createArmMonkeyScene();
+    static void createRobotScene();
+    static void CreateDefaultScene(int scene);
 
     static void clearScene();
 

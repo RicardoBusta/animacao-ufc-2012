@@ -9,6 +9,17 @@ FileObj::FileObj()
     label_ = "Untitled";
 }
 
+FileObj::~FileObj()
+{
+    vertex.clear();
+
+    texturecoord.clear();
+
+    normal.clear();
+
+    face.clear();
+}
+
 void FileObj::drawObject()
 {
     if(!SceneContainer::renderBox()){

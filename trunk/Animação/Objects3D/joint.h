@@ -7,6 +7,7 @@ class Joint : public Object3D
 {
 public:
     Joint(Object3D* children_object);
+    virtual ~Joint();
 
     void addChildJoint(Joint* child);
 

@@ -14,7 +14,7 @@ public:
     Object3D(qglviewer::Vec pos);
     Object3D(qglviewer::Quaternion ori);
     Object3D(qglviewer::Vec pos, qglviewer::Quaternion ori);
-    ~Object3D();
+    virtual ~Object3D();
 
     std::string                    label();
     void                           setLabel(std::string label);

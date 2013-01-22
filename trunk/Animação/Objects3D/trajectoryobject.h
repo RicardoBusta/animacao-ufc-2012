@@ -11,6 +11,7 @@ class TrajectoryObject : public Object3D
 public:
     enum TrajectoryType {kPosition,kOrientation,kBoth};
     TrajectoryObject(ObjectAnimator* animator);
+    virtual ~TrajectoryObject();
 
     void update();
     void update(int start_frame, int end_frame);

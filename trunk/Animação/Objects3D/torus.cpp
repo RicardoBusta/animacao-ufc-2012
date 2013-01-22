@@ -30,6 +30,10 @@ Torus::Torus(double inner_radius, double outer_radius, int slices, int steps) :
     createSlices();
 }
 
+Torus::~Torus()
+{
+}
+
 void Torus::createSlices()
 {
     if(inner_radius_ > outer_radius_) {

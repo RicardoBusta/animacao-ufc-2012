@@ -9,6 +9,7 @@ class CurveObject : public Object3D
 {
 public:
     CurveObject(Curve* cuve);
+    virtual ~CurveObject();
 
 private:
     void drawObject();

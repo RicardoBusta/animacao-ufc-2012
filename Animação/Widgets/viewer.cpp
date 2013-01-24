@@ -31,7 +31,7 @@ void Viewer::draw() {
 
 void Viewer::drawWithNames(){
     SceneContainer::setDrawWithNames(true);
-    SceneContainer::drawObjects();
+    SceneContainer::drawObjectsNoShader();
     SceneContainer::setDrawWithNames(false);
 }
 
@@ -157,6 +157,7 @@ QString Viewer::helpString() const {
 
 void Viewer::setCurrentShader(int shader)
 {
+    current_shader_ = shader;
     shader_enabled_ = true;
     shaderProgram.removeAllShaders();
     switch(shader){
@@ -189,18 +190,18 @@ void Viewer::bindShader(){
 void Viewer::postSelection(const QPoint &point)
 {
     //std::cout << selectedName() << std::endl;
-    if(selectedName()>=0){
+    if(selectedName()>=-1){
         emit updateSelected(selectedName());
     }
 }
 
-#include <QMouseEvent>
+//#include <QMouseEvent>
 
-void Viewer::mousePressEvent(QMouseEvent *event)
-{
-    if(event->modifiers()&Qt::ControlModifier){
-        select(event->pos());
-    }else{
-        QGLViewer::mousePressEvent(event);
-    }
-}
+//void Viewer::mousePressEvent(QMouseEvent *event)
+//{
+//    if(event->modifiers()&Qt::ControlModifier){
+//        select(event->pos());
+//    }else{
+//        QGLViewer::mousePressEvent(event);
+//    }
+//}

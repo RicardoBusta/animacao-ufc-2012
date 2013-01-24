@@ -4,5 +4,6 @@
         <file>ship.png</file>
         <file>stache_teeth.png</file>
         <file>wooden.png</file>
+        <file>flammable.jpg</file>
     </qresource>
 </RCC>

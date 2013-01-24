@@ -66,7 +66,10 @@ Object3D *Joint::childObject()
 
 void Joint::drawBoundingBox()
 {
+    glPushMatrix();
+    child_object_->glTransform();
     child_object_->drawBoundingBox();
+    glPopMatrix();
 }
 
 void Joint::drawBone()

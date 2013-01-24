@@ -11,6 +11,8 @@
 
 #include "Objects3D/fileobj.h"
 
+#include "Widgets/viewer.h"
+
 #include <QQuaternion>
 Viewer* SceneContainer::viewer_reference_ = NULL;
 
@@ -44,6 +46,14 @@ void SceneContainer::drawObjects() {
     }
 }
 
+void SceneContainer::drawObjectsNoShader() {
+    for(unsigned int i = 0; i < objects_.size();i++){
+        Joint *object = objects_.at(i);
+        render_options_ = RENDER_NONE;
+        object->draw();
+    }
+}
+
 void SceneContainer::drawExtras()
 {
     for(unsigned int i = 0 ; i < extras_.size() ; i++ ) {
@@ -54,11 +64,13 @@ void SceneContainer::drawExtras()
 }
 
 
-Joint* SceneContainer::addObject(QString label, QString objfile, QString texfile, QVector3D position, QQuaternion rotation, Joint* parent){
+Joint* SceneContainer::addObject(QString label, QString objfile, QString texfile, QVector3D position, QQuaternion rotation, Joint* parent, QVector3D objPos, QQuaternion objRot){
     FileObj *newobj = new FileObj();
     newobj->setLabel( label.toStdString() );
     newobj->loadFile(objfile);
     newobj->loadTex(texfile);
+    newobj->setNewPosition(qglviewer::Vec(objPos.x(),objPos.y(),objPos.z()));
+    newobj->setNewOrientation(qglviewer::Quaternion(objRot.x(),objRot.y(),objRot.z(),objRot.scalar()));
     Joint *newjoint = new Joint(newobj);
     //newjoint->SetLabel( ( label+" Joint" ).toStdString());
     newjoint->setNewPosition(qglviewer::Vec(position.x(),position.y(),position.z()));
@@ -294,9 +306,19 @@ void SceneContainer::clearScene()
     }
 }
 
+bool SceneContainer::getDrawWithNames()
+{
+    return draw_with_names_;
+}
+
+void SceneContainer::setDrawWithNames(bool draw_with_names)
+{
+    draw_with_names_ = draw_with_names;
+}
+
 void SceneContainer::createMonkeyHeadScene(){
     //Face Scene
-    Joint* face_head = addObject("Head",":/models/face_head.obj","://textures/wooden.png",QVector3D(0,2,0), QQuaternion(1,0,0,0), NULL);
+    Joint* face_head = addObject("Head",":/models/face_head.obj","://textures/wooden.png",QVector3D(0,4,0), QQuaternion(1,0,0,0), NULL);
     Joint* face_teeth_top = addObject("Teeth Up",":/models/face_teeth_top.obj",":/textures/stache_teeth.png",QVector3D(0,-1.5,1), QQuaternion(1,0,0,0), face_head);
     Joint* face_teeth_bot = addObject("Teeth Down",":/models/face_teeth_bot.obj",":/textures/stache_teeth.png",QVector3D(0,-1.5,1), QQuaternion(1,0,0,0), face_head);
     Joint* face_eye_lid_back_left = addObject("Eye Lid Back Left",":/models/face_eye_lid_back.obj",":/textures/wooden.png",QVector3D(0.7,0.5,1.7), QQuaternion(1,0,0,0), face_head);
@@ -346,6 +368,8 @@ void SceneContainer::createMonkeyHeadScene(){
     animate->addKeyOrientation(50, 1.6,0,0);
     animate->addKeyOrientation(75, 2.1,0,0);
     animate->addKeyOrientation(100, 1.6,0,0);
+
+    viewer_reference_->camera()->fitSphere(qglviewer::Vec(0,5,0),6);
 }
 
 void SceneContainer::createArmScene(){
@@ -438,6 +462,8 @@ void SceneContainer::createArmScene(){
     animate->addKeyOrientation(50, 90,90,30);
     animate->addKeyOrientation(75, 90,90,90);
     animate->addKeyOrientation(100, 0,0,0);
+
+    viewer_reference_->camera()->fitSphere(qglviewer::Vec(0,5,0),8);
 }
 void SceneContainer::createMonkeySnakeScene(){
     Joint* arm_base = addObject("Arm Base",":/models/arm_base.obj",":/textures/wooden.png",QVector3D(0,0.75,0), QQuaternion(1,0,0,0), NULL);
@@ -531,85 +557,78 @@ void SceneContainer::createMonkeySnakeScene(){
     animate->addKeyOrientation(50, 1.6,0,0);
     animate->addKeyOrientation(75, 2.1,0,0);
     animate->addKeyOrientation(100, 1.6,0,0);
+
+    viewer_reference_->camera()->fitSphere(qglviewer::Vec(0,7,0),9);
 }
 
 void SceneContainer::createRobotScene(){
 
     //! Body
-    Joint* body = addObject("Body Top",":/models/body.obj",":/textures/wooden.png",QVector3D(0,3.7,0),QQuaternion(1,0,0,0),NULL);
-    Joint* neck = addObject("Neck",":/models/arm_hand.obj",":/textures/wooden.png",QVector3D(0,3.6,0),QQuaternion(1,0,0,0),body);
+    Joint* body = addObject("body",":/models/body.obj",":/textures/flammable.jpg",QVector3D(0,10,0),QQuaternion(1,0,0,0),NULL);
+    Joint* neck = addObject("neck",":/models/arm_hand.obj",":/textures/wooden.png",QVector3D(0,3.6,0),QQuaternion(1,0,0,0),body);
+    Joint* tail = addObject("Tail",":/models/tail.obj",":/textures/wooden.png",QVector3D(0,-1.05,-2),QQuaternion(1,0,0,0),body);
 
     //! Face
-    Joint* face_head = addObject("Head",":/models/face_head.obj","://textures/wooden.png",QVector3D(0,2,0), QQuaternion(1,0,0,0), neck);
-    /*Joint* face_teeth_top =*/ addObject("Teeth Up",":/models/face_teeth_top.obj",":/textures/stache_teeth.png",QVector3D(0,-1.5,1), QQuaternion(1,0,0,0), face_head);
-    Joint* face_teeth_bot = addObject("Teeth Down",":/models/face_teeth_bot.obj",":/textures/stache_teeth.png",QVector3D(0,-1.5,1), QQuaternion(1,0,0,0), face_head);
-    Joint* face_eye_lid_back_left = addObject("Eye Lid Back Left",":/models/face_eye_lid_back.obj",":/textures/wooden.png",QVector3D(0.7,0.5,1.7), QQuaternion(1,0,0,0), face_head);
-    Joint* face_eye_lid_back_right = addObject("Eye Lid Back Right",":/models/face_eye_lid_back.obj",":/textures/wooden.png",QVector3D(-0.7,0.5,1.7), QQuaternion(1,0,0,0), face_head);
-    /*Joint* face_eye_left =*/ addObject("Eye Left",":/models/face_eye.obj",":/textures/eye.png",QVector3D(0,0,0), QQuaternion(1,0,0,0), face_eye_lid_back_left);
-    /*Joint* face_eye_right =*/ addObject("Eye Right",":/models/face_eye.obj",":/textures/eye.png",QVector3D(0,0,0), QQuaternion(1,0,0,0), face_eye_lid_back_right);
-    Joint* face_eye_lid_top_left = addObject("Eye Lid Top Left",":/models/face_eye_lid_front.obj",":/textures/wooden.png",QVector3D(0,0,0), QQuaternion(1,0,0,0), face_eye_lid_back_left);
-    Joint* face_eye_lid_top_right = addObject("Eye Lid Top Right",":/models/face_eye_lid_front.obj",":/textures/wooden.png",QVector3D(0,0,0), QQuaternion(1,0,0,0), face_eye_lid_back_right);
-    Joint* face_eye_lid_bot_left = addObject("Eye Lid Bot Left",":/models/face_eye_lid_front.obj",":/textures/wooden.png",QVector3D(0,0,0), QQuaternion(cos(M_PI_4),sin(M_PI_4),0,0), face_eye_lid_back_left);
-    Joint* face_eye_lid_bot_right = addObject("Eye Lid Bot Right",":/models/face_eye_lid_front.obj",":/textures/wooden.png",QVector3D(0,0,0), QQuaternion(cos(M_PI_4),sin(M_PI_4),0,0), face_eye_lid_back_right);
-    /*Joint* face_brow_left =*/ addObject("Eye Brow Left",":/models/face_brow.obj",":/textures/wooden.png",QVector3D(0.3,1,0), QQuaternion(1,0,0,0), face_eye_lid_back_left);
-    /*Joint* face_brow_right =*/ addObject("Eye Brow Right",":/models/face_brow.obj",":/textures/wooden.png",QVector3D(-0.3,1,0), QQuaternion(1,0,0,0), face_eye_lid_back_right);
-    /*Joint* face_stache =*/ addObject("Stache",":/models/face_stache.obj",":/textures/stache_teeth.png",QVector3D(0,-0.5,2), QQuaternion(1,0,0,0), face_head);
-    /*Joint* face_hat =*/ addObject("Hat",":/models/face_hat.obj",":/textures/wooden.png",QVector3D(0,1.4,0), QQuaternion(1,0,0,0), face_head);
+    Joint* face_head = addObject("face_head",":/models/face_head.obj","://textures/wooden.png",QVector3D(0,2,0), QQuaternion(1,0,0,0), neck);
+    /*Joint* face_teeth_top =*/ addObject("face_teeth_top",":/models/face_teeth_top.obj",":/textures/stache_teeth.png",QVector3D(0,-1.5,1), QQuaternion(1,0,0,0), face_head);
+    Joint* face_teeth_bot = addObject("face_teeth_bot",":/models/face_teeth_bot.obj",":/textures/stache_teeth.png",QVector3D(0,-1.5,1), QQuaternion(1,0,0,0), face_head);
+    Joint* face_eye_lid_back_left = addObject("face_eye_lid_back_left",":/models/face_eye_lid_back.obj",":/textures/wooden.png",QVector3D(0.7,0.5,1.7), QQuaternion(1,0,0,0), face_head);
+    Joint* face_eye_lid_back_right = addObject("face_eye_lid_back_right",":/models/face_eye_lid_back.obj",":/textures/wooden.png",QVector3D(-0.7,0.5,1.7), QQuaternion(1,0,0,0), face_head);
+    /*Joint* face_eye_left =*/ addObject("face_eye_left",":/models/face_eye.obj",":/textures/eye.png",QVector3D(0,0,0), QQuaternion(1,0,0,0), face_eye_lid_back_left);
+    /*Joint* face_eye_right =*/ addObject("face_eye_right",":/models/face_eye.obj",":/textures/eye.png",QVector3D(0,0,0), QQuaternion(1,0,0,0), face_eye_lid_back_right);
+    Joint* face_eye_lid_top_left = addObject("face_eye_lid_top_left",":/models/face_eye_lid_front.obj",":/textures/wooden.png",QVector3D(0,0,0), QQuaternion(1,0,0,0), face_eye_lid_back_left);
+    Joint* face_eye_lid_top_right = addObject("face_eye_lid_top_right",":/models/face_eye_lid_front.obj",":/textures/wooden.png",QVector3D(0,0,0), QQuaternion(1,0,0,0), face_eye_lid_back_right);
+    Joint* face_eye_lid_bot_left = addObject("face_eye_lid_bot_left",":/models/face_eye_lid_front.obj",":/textures/wooden.png",QVector3D(0,0,0), QQuaternion(cos(M_PI_4),sin(M_PI_4),0,0), face_eye_lid_back_left);
+    Joint* face_eye_lid_bot_right = addObject("face_eye_lid_bot_right",":/models/face_eye_lid_front.obj",":/textures/wooden.png",QVector3D(0,0,0), QQuaternion(cos(M_PI_4),sin(M_PI_4),0,0), face_eye_lid_back_right);
+    /*Joint* face_brow_left =*/ addObject("face_brow_left",":/models/face_brow.obj",":/textures/wooden.png",QVector3D(0.3,1,0), QQuaternion(1,0,0,0), face_eye_lid_back_left);
+    /*Joint* face_brow_right =*/ addObject("face_brow_right",":/models/face_brow.obj",":/textures/wooden.png",QVector3D(-0.3,1,0), QQuaternion(1,0,0,0), face_eye_lid_back_right);
+    /*Joint* face_stache =*/ addObject("face_stache",":/models/face_stache.obj",":/textures/stache_teeth.png",QVector3D(0,-0.5,2), QQuaternion(1,0,0,0), face_head);
+    /*Joint* face_hat =*/ addObject("face_hat",":/models/face_hat.obj",":/textures/wooden.png",QVector3D(0,1.4,0), QQuaternion(1,0,0,0), face_head);
 
     //! Left Hand
-    Joint* left_arm_part1 = addObject("Part 1",":/models/arm_part1.obj",":/textures/wooden.png",QVector3D(1.8,2.6,0),QQuaternion(cos(-M_PI_4),0,0,sin(-M_PI_4)),body);
-    Joint* left_arm_part2 = addObject("Part 2",":/models/arm_part1.obj",":/textures/wooden.png",QVector3D(0,3.7,0),QQuaternion(1,0,0,0),left_arm_part1);
-    Joint* left_arm_hand = addObject("Hand",":/models/arm_hand.obj",":/textures/wooden.png",QVector3D(0,3.7,0),QQuaternion(1,0,0,0),left_arm_part2);
+    Joint* left_arm_part1 = addObject("left_arm_part1",":/models/arm_part1.obj",":/textures/wooden.png",QVector3D(2,2.4,0),QQuaternion(cos(-M_PI_4),0,0,sin(-M_PI_4)),body);
+    Joint* left_arm_part2 = addObject("left_arm_part2",":/models/arm_part1.obj",":/textures/wooden.png",QVector3D(0,3.7,0),QQuaternion(1,0,0,0),left_arm_part1);
+    Joint* left_arm_hand = addObject("left_arm_hand",":/models/arm_hand.obj",":/textures/wooden.png",QVector3D(0,3.7,0),QQuaternion(1,0,0,0),left_arm_part2);
 
-    Joint* left_arm_finger_5_1 = addObject("Finger 5 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0.5,1.4,0),QQuaternion(1,0,0,0),left_arm_hand);
-    Joint* left_arm_finger_4_1 = addObject("Finger 4 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0.2,1.5,0),QQuaternion(1,0,0,0),left_arm_hand);
-    Joint* left_arm_finger_3_1 = addObject("Finger 3 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(-0.1,1.6,0),QQuaternion(1,0,0,0),left_arm_hand);
-    Joint* left_arm_finger_2_1 = addObject("Finger 2 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(-0.4,1.5,0),QQuaternion(1,0,0,0),left_arm_hand);
-    Joint* left_arm_finger_1_1 = addObject("Finger 1 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(-0.6,1,0),QQuaternion(1,0,0,0),left_arm_hand);
+    Joint* left_arm_finger_5_1 = addObject("left_arm_finger_5_1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0.5,1.4,0),QQuaternion(1,0,0,0),left_arm_hand);
+    Joint* left_arm_finger_4_1 = addObject("left_arm_finger_4_1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0.2,1.5,0),QQuaternion(1,0,0,0),left_arm_hand);
+    Joint* left_arm_finger_3_1 = addObject("left_arm_finger_3_1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(-0.1,1.6,0),QQuaternion(1,0,0,0),left_arm_hand);
+    Joint* left_arm_finger_2_1 = addObject("left_arm_finger_2_1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(-0.4,1.5,0),QQuaternion(1,0,0,0),left_arm_hand);
+    Joint* left_arm_finger_1_1 = addObject("left_arm_finger_1_1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(-0.6,1,0),QQuaternion(1,0,0,0),left_arm_hand);
 
-    Joint* left_arm_finger_5_2 = addObject("Finger 5 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),left_arm_finger_5_1);
-    Joint* left_arm_finger_4_2 = addObject("Finger 4 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),left_arm_finger_4_1);
-    Joint* left_arm_finger_3_2 = addObject("Finger 3 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),left_arm_finger_3_1);
-    Joint* left_arm_finger_2_2 = addObject("Finger 2 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),left_arm_finger_2_1);
-    Joint* left_arm_finger_1_2 = addObject("Finger 1 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),left_arm_finger_1_1);
+    /*Joint* left_arm_finger_5_2 =*/ addObject("left_arm_finger_5_2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),left_arm_finger_5_1);
+    /*Joint* left_arm_finger_4_2 =*/ addObject("left_arm_finger_4_2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),left_arm_finger_4_1);
+    /*Joint* left_arm_finger_3_2 =*/ addObject("left_arm_finger_3_2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),left_arm_finger_3_1);
+    /*Joint* left_arm_finger_2_2 =*/ addObject("left_arm_finger_2_2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),left_arm_finger_2_1);
+    /*Joint* left_arm_finger_1_2 =*/ addObject("left_arm_finger_1_2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),left_arm_finger_1_1);
 
     //! Right Hand
-    Joint* right_arm_part1 = addObject("Part 1",":/models/arm_part1.obj",":/textures/wooden.png",QVector3D(-1.8,2.6,0),QQuaternion(cos(M_PI_4),0,0,sin(M_PI_4)),body);
-    Joint* right_arm_part2 = addObject("Part 2",":/models/arm_part1.obj",":/textures/wooden.png",QVector3D(0,3.7,0),QQuaternion(1,0,0,0),right_arm_part1);
-    Joint* right_arm_hand = addObject("Hand",":/models/arm_hand.obj",":/textures/wooden.png",QVector3D(0,3.7,0),QQuaternion(cos(M_PI_2),0,sin(M_PI_2),0),right_arm_part2);
+    Joint* right_arm_part1 = addObject("right_arm_part1",":/models/arm_part1.obj",":/textures/wooden.png",QVector3D(-2,2.4,0),QQuaternion(cos(M_PI_4),0,0,sin(M_PI_4)),body);
+    Joint* right_arm_part2 = addObject("right_arm_part2",":/models/arm_part1.obj",":/textures/wooden.png",QVector3D(0,3.7,0),QQuaternion(1,0,0,0),right_arm_part1);
+    Joint* right_arm_hand = addObject("right_arm_hand",":/models/arm_hand.obj",":/textures/wooden.png",QVector3D(0,3.7,0),QQuaternion(cos(M_PI_2),0,sin(M_PI_2),0),right_arm_part2);
 
-    Joint* right_arm_finger_5_1 = addObject("Finger 5 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0.5,1.4,0),QQuaternion(1,0,0,0),right_arm_hand);
-    Joint* right_arm_finger_4_1 = addObject("Finger 4 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0.2,1.5,0),QQuaternion(1,0,0,0),right_arm_hand);
-    Joint* right_arm_finger_3_1 = addObject("Finger 3 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(-0.1,1.6,0),QQuaternion(1,0,0,0),right_arm_hand);
-    Joint* right_arm_finger_2_1 = addObject("Finger 2 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(-0.4,1.5,0),QQuaternion(1,0,0,0),right_arm_hand);
-    Joint* right_arm_finger_1_1 = addObject("Finger 1 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(-0.6,1,0),QQuaternion(1,0,0,0),right_arm_hand);
+    Joint* right_arm_finger_5_1 = addObject("right_arm_finger_5_1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0.5,1.4,0),QQuaternion(1,0,0,0),right_arm_hand);
+    Joint* right_arm_finger_4_1 = addObject("right_arm_finger_4_1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0.2,1.5,0),QQuaternion(1,0,0,0),right_arm_hand);
+    Joint* right_arm_finger_3_1 = addObject("right_arm_finger_3_1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(-0.1,1.6,0),QQuaternion(1,0,0,0),right_arm_hand);
+    Joint* right_arm_finger_2_1 = addObject("right_arm_finger_2_1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(-0.4,1.5,0),QQuaternion(1,0,0,0),right_arm_hand);
+    Joint* right_arm_finger_1_1 = addObject("right_arm_finger_1_1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(-0.6,1,0),QQuaternion(1,0,0,0),right_arm_hand);
 
-    Joint* right_arm_finger_5_2 = addObject("Finger 5 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),right_arm_finger_5_1);
-    Joint* right_arm_finger_4_2 = addObject("Finger 4 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),right_arm_finger_4_1);
-    Joint* right_arm_finger_3_2 = addObject("Finger 3 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),right_arm_finger_3_1);
-    Joint* right_arm_finger_2_2 = addObject("Finger 2 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),right_arm_finger_2_1);
-    Joint* right_arm_finger_1_2 = addObject("Finger 1 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),right_arm_finger_1_1);
+    /*Joint* right_arm_finger_5_2 =*/ addObject("right_arm_finger_5_2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),right_arm_finger_5_1);
+    /*Joint* right_arm_finger_4_2 =*/ addObject("right_arm_finger_4_2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),right_arm_finger_4_1);
+    /*Joint* right_arm_finger_3_2 =*/ addObject("right_arm_finger_3_2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),right_arm_finger_3_1);
+    /*Joint* right_arm_finger_2_2 =*/ addObject("right_arm_finger_2_2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),right_arm_finger_2_1);
+    /*Joint* right_arm_finger_1_2 =*/ addObject("right_arm_finger_1_2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),right_arm_finger_1_1);
 
     //! Left Leg
     //Hand Scene
-    Joint* arm_base = addObject("Arm Base",":/models/arm_base.obj",":/textures/wooden.png",QVector3D(0,0.75,0), QQuaternion(1,0,0,0), body);
-    Joint* arm_part1 = addObject("Part 1",":/models/arm_part1.obj",":/textures/wooden.png",QVector3D(0,0.25,0),QQuaternion(1,0,0,0),arm_base);
-    Joint* arm_part2 = addObject("Part 2",":/models/arm_part2.obj",":/textures/wooden.png",QVector3D(0,3.7,0),QQuaternion(1,0,0,0),arm_part1);
-    Joint* arm_hand = addObject("Hand",":/models/arm_hand.obj",":/textures/wooden.png",QVector3D(0,4.7,0),QQuaternion(1,0,0,0),arm_part2);
-
-    Joint* arm_finger_5_1 = addObject("Finger 5 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0.5,1.4,0),QQuaternion(1,0,0,0),arm_hand);
-    Joint* arm_finger_4_1 = addObject("Finger 4 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0.2,1.5,0),QQuaternion(1,0,0,0),arm_hand);
-    Joint* arm_finger_3_1 = addObject("Finger 3 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(-0.1,1.6,0),QQuaternion(1,0,0,0),arm_hand);
-    Joint* arm_finger_2_1 = addObject("Finger 2 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(-0.4,1.5,0),QQuaternion(1,0,0,0),arm_hand);
-    Joint* arm_finger_1_1 = addObject("Finger 1 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(-0.6,1,0),QQuaternion(1,0,0,0),arm_hand);
-
-    Joint* arm_finger_5_2 = addObject("Finger 5 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),arm_finger_5_1);
-    Joint* arm_finger_4_2 = addObject("Finger 4 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),arm_finger_4_1);
-    Joint* arm_finger_3_2 = addObject("Finger 3 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),arm_finger_3_1);
-    Joint* arm_finger_2_2 = addObject("Finger 2 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),arm_finger_2_1);
-    Joint* arm_finger_1_2 = addObject("Finger 1 Part 2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),arm_finger_1_1);
+    Joint* arm_part2 = addObject("Part 2",":/models/arm_part1.obj",":/textures/wooden.png",QVector3D(-2,-1,0),QQuaternion(1,0,0,0), body, QVector3D(0,-3.7,0));
+    Joint* arm_part1 = addObject("Part 1",":/models/arm_part1.obj",":/textures/wooden.png",QVector3D(0,-3.7,0),QQuaternion(1,0,0,0), arm_part2, QVector3D(0,-3.7,0));
+    /*Joint* arm_base =*/ addObject("Arm Base",":/models/arm_base.obj",":/textures/wooden.png",QVector3D(0,-3.7,0), QQuaternion(1,0,0,0), arm_part1, QVector3D(0,-0.4,0));
 
     //! Right Leg
+    Joint* larm_part2 = addObject("Part 2",":/models/arm_part1.obj",":/textures/wooden.png",QVector3D(2,-1,0),QQuaternion(1,0,0,0), body, QVector3D(0,-3.7,0));
+    Joint* larm_part1 = addObject("Part 1",":/models/arm_part1.obj",":/textures/wooden.png",QVector3D(0,-3.7,0),QQuaternion(1,0,0,0), larm_part2, QVector3D(0,-3.7,0));
+    /*Joint* larm_base =*/ addObject("Arm Base",":/models/arm_base.obj",":/textures/wooden.png",QVector3D(0,-3.7,0), QQuaternion(1,0,0,0), larm_part1, QVector3D(0,-0.4,0));
 
     ObjectAnimator *animate;
 
@@ -639,15 +658,6 @@ void SceneContainer::createRobotScene(){
     animate->addKeyOrientation(0, 1.6,0,0);
     animate->addKeyOrientation(50, 2.1,0,0);
     animate->addKeyOrientation(100, 1.6,0,0);
-}
 
-bool SceneContainer::getDrawWithNames()
-{
-    return draw_with_names_;
+    viewer_reference_->camera()->fitSphere(qglviewer::Vec(0,10,0),11);
 }
-
-void SceneContainer::setDrawWithNames(bool draw_with_names)
-{
-    draw_with_names_ = draw_with_names;
-}
-

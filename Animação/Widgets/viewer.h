@@ -14,6 +14,8 @@ class Viewer : public QGLViewer
 public:
     explicit Viewer(QWidget* parent = 0);
 
+    int current_shader_;
+
 protected :
     virtual void draw();
     virtual void drawWithNames();
@@ -39,7 +41,7 @@ public slots:
     void releaseShader();
     void bindShader();
 
-    virtual void mousePressEvent(QMouseEvent *event);
+//    virtual void mousePressEvent(QMouseEvent *event);
 private:
     BezierQuadratic* nova_;
 

@@ -2,6 +2,8 @@
 #define SCENECONTAINER_H
 
 #include <vector>
+#include <QVector3D>
+#include <QQuaternion>
 #include "Interpolation/objectanimator.h"
 
 class Joint;
@@ -28,7 +30,7 @@ public:
     static void setCurrentFrame(int frame);
 
     //! Objects management
-    static Joint* addObject(QString label, QString objfile, QString texfile, QVector3D position, QQuaternion rotation, Joint *parent);
+    static Joint* addObject(QString label, QString objfile, QString texfile, QVector3D position, QQuaternion rotation, Joint *parent, QVector3D objPos = QVector3D(0,0,0), QQuaternion objRot = QQuaternion(1,0,0,0));
     static unsigned int howManyObjects();
     static Joint* objectAt(int i);
     static  ObjectInfoTree *getObjects();
@@ -56,6 +58,7 @@ public:
 
     //! Drawing
     static void drawObjects();
+    static void drawObjectsNoShader();
     static void drawExtras();
 
     //! Rendering Parameters

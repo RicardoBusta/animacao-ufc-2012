@@ -73,11 +73,15 @@ void Object3D::defaultInitialisation() {
     bounding_box_min_ = qglviewer::Vec(-0.5,-0.5,-0.5);
 }
 
+void Object3D::glTransform(){
+    glTranslated(position_.x,position_.y,position_.z);
+    glMultMatrixd(orientation_.matrix());
+}
+
 void Object3D::draw() {
     glPushMatrix();
 
-    glTranslated(position_.x,position_.y,position_.z);
-    glMultMatrixd(orientation_.matrix());
+    glTransform();
 
     if(SceneContainer::renderOptions(RENDER_SHADER)){
         SceneContainer::viewer_reference_->bindShader();

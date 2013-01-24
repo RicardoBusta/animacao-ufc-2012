@@ -115,10 +115,10 @@ void TimeBar::setKeyFrames(Object3D *object)
     this->pos_key_frames_.clear();
     this->ori_key_frames_.clear();
 
+    if(object == NULL or object->getAnimator()==NULL){ repaint(); return; }
+
     //std::vector<OrientationStep> *orivec = &object->GetAnimator()->GetKeyOrientations();
     //std::vector<PositionStep> *posvec = &object->GetAnimator()->GetKeyPositions();
-
-    if(object->getAnimator()==NULL) return;
 
     for(int i=0;i<object->getAnimator()->getKeyOrientations()->size();i++){
         ori_key_frames_.push_back(object->getAnimator()->getKeyOrientations()->at(i).frame_);
@@ -136,4 +136,6 @@ void TimeBar::setKeyFrames(Object3D *object)
     ori_key_frames_.push_back(2);
     ori_key_frames_.push_back(3);
     ori_key_frames_.push_back(4);*/
+
+    repaint();
 }

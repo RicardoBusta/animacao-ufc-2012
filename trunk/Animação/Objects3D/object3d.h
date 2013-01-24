@@ -34,6 +34,7 @@ public:
     inline qglviewer::Quaternion   orientation() { return orientation_; }
 
     void                           draw();
+    void                           glTransform();
 
     void                           setAnimator(ObjectAnimator* animator);
     ObjectAnimator*                getAnimator();

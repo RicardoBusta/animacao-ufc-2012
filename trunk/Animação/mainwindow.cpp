@@ -141,7 +141,6 @@ void MainWindow::updateCurrentSelected(QTreeWidgetItem *item, QTreeWidgetItem* o
         Object3D* object = item_to_object_[item];
         updateSelectedInfo(object);
         ui->timebar->setKeyFrames(object);
-        ui->timebar->repaint();
     }
 }
 
@@ -285,25 +284,21 @@ void MainWindow::displayTrajectoryOrientation(bool display) {
 void  MainWindow::addPositionKeyframe() {
     SceneContainer::addCurrentPositionKeyframe();
     ui->timebar->setKeyFrames(SceneContainer::selectedObject());
-    ui->timebar->repaint();
 }
 
 void  MainWindow::addOrientationKeyframe() {
     SceneContainer::addCurrentOrientationKeyframe();
     ui->timebar->setKeyFrames(SceneContainer::selectedObject());
-    ui->timebar->repaint();
 }
 
 void  MainWindow::removePositionKeyframe() {
     SceneContainer::removeCurrentPositionKeyframe();
     ui->timebar->setKeyFrames(SceneContainer::selectedObject());
-    ui->timebar->repaint();
 }
 
 void  MainWindow::removeOrientationKeyframe() {
     SceneContainer::removeCurrentOrientationKeyframe();
     ui->timebar->setKeyFrames(SceneContainer::selectedObject());
-    ui->timebar->repaint();
 }
 
 void MainWindow::updateRenderBox(bool box)
@@ -329,10 +324,17 @@ void MainWindow::updateCurrentScene(int scene){
 
 void MainWindow::setSelectedByID(int id)
 {
-    Object3D *obj = Object3D::getObjectByID(id);
-    selected_item_ = object_to_item_[obj];
+    Object3D *obj;
+    if(id >= 0){
+        obj = Object3D::getObjectByID(id);
+        selected_item_ = object_to_item_[obj];
+    }else{
+        obj = NULL;
+        selected_item_ = NULL;
+        updateSelectedInfo(NULL);
+        ui->timebar->setKeyFrames(NULL);
+    }
 //    updateSelectedInfo(obj);
-
 
     ui->treeWidget->setCurrentItem(selected_item_);
 }

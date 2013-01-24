@@ -24,6 +24,7 @@ void Viewer::draw() {
     SceneContainer::drawObjects();
     SceneContainer::drawExtras();
 
+    glColor3f(1,1,1);
     this->drawText(10,10,QString("Frame: %1").arg(SceneContainer::current_frame()));
 
     //rotation->Draw();
@@ -160,12 +161,14 @@ void Viewer::setCurrentShader(int shader)
     current_shader_ = shader;
     shader_enabled_ = true;
     shaderProgram.removeAllShaders();
+    SceneContainer::setAlternateColors(false);
     switch(shader){
     case 0:
         shaderProgram.addShaderFromSourceFile(QGLShader::Vertex, ":/shaders/phong.vert");
         shaderProgram.addShaderFromSourceFile(QGLShader::Fragment, ":/shaders/phong.frag");
         break;
     case 1:
+        SceneContainer::setAlternateColors(true);
         shaderProgram.addShaderFromSourceFile(QGLShader::Vertex, ":/shaders/toon.vert");
         shaderProgram.addShaderFromSourceFile(QGLShader::Fragment, ":/shaders/toon.frag");
         break;

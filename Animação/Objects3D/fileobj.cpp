@@ -20,8 +20,19 @@ FileObj::~FileObj()
     face.clear();
 }
 
-void FileObj::drawObject()
+void FileObj::drawObject(int depth)
 {
+
+    if(SceneContainer::alternateColors()){
+        if(depth%2==0){
+            glColor3ub(0,200,255);
+        }else{
+            glColor3ub(255,140,0);
+        }
+    }else{
+        glColor3f(1,1,1);
+    }
+
     if(!SceneContainer::renderBox()){
         glPushAttrib(GL_ALL_ATTRIB_BITS);
         glShadeModel(GL_SMOOTH);

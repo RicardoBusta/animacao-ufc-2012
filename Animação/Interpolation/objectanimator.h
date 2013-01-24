@@ -7,6 +7,8 @@
 
 class Object3D;
 
+class Matrix4D;
+
 
 class ObjectAnimator
 {
@@ -20,6 +22,12 @@ public:
     //! Object acess information
     qglviewer::Vec positionAt           (int frame);
     qglviewer::Quaternion orientationAt (int frame);
+
+    Matrix4D localTransformationMatrix(int frame);
+    Matrix4D globalTransformationMatrix(int frame);
+
+    qglviewer::Vec globalPositionAt(int frame);
+    qglviewer::Quaternion globalOrientationAt(int frame);
 
     std::vector<PositionStep> *getKeyPositions          ();
     std::vector<OrientationStep> *getKeyOrientations    ();

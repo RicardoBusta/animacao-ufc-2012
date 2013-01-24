@@ -41,19 +41,19 @@ Joint* Joint::childAt(int index) {
     return children_joint_.at(index);
 }
 
-void Joint::drawObject() {
+void Joint::drawObject(int depth) {
 
     if(SceneContainer::getDrawWithNames()){
         glPushName(id());
     }
 
-    child_object_->draw();
+    child_object_->draw(depth+1);
     if(SceneContainer::getDrawWithNames()){
         glPopName();
     }
 
     for(size_t i = 0 ; i < children_joint_.size() ; i++ )
-        children_joint_.at(i)->draw();
+        children_joint_.at(i)->draw(depth+1);
 
 
 }
@@ -72,12 +72,18 @@ void Joint::drawBoundingBox()
     glPopMatrix();
 }
 
-void Joint::drawBone()
+void Joint::drawBone(int depth)
 {
     glPushAttrib(GL_ALL_ATTRIB_BITS);
     glDisable(GL_DEPTH_TEST);
     glDisable(GL_LIGHTING);
     glBegin(GL_LINES);
+
+    if(depth%2==0){
+        glColor3ub(0,100,255);
+    }else{
+        glColor3ub(255,100,0);
+    }
 
     for(size_t i=0;i<children_joint_.size();i++){
         qglviewer::Vec pos = children_joint_.at(i)->position();
@@ -87,4 +93,10 @@ void Joint::drawBone()
     }
     glEnd();
     glPopAttrib();
+}
+
+
+Joint *Joint::parent()
+{
+    return parent_joint_;
 }

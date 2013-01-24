@@ -21,7 +21,6 @@ HEADERS += \
     Interpolation/interpolator.h \
     Interpolation/animation_step.h \
     Objects3D/trajectoryobject.h \
-    Objects3D/spaceshipobject.h \
     Objects3D/object3d.h \
     Objects3D/joint.h \
     Objects3D/curveobject.h \
@@ -32,7 +31,8 @@ HEADERS += \
     Objects3D/fileobj.h \
     Widgets/rotationwidget.h \
     Objects3D/torus.h \
-    Interpolation/genericinterpolator.h
+    Interpolation/genericinterpolator.h \
+    Utils/matrix4d.h
 
 SOURCES += \
     Curves/arclength.cpp \
@@ -42,7 +42,6 @@ SOURCES += \
     Interpolation/objectanimator.cpp \
     Interpolation/interpolator.cpp \
     Objects3D/trajectoryobject.cpp \
-    Objects3D/spaceshipobject.cpp \
     Objects3D/object3d.cpp \
     Objects3D/joint.cpp \
     Objects3D/curveobject.cpp \
@@ -54,7 +53,8 @@ SOURCES += \
     Objects3D/fileobj.cpp \
     Widgets/rotationwidget.cpp \
     Objects3D/torus.cpp \
-    Interpolation/genericinterpolator.cpp
+    Interpolation/genericinterpolator.cpp \
+    Utils/matrix4d.cpp
 
 
 FORMS += \

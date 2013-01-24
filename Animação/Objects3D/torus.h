@@ -33,7 +33,7 @@ private:
     std::vector<Slice> torus_slices_;
 
     void createSlices();
-    void drawObject();
+    void drawObject(int depth);
     
 };
 

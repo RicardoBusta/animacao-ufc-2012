@@ -82,6 +82,9 @@ public:
     static bool getDrawWithNames();
     static void setDrawWithNames(bool draw_with_names);
 
+    static bool alternateColors();
+    static void setAlternateColors(bool alternate);
+
 private:
     static Object3D* selected_object_;
     static bool animate_position_, animate_orientation_;
@@ -92,6 +95,8 @@ private:
     static unsigned int render_options_;
 
     static bool draw_with_names_;
+
+    static bool alternate_colors_;
 
     static std::vector<ObjectAnimator*> animators_;
     static std::vector<Joint*> objects_;

@@ -19,7 +19,7 @@ public:
     void setType(TrajectoryType type);
 
 private:
-    void drawObject();
+    void drawObject(int depth);
 
     void drawPositionsCurve();
 

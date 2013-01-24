@@ -15,11 +15,11 @@ public:
     Joint* childAt(int index);
     Object3D *childObject();
 
-
+    Joint *parent();
 protected:
-    virtual void drawObject();
+    virtual void drawObject(int depth);
     virtual void drawBoundingBox();
-    virtual void drawBone();
+    virtual void drawBone(int depth);
 
 private:
     Object3D* child_object_;

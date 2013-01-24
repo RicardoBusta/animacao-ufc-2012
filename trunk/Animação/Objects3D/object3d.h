@@ -33,7 +33,7 @@ public:
     inline qglviewer::Vec          position()    { return position_; }
     inline qglviewer::Quaternion   orientation() { return orientation_; }
 
-    void                           draw();
+    void                           draw(int depth);
     void                           glTransform();
 
     void                           setAnimator(ObjectAnimator* animator);
@@ -43,10 +43,10 @@ protected:
     void                           defaultInitialisation();
     void                           drawPositionParticle();
     void                           drawOrientationAxes();
-    virtual void                   drawObject();
+    virtual void                   drawObject(int depth);
     virtual void                   drawBoundingBox();
     virtual void                   drawBoxObject();
-    virtual void                   drawBone();
+    virtual void                   drawBone(int depth);
     friend class Joint;
 
     std::string label_;

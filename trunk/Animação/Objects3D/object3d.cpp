@@ -78,7 +78,7 @@ void Object3D::glTransform(){
     glMultMatrixd(orientation_.matrix());
 }
 
-void Object3D::draw() {
+void Object3D::draw(int depth) {
     glPushMatrix();
 
     glTransform();
@@ -86,11 +86,11 @@ void Object3D::draw() {
     if(SceneContainer::renderOptions(RENDER_SHADER)){
         SceneContainer::viewer_reference_->bindShader();
         if(draw_object_)
-            drawObject();
+            drawObject(depth);
         SceneContainer::viewer_reference_->releaseShader();
     }else{
         if(draw_object_)
-            drawObject();
+            drawObject(depth);
     }
     if(draw_position_particle_)
         drawPositionParticle();
@@ -99,7 +99,7 @@ void Object3D::draw() {
     if(draw_bounding_box_)
         drawBoundingBox();
     if(SceneContainer::drawBones())
-        drawBone();
+        drawBone(depth);
 
     glPopMatrix();
 }
@@ -135,7 +135,7 @@ void Object3D::drawOrientationAxes() {
     glPopAttrib();
 }
 
-void Object3D::drawObject() {
+void Object3D::drawObject(int depth) {
 }
 
 void Object3D::setAnimator(ObjectAnimator *animator)
@@ -243,7 +243,7 @@ void Object3D::drawBoxObject()
 }
 
 
-void Object3D::drawBone()
+void Object3D::drawBone(int depth)
 {
 }
 

@@ -3,6 +3,7 @@
 #include "Interpolation/animation_step.h"
 #include "Objects3D/trajectoryobject.h"
 #include "Utils/scenecontainer.h"
+#include "Utils/matrix4d.h"
 
 ObjectAnimator::ObjectAnimator(Object3D* child)
 {
@@ -14,6 +15,7 @@ ObjectAnimator::ObjectAnimator(Object3D* child)
     update_orientations_ = true;
 
     oriTrajectory = NULL;
+    parent_ = NULL;
 }
 
 void ObjectAnimator::setFrameRange(int start, int end) {
@@ -177,7 +179,7 @@ void  ObjectAnimator::orientationsUpdate() {
     }
 }
 
-void ObjectAnimator::setParent(ObjectAnimator* parent) {
+void ObjectAnimator::setParent(ObjectAnimator* parent) {    
     parent_ = parent;
 }
 
@@ -209,4 +211,34 @@ std::vector<PositionStep> *ObjectAnimator::getKeyPositions()
 std::vector<OrientationStep> *ObjectAnimator::getKeyOrientations()
 {
     return &key_orientations_;
+}
+
+
+Matrix4D ObjectAnimator::localTransformationMatrix(int frame)
+{
+    Matrix4D translation( positionAt(frame) );
+    Matrix4D rotation( orientationAt(frame) );
+
+    return (translation * rotation);
+}
+
+Matrix4D ObjectAnimator::globalTransformationMatrix(int frame)
+{
+    if( parent()!=NULL ){
+        return parent()->globalTransformationMatrix(frame) * localTransformationMatrix(frame);
+    }
+    return localTransformationMatrix(frame);
+}
+
+qglviewer::Vec ObjectAnimator::globalPositionAt(int frame)
+{
+    return globalTransformationMatrix(frame).apply(qglviewer::Vec(0,0,0),false);
+}
+
+qglviewer::Quaternion ObjectAnimator::globalOrientationAt(int frame)
+{
+    if( parent()!=NULL ){
+       return parent()->globalOrientationAt(frame) * orientationAt(frame);
+    }
+    return orientationAt(frame);
 }

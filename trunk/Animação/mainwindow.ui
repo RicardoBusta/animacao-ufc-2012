@@ -61,7 +61,7 @@
            <bool>true</bool>
           </property>
           <property name="currentIndex">
-           <number>0</number>
+           <number>2</number>
           </property>
           <widget class="QWidget" name="tab_animation">
            <property name="enabled">
@@ -519,14 +519,14 @@
             <string>Render</string>
            </attribute>
            <layout class="QFormLayout" name="formLayout_2">
-            <item row="2" column="0">
+            <item row="3" column="0">
              <widget class="QLabel" name="label_18">
               <property name="text">
                <string>Shader</string>
               </property>
              </widget>
             </item>
-            <item row="2" column="1">
+            <item row="3" column="1">
              <widget class="QComboBox" name="comboBox_shader">
               <item>
                <property name="text">
@@ -570,6 +570,20 @@
              <widget class="QLabel" name="label_20">
               <property name="text">
                <string>Render Bones</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="0">
+             <widget class="QLabel" name="label_22">
+              <property name="text">
+               <string>Alternate Colors</string>
+              </property>
+             </widget>
+            </item>
+            <item row="2" column="1">
+             <widget class="QCheckBox" name="checkBox_alt_color">
+              <property name="text">
+               <string/>
               </property>
              </widget>
             </item>

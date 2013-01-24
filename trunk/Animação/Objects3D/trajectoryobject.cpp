@@ -40,7 +40,7 @@ void TrajectoryObject::update(int start_frame, int end_frame) {
 
     if(type_ == kPosition){
         for(int i = start_frame ; i <= end_frame ; i++ ) {
-            positions_.push_back(animator_->positionAt(i));
+            positions_.push_back(animator_->globalPositionAt(i));
         }
         for(uint i=0; i < animator_->getKeyPositions()->size(); i++){
             PositionStep pos = animator_->getKeyPositions()->at(i);
@@ -50,7 +50,7 @@ void TrajectoryObject::update(int start_frame, int end_frame) {
         qglviewer::Vec over(0,radius_,0);
         for(int current_frame = start_frame ; current_frame <= end_frame ; current_frame++ ) {
             //std::cout <<" CURRENT_FRAME: " << current_frame << " of " << end_frame << std::endl;
-            qglviewer::Quaternion ori = animator_->orientationAt(current_frame);
+            qglviewer::Quaternion ori = animator_->globalOrientationAt(current_frame);
             qglviewer::Vec pos = ori.rotate(over);
 #ifdef DEBUG_TEXT
             std::cout <<" OVER ROTATED i:" << i <<"(" <<pos.x << ", "<< pos.y << ", " << pos.z << ")" << std::endl;
@@ -66,11 +66,11 @@ void TrajectoryObject::update(int start_frame, int end_frame) {
     }
 }
 
-void TrajectoryObject::drawObject() {
+void TrajectoryObject::drawObject(int) {
     glPushMatrix();
 
     if(type_ == kOrientation){
-        qglviewer::Vec pos = animator_->positionAt(SceneContainer::current_frame());
+        qglviewer::Vec pos = animator_->globalPositionAt(SceneContainer::current_frame());
         glTranslated(pos.x,pos.y,pos.z);
         glPushAttrib(GL_ALL_ATTRIB_BITS);
         glEnable(GL_BLEND);

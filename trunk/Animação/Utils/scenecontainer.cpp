@@ -34,6 +34,8 @@ bool SceneContainer::draw_bones_ = false;
 
 bool SceneContainer::draw_with_names_ = false;
 
+bool SceneContainer::alternate_colors_ = true;
+
 unsigned int SceneContainer::render_options_ = 0;
 
 SceneContainer::SceneContainer(){}
@@ -42,7 +44,7 @@ void SceneContainer::drawObjects() {
     for(unsigned int i = 0; i < objects_.size();i++){
         Joint *object = objects_.at(i);
         render_options_ = RENDER_SHADER;
-        object->draw();
+        object->draw(0);
     }
 }
 
@@ -50,7 +52,7 @@ void SceneContainer::drawObjectsNoShader() {
     for(unsigned int i = 0; i < objects_.size();i++){
         Joint *object = objects_.at(i);
         render_options_ = RENDER_NONE;
-        object->draw();
+        object->draw(0);
     }
 }
 
@@ -59,7 +61,7 @@ void SceneContainer::drawExtras()
     for(unsigned int i = 0 ; i < extras_.size() ; i++ ) {
         Object3D* object = extras_.at(i);
         render_options_ = RENDER_NONE;
-        object->draw();
+        object->draw(0);
     }
 }
 
@@ -81,6 +83,9 @@ Joint* SceneContainer::addObject(QString label, QString objfile, QString texfile
         parent->addChildJoint(newjoint);
     }
     ObjectAnimator *newanimator = new ObjectAnimator(newjoint);
+    if(newjoint->parent()!=NULL){
+        newanimator->setParent( newjoint->parent()->getAnimator() );
+    }
     SceneContainer::animators_.push_back(newanimator);
 
     return newjoint;
@@ -574,14 +579,14 @@ void SceneContainer::createRobotScene(){
     Joint* face_teeth_bot = addObject("face_teeth_bot",":/models/face_teeth_bot.obj",":/textures/stache_teeth.png",QVector3D(0,-1.5,1), QQuaternion(1,0,0,0), face_head);
     Joint* face_eye_lid_back_left = addObject("face_eye_lid_back_left",":/models/face_eye_lid_back.obj",":/textures/wooden.png",QVector3D(0.7,0.5,1.7), QQuaternion(1,0,0,0), face_head);
     Joint* face_eye_lid_back_right = addObject("face_eye_lid_back_right",":/models/face_eye_lid_back.obj",":/textures/wooden.png",QVector3D(-0.7,0.5,1.7), QQuaternion(1,0,0,0), face_head);
-    /*Joint* face_eye_left =*/ addObject("face_eye_left",":/models/face_eye.obj",":/textures/eye.png",QVector3D(0,0,0), QQuaternion(1,0,0,0), face_eye_lid_back_left);
-    /*Joint* face_eye_right =*/ addObject("face_eye_right",":/models/face_eye.obj",":/textures/eye.png",QVector3D(0,0,0), QQuaternion(1,0,0,0), face_eye_lid_back_right);
-    Joint* face_eye_lid_top_left = addObject("face_eye_lid_top_left",":/models/face_eye_lid_front.obj",":/textures/wooden.png",QVector3D(0,0,0), QQuaternion(1,0,0,0), face_eye_lid_back_left);
-    Joint* face_eye_lid_top_right = addObject("face_eye_lid_top_right",":/models/face_eye_lid_front.obj",":/textures/wooden.png",QVector3D(0,0,0), QQuaternion(1,0,0,0), face_eye_lid_back_right);
-    Joint* face_eye_lid_bot_left = addObject("face_eye_lid_bot_left",":/models/face_eye_lid_front.obj",":/textures/wooden.png",QVector3D(0,0,0), QQuaternion(cos(M_PI_4),sin(M_PI_4),0,0), face_eye_lid_back_left);
-    Joint* face_eye_lid_bot_right = addObject("face_eye_lid_bot_right",":/models/face_eye_lid_front.obj",":/textures/wooden.png",QVector3D(0,0,0), QQuaternion(cos(M_PI_4),sin(M_PI_4),0,0), face_eye_lid_back_right);
-    /*Joint* face_brow_left =*/ addObject("face_brow_left",":/models/face_brow.obj",":/textures/wooden.png",QVector3D(0.3,1,0), QQuaternion(1,0,0,0), face_eye_lid_back_left);
-    /*Joint* face_brow_right =*/ addObject("face_brow_right",":/models/face_brow.obj",":/textures/wooden.png",QVector3D(-0.3,1,0), QQuaternion(1,0,0,0), face_eye_lid_back_right);
+    Joint* face_eye_left = addObject("face_eye_left",":/models/face_eye.obj",":/textures/eye.png",QVector3D(0,0,0), QQuaternion(1,0,0,0), face_eye_lid_back_left);
+    Joint* face_eye_right = addObject("face_eye_right",":/models/face_eye.obj",":/textures/eye.png",QVector3D(0,0,0), QQuaternion(1,0,0,0), face_eye_lid_back_right);
+    Joint* face_eye_lid_top_left = addObject("face_eye_lid_top_left",":/models/face_eye_lid_front.obj",":/textures/wooden.png",QVector3D(0,0,0), QQuaternion(1,0,0,0), face_eye_left);
+    Joint* face_eye_lid_top_right = addObject("face_eye_lid_top_right",":/models/face_eye_lid_front.obj",":/textures/wooden.png",QVector3D(0,0,0), QQuaternion(1,0,0,0), face_eye_right);
+    Joint* face_eye_lid_bot_left = addObject("face_eye_lid_bot_left",":/models/face_eye_lid_front.obj",":/textures/wooden.png",QVector3D(0,0,0), QQuaternion(cos(M_PI_4),sin(M_PI_4),0,0), face_eye_left);
+    Joint* face_eye_lid_bot_right = addObject("face_eye_lid_bot_right",":/models/face_eye_lid_front.obj",":/textures/wooden.png",QVector3D(0,0,0), QQuaternion(cos(M_PI_4),sin(M_PI_4),0,0), face_eye_right);
+    /*Joint* face_brow_left =*/ addObject("face_brow_left",":/models/face_brow.obj",":/textures/wooden.png",QVector3D(0.3,1,0), QQuaternion(1,0,0,0), face_eye_left);
+    /*Joint* face_brow_right =*/ addObject("face_brow_right",":/models/face_brow.obj",":/textures/wooden.png",QVector3D(-0.3,1,0), QQuaternion(1,0,0,0), face_eye_right);
     /*Joint* face_stache =*/ addObject("face_stache",":/models/face_stache.obj",":/textures/stache_teeth.png",QVector3D(0,-0.5,2), QQuaternion(1,0,0,0), face_head);
     /*Joint* face_hat =*/ addObject("face_hat",":/models/face_hat.obj",":/textures/wooden.png",QVector3D(0,1.4,0), QQuaternion(1,0,0,0), face_head);
 
@@ -660,4 +665,14 @@ void SceneContainer::createRobotScene(){
     animate->addKeyOrientation(100, 1.6,0,0);
 
     viewer_reference_->camera()->fitSphere(qglviewer::Vec(0,10,0),11);
+}
+
+
+bool SceneContainer::alternateColors()
+{
+    return alternate_colors_;
+}
+
+void SceneContainer::setAlternateColors(bool alternate){
+    alternate_colors_ = alternate;
 }

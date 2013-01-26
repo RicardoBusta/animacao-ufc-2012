@@ -4,18 +4,14 @@
 #include <QGLViewer/vec.h>
 #include <QGLViewer/quaternion.h>
 
-#include <vector>
+#include <Utils/genericmatrix.h>
 
-class Matrix4D
+class Matrix4D : public GenericMatrix
 {
 public:
-    std::vector<double> data_;
-
     Matrix4D();
     Matrix4D(qglviewer::Vec translation);
     Matrix4D(qglviewer::Quaternion orientation);
-
-    virtual ~Matrix4D();
 
     Matrix4D operator =(Matrix4D op);
     Matrix4D operator *(Matrix4D op);

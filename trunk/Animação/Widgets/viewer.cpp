@@ -70,14 +70,7 @@ void  Viewer::setCurrentFrame(int frame) {
     updateGL();
 }
 
-#include <Utils/genericmatrix.h>
-
 void Viewer::init() {
-    GenericMatrix matrix(5,3);
-    matrix.setZero();
-    GenericMatrix m2 = matrix.transpose();
-    matrix.debugPrint();
-
     SceneContainer::updateCurrentScene(0);
     emit signalUpdateObjects();
 

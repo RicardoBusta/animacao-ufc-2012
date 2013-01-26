@@ -12,11 +12,14 @@ GenericMatrix::GenericMatrix(int rows_, int cols_){
 }
 
 
-void GenericMatrix::setZero()
+void GenericMatrix::setIdentity()
 {
     for(int i=0;i<rows_;i++){
         for(int j=0;j<cols_;j++){
-            data_[ ((i*cols_) + j) ] = ((i*cols_) + j);
+            if(i!=j)
+                data_[ ((i*cols_) + j) ] = 0;
+            else
+                data_[ ((i*cols_) + j) ] = 1;
         }
     }
 }
@@ -40,7 +43,7 @@ GenericMatrix GenericMatrix::transpose()
 
     for(int i=0;i<rows_;i++){
         for(int j=0;j<cols_;j++){
-            result.data_[ ((j*cols_) + i) ] = data_[ ((i*cols_) + j) ];
+            result.data_[ ((j*rows_) + i) ] = data_[ ((i*cols_) + j) ];
         }
     }
 
@@ -58,8 +61,25 @@ GenericMatrix GenericMatrix::operator =(GenericMatrix op)
     return *this;
 }
 
+GenericMatrix GenericMatrix::operator* (GenericMatrix op)
+{
+    if( this->cols_ != op.rows_ ) return GenericMatrix(1,1);
 
-GenericMatrix GenericMatrix::debugPrint()
+    GenericMatrix result(this->rows_,op.cols_);
+
+    for(int i=0;i<this->rows_;i++){
+        for(int j=0;j<op.cols_;j++){
+            for(int k=0;k<this->cols_;k++){
+                result.data_[ ((i*result.cols_) + j) ] += this->data_ [  ((i*this->cols_) + k) ] * op.data_[  ((k*op.cols_) + j) ];
+            }
+        }
+    }
+
+    return result;
+}
+
+
+void GenericMatrix::debugPrint()
 {
     std::cout << "==matrix==" << std::endl;
 

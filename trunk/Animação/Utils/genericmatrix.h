@@ -8,17 +8,18 @@ class GenericMatrix
 public:
     GenericMatrix(int rows_=4, int cols_=4);
 
-    void setZero();
+    void setIdentity();
 
     void set( int row, int col, double val );
     double get( int row, int col );
 
     GenericMatrix transpose();
 
-    GenericMatrix operator=(GenericMatrix op);
+    GenericMatrix operator= (GenericMatrix op);
+    GenericMatrix operator* (GenericMatrix op);
 
-    GenericMatrix debugPrint();
-private:
+    void debugPrint();
+protected:
     int rows_;
     int cols_;
 

@@ -9,11 +9,18 @@ public:
     GenericMatrix(int rows_=4, int cols_=4);
 
     void setIdentity();
+    void setZero();
 
     void set( int row, int col, double val );
     double get( int row, int col );
+    void set( int index, double val );
+    double get( int index );
+
+    int rows();
+    int cols();
 
     GenericMatrix transpose();
+    GenericMatrix inverse();
 
     GenericMatrix operator= (GenericMatrix op);
     GenericMatrix operator* (GenericMatrix op);

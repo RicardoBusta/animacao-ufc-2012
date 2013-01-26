@@ -2,7 +2,8 @@
 
 #include <QString>
 
-#include <Utils/scenecontainer.h>
+#include "Utils/scenecontainer.h"
+#include "Utils/matrix4d.h"
 
 Joint::Joint(Object3D* child_object)
 {
@@ -99,4 +100,12 @@ void Joint::drawBone(int depth)
 Joint *Joint::parent()
 {
     return parent_joint_;
+}
+
+
+Matrix4D Joint::globalTransformationMatrix()
+{
+    if(parent()==NULL) return ( Matrix4D(position()) * Matrix4D(orientation()) );
+
+    return parent()->globalTransformationMatrix() * ( Matrix4D(position()) * Matrix4D(orientation()) );
 }

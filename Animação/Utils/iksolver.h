@@ -3,14 +3,16 @@
 
 #include <Objects3D/joint.h>
 
+class GenericMatrix;
+
 class IKSolver
 {
 public:
     IKSolver();
 
-    void solve(Joint *effector, QVector4D targetPosition, int type);
-    void jacobian(Joint *effector);
-    void pseudoJacobian(Joint *effector, int type);
+    static void solve(Joint *effector, qglviewer::Vec goal, int type);
+    static GenericMatrix jacobian(Joint *effector);
+    static GenericMatrix pseudoJacobian(Joint *effector, int type);
 };
 
 #endif // IKSOLVER_H

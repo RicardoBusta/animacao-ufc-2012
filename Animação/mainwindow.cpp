@@ -316,6 +316,9 @@ void MainWindow::updateRenderBones(bool bones)
 void MainWindow::updateCurrentScene(int scene){
     SceneContainer::updateCurrentScene(scene);
     updateObjects();
+    updateSelectedInfo(NULL);
+    ui->timebar->setKeyFrames(NULL);
+
     SceneContainer::setFrameRange(0,100);
     SceneContainer::setCurrentFrame(0);
     ui->viewer->repaint();

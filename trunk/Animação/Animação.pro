@@ -32,7 +32,9 @@ HEADERS += \
     Widgets/rotationwidget.h \
     Objects3D/torus.h \
     Interpolation/genericinterpolator.h \
-    Utils/matrix4d.h
+    Utils/matrix4d.h \
+    Utils/iksolver.h \
+    Utils/genericmatrix.h
 
 SOURCES += \
     Curves/arclength.cpp \
@@ -54,7 +56,9 @@ SOURCES += \
     Widgets/rotationwidget.cpp \
     Objects3D/torus.cpp \
     Interpolation/genericinterpolator.cpp \
-    Utils/matrix4d.cpp
+    Utils/matrix4d.cpp \
+    Utils/iksolver.cpp \
+    Utils/genericmatrix.cpp
 
 
 FORMS += \

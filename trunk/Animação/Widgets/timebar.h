@@ -21,6 +21,9 @@ private:
     QVector<int> pos_key_frames_;
     QVector<int> ori_key_frames_;
 
+    QVector<bool> has_pos_frames_;
+    QVector<bool> has_ori_frames_;
+
 protected:
     virtual void paintEvent(QPaintEvent* event);
     virtual void mousePressEvent ( QMouseEvent * event );

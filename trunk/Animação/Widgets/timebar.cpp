@@ -5,6 +5,7 @@
 #include "Objects3D/object3d.h"
 #include "Interpolation/objectanimator.h"
 #include "Interpolation/animation_step.h"
+#include "Utils/scenecontainer.h"
 
 TimeBar::TimeBar(QWidget *parent) :
     QWidget(parent)
@@ -15,6 +16,9 @@ TimeBar::TimeBar(QWidget *parent) :
     step_width_ = 10;
 
     setNumberOfFrames(number_of_frames_);
+
+    this->has_pos_frames_.resize(number_of_frames_);
+    this->has_ori_frames_.resize(number_of_frames_);
 }
 void TimeBar::setNumberOfFrames(int total) {
     number_of_frames_ = total;
@@ -72,6 +76,18 @@ void TimeBar::paintEvent(QPaintEvent*) {
     painter.setPen(selection_color);
     painter.drawRect((h_step)*current_frame_,0,h_step,v_step);
 
+    //Other Objects Key Frames
+    painter.setPen(frame_alternate_color);
+    painter.setBrush(frame_base_color);
+    for(int i=0; i< number_of_frames_; i++){
+        if(has_pos_frames_.at(i)){
+            painter.drawRect((h_step)*i+3,3,h_step-6,(v_step/2)-6);
+        }
+        if(has_ori_frames_.at(i)){
+            painter.drawRect((h_step)*i+3,(v_step/2)+3,h_step-6,(v_step/2)-6);
+        }
+    }
+
     //Position KeyFrames
     painter.setPen(keyframe_pos_color.darker(150));
     painter.setBrush(keyframe_pos_color);
@@ -115,10 +131,28 @@ void TimeBar::setKeyFrames(Object3D *object)
     this->pos_key_frames_.clear();
     this->ori_key_frames_.clear();
 
+    this->has_pos_frames_.clear();
+    this->has_ori_frames_.clear();
+
+    this->has_pos_frames_.resize(number_of_frames_);
+    this->has_ori_frames_.resize(number_of_frames_);
+
     if(object == NULL or object->getAnimator()==NULL){ repaint(); return; }
 
     //std::vector<OrientationStep> *orivec = &object->GetAnimator()->GetKeyOrientations();
     //std::vector<PositionStep> *posvec = &object->GetAnimator()->GetKeyPositions();
+    std::vector<ObjectAnimator*> *animators = SceneContainer::getAnimators();
+
+    for(int i=0;i<animators->size();i++){
+        ObjectAnimator *ani = animators->at(i);
+        for(int j=0;j<ani->getKeyPositions()->size();j++){
+            has_pos_frames_[ ani->getKeyPositions()->at(j).frame_ ] = true;
+        }
+
+        for(int j=0;j<ani->getKeyOrientations()->size();j++){
+            has_ori_frames_[ ani->getKeyOrientations()->at(j).frame_ ] = true;
+        }
+    }
 
     for(int i=0;i<object->getAnimator()->getKeyOrientations()->size();i++){
         ori_key_frames_.push_back(object->getAnimator()->getKeyOrientations()->at(i).frame_);

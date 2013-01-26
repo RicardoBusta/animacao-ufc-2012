@@ -1,49 +1,53 @@
 #include "matrix4d.h"
 
 Matrix4D::Matrix4D(){
-    data = new double[16];
+    data_.resize(16);
     for(int i=0;i<4;i++){
         for(int j=0;j<4;j++){
             if(i==j){
-                data[i+4*j]=1;
+                data_[((i*4)+j)]=1;
             }else{
-                data[i+4*j]=0;
+                data_[((i*4)+j)]=0;
             }
         }
     }
 }
+
 
 Matrix4D::Matrix4D(qglviewer::Vec translation)
 {
-    data = new double[16];
+    data_.resize(16);
     for(int i=0;i<4;i++){
         for(int j=0;j<4;j++){
             if(i==j){
-                data[i+4*j]=1;
+                data_[((i*4)+j)]=1;
             }else{
-                data[i+4*j]=0;
+                data_[((i*4)+j)]=0;
             }
         }
     }
 
-    data[3] = translation.x;
-    data[7] = translation.y;
-    data[11] = translation.z;
+    data_[3] = translation.x;
+    data_[7] = translation.y;
+    data_[11] = translation.z;
 }
+
 
 Matrix4D::Matrix4D(qglviewer::Quaternion orientation)
 {
-    data = new double[16];
-    memcpy(data, orientation.matrix(), sizeof(GLdouble)*16);
+    data_.resize(16);
+    const GLdouble *matrix = orientation.matrix();
+    for(int i=0;i<16;i++){
+        data_[i] = matrix[i];
+    }
 }
+
 
 Matrix4D::~Matrix4D()
 {
-    if(data !=NULL){
-        //delete data;
-        data = NULL;
-    }
+    data_.clear();
 }
+
 
 Matrix4D Matrix4D::operator *(Matrix4D op)
 {
@@ -51,9 +55,9 @@ Matrix4D Matrix4D::operator *(Matrix4D op)
 
     for(int i=0;i<4;i++){
         for(int j=0;j<4;j++){
-            result.data[(i*4)+j] = 0;
+            result.data_[((i*4)+j)]=0;
             for(int k=0;k<4;k++){
-                result.data[(i*4)+j] += this->data[(i*4)+k] * op.data[(k*4)+j];
+                result.data_[((i*4)+j)] += this->data_[((i*4)+k)] * op.data_[((k*4)+j)];
             }
         }
     }
@@ -61,11 +65,13 @@ Matrix4D Matrix4D::operator *(Matrix4D op)
     return result;
 }
 
+
 Matrix4D Matrix4D::operator =(Matrix4D op)
 {
-    memcpy(this->data, op.data, sizeof(GLdouble)*16);
+    this->data_ = op.data_;
     return *this;
 }
+
 
 qglviewer::Vec Matrix4D::apply(qglviewer::Vec op, bool vector)
 {
@@ -83,7 +89,7 @@ qglviewer::Vec Matrix4D::apply(qglviewer::Vec op, bool vector)
     for(int i=0;i<4;i++){
         res[i] = 0;
         for(int k=0;k<4;k++){
-            res[i] += ( data[(4*i)+k] * temp[k] );
+            res[i] += ( data_[((i*4)+k)] * temp[k] );
         }
     }
 

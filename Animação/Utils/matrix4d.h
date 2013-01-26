@@ -4,10 +4,12 @@
 #include <QGLViewer/vec.h>
 #include <QGLViewer/quaternion.h>
 
+#include <vector>
+
 class Matrix4D
 {
 public:
-    double *data;
+    std::vector<double> data_;
 
     Matrix4D();
     Matrix4D(qglviewer::Vec translation);

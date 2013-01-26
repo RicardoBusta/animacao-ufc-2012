@@ -85,6 +85,8 @@ public:
     static bool alternateColors();
     static void setAlternateColors(bool alternate);
 
+    static std::vector<ObjectAnimator *> *getAnimators();
+
 private:
     static Object3D* selected_object_;
     static bool animate_position_, animate_orientation_;

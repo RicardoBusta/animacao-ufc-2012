@@ -676,3 +676,9 @@ bool SceneContainer::alternateColors()
 void SceneContainer::setAlternateColors(bool alternate){
     alternate_colors_ = alternate;
 }
+
+
+std::vector<ObjectAnimator *>* SceneContainer::getAnimators()
+{
+    return &animators_;
+}

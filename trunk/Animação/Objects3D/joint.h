@@ -3,6 +3,8 @@
 
 #include "object3d.h"
 
+class Matrix4D;
+
 class Joint : public Object3D
 {
 public:
@@ -16,6 +18,8 @@ public:
     Object3D *childObject();
 
     Joint *parent();
+
+    Matrix4D globalTransformationMatrix();
 protected:
     virtual void drawObject(int depth);
     virtual void drawBoundingBox();

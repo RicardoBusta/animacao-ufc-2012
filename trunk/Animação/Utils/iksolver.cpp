@@ -2,165 +2,169 @@
 
 #include <QVector4D>
 
+#include <Utils/genericmatrix.h>
+#include <Utils/scenecontainer.h>
+#include <Utils/matrix4d.h>
+#include <Interpolation/objectanimator.h>
+
+#define D 0.5;
+#define DMAX 0.0001
+
 IKSolver::IKSolver()
 {
 }
 
-
-void IKSolver::solve(Joint *effector, QVector4D targetPosition, int type)
+void IKSolver::solve(Joint *effector, qglviewer::Vec goal, int type)
 {
-//    Vec4 posEffector = effector->getPositionEffector();
+    qglviewer::Vec posEffector = effector->globalTransformationMatrix().apply(qglviewer::Vec(0,0,0),true);
 
-//    if ((goal-posEffector).module()<dmax) return;
+    if ((goal-posEffector).norm()<DMAX) return;
 
-//    Joint *root;
-//    root = effector;
-//    Joint *r;
-//    int qtde_joint=0;
-//    if(!(root==NULL)){
-//        while(root!=NULL){
-//            qtde_joint++;
-//            r = root;
-//            root = root->getParent();
-//        }
-//    }else{
-//        qtde_joint=1;
-//    }
-//    root = effector;
+    Joint *root;
+    root = effector;
+    Joint *r;
+    int joint_count=0;
+    if(!(root==NULL)){
+        while(root!=NULL){
+            joint_count++;
+            r = root;
+            root = root->parent();
+        }
+    }else{
+        joint_count=1;
+    }
+    root = effector;
 
-//    MatrixXd jacobiana = pseudo_jacobian(effector,type);
+    GenericMatrix jacobiana = pseudoJacobian(effector,type);
 
-//    Vec4 e;
-//    if(type==0){
-//        d=0.5;
-//        dmax=0.01;
-//        if((goal-posEffector).module()<dmax){
-//            e = (goal-posEffector);
-//        }else{
-//            e = ((goal-posEffector)*dmax)/(goal-posEffector).module();
-//        }
+    qglviewer::Vec e;
+    if(type==0){
+        if((goal-posEffector).norm()<DMAX){
+            e = (goal-posEffector);
+        }else{
+            e = ((goal-posEffector)*DMAX)/(goal-posEffector).norm();
+        }
 
-//    }else{
-//        d=0.05;
-//        dmax=0.01;
-//        e = (goal-posEffector)*d;
-//    }
+    }else{
+        e = (goal-posEffector)*D;
+    }
 
-//    MatrixXd position = MatrixXd::Zero(3,1);
+    GenericMatrix position = GenericMatrix(3,1);
 
-//    position(0,0) = e.x1;
-//    position(1,0) = e.x2;
-//    position(2,0) = e.x3;
+    position.set( 0 , 0 , e.x);
+    position.set( 1 , 0 , e.y);
+    position.set( 2 , 0 , e.z);
 
 
-//    jacobiana = (jacobiana*position);
+    jacobiana = (jacobiana*position);
 
 
-//    int i = 0;
-//    while(root!=NULL){
-//        //fator de suavizacao s
-//        double s=0.5;
-//        root->applyOrientation(Vec4(1,0,0,s*jacobiana(i,0)*180.0/M_PI));
-//        root->applyOrientation(Vec4(0,1,0,s*jacobiana(1+i,0)*180.0/M_PI));
-//        root->applyOrientation(Vec4(0,0,1,s*jacobiana(2+i,0)*180.0/M_PI));
-//        i+=3;
-//        root = root->getParent();
-//    }
+    int i = 0;
+    while(root!=NULL){
+        // Smoothing Factor s
+        double s=0.5;
+        root->setNewOrientation(qglviewer::Quaternion(1,0,0,s*jacobiana.get(i,0)*180.0/M_PI));
+        root->setNewOrientation(qglviewer::Quaternion(0,1,0,s*jacobiana.get(1+i,0)*180.0/M_PI));
+        root->setNewOrientation(qglviewer::Quaternion(0,0,1,s*jacobiana.get(2+i,0)*180.0/M_PI));
+        i+=3;
+        root = root->parent();
+    }
 
 }
 
 
-void IKSolver::jacobian(Joint *effector)
+GenericMatrix IKSolver::jacobian(Joint *effector)
 {
-//    Joint *root;
-//    root = effector;
-//    int qtde_joint=0;
+    Joint *joint;
+    joint = effector;
+    int joint_count=0;
 //    if(!(root==NULL)){
-//        while(root!=NULL){
+        while(joint!=NULL){
 //            if(root->getParent()==NULL){
 //                root->DrawObject();
 //            }
-//            qtde_joint++;
-//            root = root->getParent();
-//        }
+            joint_count++;
+            joint = joint->parent();
+        }
 //    }else{
-//        qtde_joint=1;
+//        joint_count=1;
 //    }
-//    root = effector;
+    joint = effector;
 
-//    MatrixXd jacobian = MatrixXd::Zero(3,3*qtde_joint);
+    GenericMatrix jacobian = GenericMatrix(3,3*joint_count);
 
-//    Vec4 posEffector = effector->getPositionEffector();
+    qglviewer::Vec posEffector = effector->globalTransformationMatrix().apply(qglviewer::Vec(0,0,0),true);
 
-//    int i = 0;
+    int i = 0;
 
-//    while(root!=NULL){
-//        Vec4 derivatex,derivatey,derivatez;
-//        Vec4 posJoint = root->getPositionAbsolute();
-//        Vec4 posrelative = posEffector - posJoint;
+    while(joint!=NULL){
+        qglviewer::Vec derivatex,derivatey,derivatez;
+        qglviewer::Vec posJoint = joint->getAnimator()->globalPositionAt(SceneContainer::current_frame());
+        qglviewer::Vec posrelative = posEffector - posJoint;
 
-//        derivatex.setVec4(root->transform_global.matrix[0],root->transform_global.matrix[1],root->transform_global.matrix[2]);
-//        derivatey.setVec4(root->transform_global.matrix[4],root->transform_global.matrix[5],root->transform_global.matrix[6]);
-//        derivatez.setVec4(root->transform_global.matrix[8],root->transform_global.matrix[9],root->transform_global.matrix[10]);
+        Matrix4D globalTransform = joint->getAnimator()->globalTransformationMatrix(SceneContainer::current_frame());
 
-//        derivatex = Vec4::crossProduct(derivatex,posrelative);
-//        derivatey = Vec4::crossProduct(derivatey,posrelative);
-//        derivatez = Vec4::crossProduct(derivatez,posrelative);
+        derivatex.setValue(globalTransform.get(0),globalTransform.get(1),globalTransform.get(2));
+        derivatey.setValue(globalTransform.get(4),globalTransform.get(5),globalTransform.get(6));
+        derivatez.setValue(globalTransform.get(8),globalTransform.get(9),globalTransform.get(10));
+
+        // Cross Product
+        derivatex = derivatex^posrelative;
+        derivatey = derivatey^posrelative;
+        derivatez = derivatez^posrelative;
 
 
-//        double vetx[3] = {derivatex.x1,derivatey.x1,derivatez.x1};
-//        double vety[3] = {derivatex.x2,derivatey.x2,derivatez.x2};
-//        double vetz[3] = {derivatex.x3,derivatey.x3,derivatez.x3};
+        double vetx[3] = {derivatex.x,derivatey.x,derivatez.x};
+        double vety[3] = {derivatex.y,derivatey.y,derivatez.y};
+        double vetz[3] = {derivatex.z,derivatey.z,derivatez.z};
 
-//        for(int j=0;j<3;j++){
-//            for(int k=0;k<3;k++){
-//                if(j==0){
-//                    jacobian(0,k+(3*i)) =vetx[k];
+        for(int j=0;j<3;j++){
+            for(int k=0;k<3;k++){
+                if(j==0){
+                    jacobian.set( 0 , k+(3*i) , vetx[k] );
 
-//                }
-//                if(j==1){
-//                    jacobian(1,k+(3*i)) =vety[k];
-//                }
-//                if(j==2){
-//                    jacobian(2,k+(3*i)) =vetz[k];
+                }
+                if(j==1){
+                    jacobian.set( 1 , k+(3*i) , vety[k] );
+                }
+                if(j==2){
+                    jacobian.set( 2 , k+(3*i) , vetz[k] );
 
-//                }
-//            }
-//        }
-//        i++;
-//        root = root->getParent();
-//    }
+                }
+            }
+        }
+        i++;
+        joint = joint->parent();
+    }
 
-//    return jacobian;
+    return jacobian;
 }
 
 
-void IKSolver::pseudoJacobian(Joint *effector, int type)
+GenericMatrix IKSolver::pseudoJacobian(Joint *effector, int type)
 {
-//    MatrixXd j = jacobian(effector);
-//    MatrixXd jjtInv = (j * j.transpose());
-//    jjtInv = jjtInv.inverse();
-//    bool nan= false;
-//    //somente o calculo da transposta
-//    if(type==0){
-//        return j.transpose();
-//    }
-//    //calculo da pseudo inversa
-//    //Verifica se existe matriz inversa
-//    for(int i=0;i<jjtInv.cols();i++){
-//        for(int j=0;j<jjtInv.rows();j++){
+    GenericMatrix j = jacobian(effector);
+    GenericMatrix j_jt_inverse = (j * j.transpose());
+    j_jt_inverse = j_jt_inverse.inverse();
+    bool nan= false;
+    // If transpose only
+    if(type==0){
+        return j.transpose();
+    }
+    // Pseudo Inverse
+    // Verify if there is inverse
+    for(int i=0;i<j_jt_inverse.cols();i++){
+        for(int j=0;j<j_jt_inverse.rows();j++){
+            if (isnan(j_jt_inverse.get(j,i))){
+                nan = true;
+                break;
+            }
+        }
+    }
 
-//            if (isnan(jjtInv(j,i))){
-//                nan = true;
-//                break;
-//            }
-//        }
+    if(nan){
+        return j.transpose();
+    }
 
-//    }
-
-//    if(nan){
-//        return j.transpose();
-//    }
-
-//    return (j.transpose()*jjtInv);
+    return (j.transpose()*j_jt_inverse);
 }

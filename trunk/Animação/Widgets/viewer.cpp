@@ -19,7 +19,16 @@ Viewer::Viewer(QWidget* parent) :
     grid_div_ = 20;
 }
 
+#include "Utils/iksolver.h"
+
 void Viewer::draw() {
+
+    if(SceneContainer::selectedObject()!=NULL){
+        qglviewer::Vec goal = SceneContainer::selectedObject()->position();
+        goal += qglviewer::Vec(0.01,0,0);
+
+        IKSolver::solve((Joint*)SceneContainer::selectedObject(),goal,0);
+    }
 
     SceneContainer::drawObjects();
     SceneContainer::drawExtras();

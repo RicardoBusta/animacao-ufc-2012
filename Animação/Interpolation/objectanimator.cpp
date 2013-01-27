@@ -214,15 +214,15 @@ std::vector<OrientationStep> *ObjectAnimator::getKeyOrientations()
 }
 
 
-Matrix4D ObjectAnimator::localTransformationMatrix(int frame)
+GenericMatrix ObjectAnimator::localTransformationMatrix(int frame)
 {
-    Matrix4D translation( positionAt(frame) );
-    Matrix4D rotation( orientationAt(frame) );
+    GenericMatrix translation = Matrix4D::generate( positionAt(frame) );
+    GenericMatrix rotation = Matrix4D::generate( orientationAt(frame) );
 
     return (translation * rotation);
 }
 
-Matrix4D ObjectAnimator::globalTransformationMatrix(int frame)
+GenericMatrix ObjectAnimator::globalTransformationMatrix(int frame)
 {
     if( parent()!=NULL ){
         return ( parent()->globalTransformationMatrix(frame) * localTransformationMatrix(frame) );
@@ -241,7 +241,7 @@ Matrix4D ObjectAnimator::globalTransformationMatrix(int frame)
 
 qglviewer::Vec ObjectAnimator::globalPositionAt(int frame)
 {
-    return globalTransformationMatrix(frame).apply(qglviewer::Vec(0,0,0),false);
+    return Matrix4D::apply(globalTransformationMatrix(frame),qglviewer::Vec(0,0,0),false);
 }
 
 qglviewer::Quaternion ObjectAnimator::globalOrientationAt(int frame)

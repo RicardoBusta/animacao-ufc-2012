@@ -103,17 +103,17 @@ Joint *Joint::parent()
 }
 
 
-Matrix4D Joint::globalTransformationMatrix()
+GenericMatrix Joint::globalTransformationMatrix()
 {
-        if(parent()==NULL) return ( Matrix4D(position()) * Matrix4D(orientation()) );
+        if(parent()==NULL) return ( Matrix4D::generate(position()) * Matrix4D::generate(orientation()) );
 
-        return ( parent()->globalTransformationMatrix() * ( Matrix4D(position()) * Matrix4D(orientation()) ) );
+        return ( parent()->globalTransformationMatrix() * ( Matrix4D::generate(position()) * Matrix4D::generate(orientation()) ) );
 }
 
 
 qglviewer::Vec Joint::globalPosition()
 {
-    return globalTransformationMatrix().apply(qglviewer::Vec(0,0,0),false);
+    return Matrix4D::apply(globalTransformationMatrix(),qglviewer::Vec(0,0,0),false);
 //    qglviewer::Vec origin;
 //    Joint* it = this;
 //    while(it != NULL) {

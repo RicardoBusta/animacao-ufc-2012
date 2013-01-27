@@ -84,7 +84,12 @@ GenericMatrix GenericMatrix::operator =(GenericMatrix op)
 
 GenericMatrix GenericMatrix::operator* (GenericMatrix op)
 {
-    if( this->cols_ != op.rows_ ) return GenericMatrix(1,1);
+    if( this->cols_ != op.rows_ ){
+        std::cout << "Generic Matrix Operator * Error" << std::endl;
+        std::cout << "Matrix1: " << this->rows() << " x " << this->cols() <<  std::endl;
+        std::cout << "Matrix2: " << op.rows() << " x " << op.cols() <<  std::endl;
+        return GenericMatrix(1,1);
+    }
 
     GenericMatrix result(this->rows_,op.cols_);
 
@@ -102,9 +107,10 @@ GenericMatrix GenericMatrix::operator* (GenericMatrix op)
 }
 
 
-void GenericMatrix::debugPrint()
+void GenericMatrix::debugPrint(std::string debugtext)
 {
-    std::cout << "==matrix==" << std::endl;
+    std::cout << "=="<< debugtext <<"==" << std::endl;
+    std::cout << "size: " << this->rows() << " x " << this->cols() <<  std::endl;
 
     for(int i=0;i<rows_;i++){
         for(int j=0;j<cols_;j++){
@@ -126,10 +132,14 @@ GenericMatrix GenericMatrix::inverse()
     // AInverse = inverted matrix (n x n)
     // This function inverts a matrix based on the Gauss Jordan method.
     // The function returns 1 on success, 0 on failure.
-    if(rows_ != cols_) return GenericMatrix(1,1);
+    if(rows_ != cols_){
+        std::cout << "Generic Matrix Inverse Error" << std::endl;
 
-    //double *AInverse = new double[ (rows_*cols_) ];
-    GenericMatrix AInverse(rows_,cols_);
+        return GenericMatrix(1,1);
+    }
+
+    double *AInverse = new double[ (rows_*cols_) ];
+    GenericMatrix result(rows_,cols_);
 
     std::vector<double> A = data_;
     int n = rows_;
@@ -143,10 +153,10 @@ GenericMatrix GenericMatrix::inverse()
     {
         for (j = 0; j < n; j++)
         {
-            AInverse.data_[n*i+j] = 0;
+            AInverse[n*i+j] = 0;
             ac[n*i+j] = A[n*i+j];
         }
-        AInverse.data_[n*i+i] = 1;
+        AInverse[n*i+i] = 1;
     }
 
     // The current pivot row is iPass.
@@ -163,9 +173,9 @@ GenericMatrix GenericMatrix::inverse()
         {
             for (icol = 0; icol < n; icol++)
             {
-                temp = AInverse.data_[n*iPass+icol];
-                AInverse.data_[n*iPass+icol] = AInverse.data_[n*imx+icol];
-                AInverse.data_[n*imx+icol] = temp;
+                temp = AInverse[n*iPass+icol];
+                AInverse[n*iPass+icol] = AInverse[n*imx+icol];
+                AInverse[n*imx+icol] = temp;
 
                 if (icol >= iPass)
                 {
@@ -183,13 +193,14 @@ GenericMatrix GenericMatrix::inverse()
         if (det == 0)
         {
             free(ac);
-            return 0;
+            std::cout << "Inverse Determinant = 0" << std::endl;
+            return GenericMatrix(1,1);
         }
 
         for (icol = 0; icol < n; icol++)
         {
             // Normalize the pivot row by dividing by the pivot element.
-            AInverse.data_[n*iPass+icol] = AInverse.data_[n*iPass+icol] / pivot;
+            AInverse[n*iPass+icol] = AInverse[n*iPass+icol] / pivot;
             if (icol >= iPass) A[n*iPass+icol] = A[n*iPass+icol] / pivot;
         }
 
@@ -202,7 +213,7 @@ GenericMatrix GenericMatrix::inverse()
             {
                 if (irow != iPass)
                 {
-                    AInverse.data_[n*irow+icol] -= factor * AInverse.data_[n*iPass+icol];
+                    AInverse[n*irow+icol] -= factor * AInverse[n*iPass+icol];
                     A[n*irow+icol] -= factor * A[n*iPass+icol];
                 }
             }
@@ -210,7 +221,18 @@ GenericMatrix GenericMatrix::inverse()
     }
 
     free(ac);
-    return AInverse;
+
+    for(int i=0;i<result.rows();i++){
+        for(int j=0;j<result.cols();j++){
+            result.set(i,j,AInverse[i*n+j]);
+        }
+    }
+
+    delete AInverse;
+
+    result.debugPrint("result");
+
+    return result;
 }
 
 
@@ -222,4 +244,10 @@ int GenericMatrix::rows()
 int GenericMatrix::cols()
 {
     return cols_;
+}
+
+
+double GenericMatrix::setData(std::vector<double> data)
+{
+    data_ = data;
 }

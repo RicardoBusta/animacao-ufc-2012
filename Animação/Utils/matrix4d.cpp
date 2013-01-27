@@ -1,33 +1,40 @@
 #include "matrix4d.h"
 
-Matrix4D::Matrix4D():GenericMatrix(4,4){
+#include "Utils/genericmatrix.h"
+
+GenericMatrix Matrix4D::generate()
+{
+    GenericMatrix matrix(4,4);
+    return matrix;
 }
 
 
-Matrix4D::Matrix4D(qglviewer::Vec translation):GenericMatrix(4,4)
+GenericMatrix Matrix4D::generate(qglviewer::Vec translation)
 {
-    setIdentity();
-    this->set(0,3,translation.x);
-    this->set(1,3,translation.y);
-    this->set(2,3,translation.z);
+    GenericMatrix matrix(4,4);
+    matrix.setIdentity();
+    matrix.set(0,3,translation.x);
+    matrix.set(1,3,translation.y);
+    matrix.set(2,3,translation.z);
+    return matrix;
 }
 
 
-Matrix4D::Matrix4D(qglviewer::Quaternion orientation):GenericMatrix(4,4)
+GenericMatrix Matrix4D::generate(qglviewer::Quaternion orientation)
 {
-
-    const GLdouble *matrix = orientation.matrix();
+    GenericMatrix matrix(4,4);
+    const GLdouble *omatrix = orientation.matrix();
     for(int i=0;i<4;i++){
         for(int j=0;j<4;j++){
-            set(j,i,matrix[((i*4)+j)]);
+            matrix.set(j,i,omatrix[((i*4)+j)]);
         }
     }
+    return matrix;
 }
 
-qglviewer::Vec Matrix4D::apply(qglviewer::Vec op, bool vector)
+qglviewer::Vec Matrix4D::apply(GenericMatrix matrix, qglviewer::Vec op, bool vector)
 {
     qglviewer::Vec result;
-    GenericMatrix thisMatrix = *this;
     GenericMatrix temp = GenericMatrix(4,1);
     GenericMatrix res;
     temp.set(0,0, op.x);
@@ -39,46 +46,19 @@ qglviewer::Vec Matrix4D::apply(qglviewer::Vec op, bool vector)
         temp.set(3,0,1);
     }
 
-    for(int i=0;i<4;i++){
-        double resv = 0;
-        for(int k=0;k<4;k++){
-            resv += ( get(i,k) * temp.get(k,0) );
-        }
-        res.set(i,0,resv);
-    }
+    res = (matrix * temp);
+
+//    for(int i=0;i<4;i++){
+//        double resv = 0;
+//        for(int k=0;k<4;k++){
+//            resv += ( thisM.get(i,k) * temp.get(k,0) );
+//        }
+//        res.set(i,0,resv);
+//    }
 
     result.x = res.get(0,0);
     result.y = res.get(1,0);
     result.z = res.get(2,0);
-
-    return result;
-}
-
-Matrix4D Matrix4D::operator =(Matrix4D op)
-{
-    this->rows_ = op.rows_;
-    this->cols_ = op.cols_;
-
-    this->data_ = op.data_;
-
-    return *this;
-}
-
-Matrix4D Matrix4D::operator *(Matrix4D op)
-{
-    if( this->cols_ != op.rows_ ) return Matrix4D();
-
-    Matrix4D result;
-
-    for(int i=0;i<this->rows_;i++){
-        for(int j=0;j<op.cols_;j++){
-            double val = 0;
-            for(int k=0;k<this->cols_;k++){
-                val += this->get(i,k) * op.get(k,j);
-            }
-            result.set(i,j,val);
-        }
-    }
 
     return result;
 }

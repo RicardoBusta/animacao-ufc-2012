@@ -3,7 +3,7 @@
 
 #include "object3d.h"
 
-class Matrix4D;
+class GenericMatrix;
 
 class Joint : public Object3D
 {
@@ -20,7 +20,7 @@ public:
     Joint *parent();
 
     qglviewer::Vec globalPosition();
-    Matrix4D globalTransformationMatrix();
+    GenericMatrix globalTransformationMatrix();
 protected:
     virtual void drawObject(int depth);
     virtual void drawBoundingBox();

@@ -6,9 +6,7 @@
 #include "Objects3D/trajectoryobject.h"
 
 class Object3D;
-
-class Matrix4D;
-
+class GenericMatrix;
 
 class ObjectAnimator
 {
@@ -23,8 +21,8 @@ public:
     qglviewer::Vec positionAt           (int frame);
     qglviewer::Quaternion orientationAt (int frame);
 
-    Matrix4D localTransformationMatrix(int frame);
-    Matrix4D globalTransformationMatrix(int frame);
+    GenericMatrix localTransformationMatrix(int frame);
+    GenericMatrix globalTransformationMatrix(int frame);
 
     qglviewer::Vec globalPositionAt(int frame);
     qglviewer::Quaternion globalOrientationAt(int frame);

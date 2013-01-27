@@ -22,18 +22,16 @@ void IKSolver::solve(Joint *effector, qglviewer::Vec goal, int type)
 
     Joint *root;
     root = effector;
-    Joint *r;
-    int joint_count=0;
-    if(!(root==NULL)){
-        while(root!=NULL){
-            joint_count++;
-            r = root;
-            root = root->parent();
-        }
-    }else{
-        joint_count=1;
-    }
-    root = effector;
+//    int joint_count=0;
+//    if(!(root==NULL)){
+//        while(root!=NULL){
+//            joint_count++;
+//            root = root->parent();
+//        }
+//    }else{
+//        joint_count=1;
+//    }
+//    root = effector;
 
     GenericMatrix jacobiana = pseudoJacobian(effector,type);
 
@@ -63,10 +61,27 @@ void IKSolver::solve(Joint *effector, qglviewer::Vec goal, int type)
     while(root!=NULL){
         // Smoothing Factor s
         double s=0.5;
-        root->setNewOrientation(qglviewer::Quaternion(1,0,0,s*jacobiana.get(i,0)*180.0/M_PI));
-        root->setNewOrientation(qglviewer::Quaternion(0,1,0,s*jacobiana.get(1+i,0)*180.0/M_PI));
-        root->setNewOrientation(qglviewer::Quaternion(0,0,1,s*jacobiana.get(2+i,0)*180.0/M_PI));
-        i+=3;
+        double angle;
+        qglviewer::Vec vector;
+        qglviewer::Quaternion qresult = qglviewer::Quaternion(0,0,0,1);
+
+        vector = qglviewer::Vec(1,0,0);
+        angle = ( s*jacobiana.get(i,0)*(180.0/M_PI) );
+        qresult = qresult * qglviewer::Quaternion(vector,angle);
+        i++;
+
+        vector = qglviewer::Vec(0,1,0);
+        angle = ( s*jacobiana.get(i,0)*(180.0/M_PI) );
+        qresult = qresult * qglviewer::Quaternion(vector,angle);
+        i++;
+
+        vector = qglviewer::Vec(0,0,1);
+        angle = ( s*jacobiana.get(i,0)*(180.0/M_PI) );
+        qresult = qresult * qglviewer::Quaternion(vector,angle);
+        i++;
+
+        root->setNewOrientation(qresult);
+
         root = root->parent();
     }
 

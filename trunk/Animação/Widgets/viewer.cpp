@@ -23,11 +23,12 @@ Viewer::Viewer(QWidget* parent) :
 
 void Viewer::draw() {
 
-    if(SceneContainer::selectedObject()!=NULL){
-        qglviewer::Vec goal = SceneContainer::selectedObject()->position();
-        goal += qglviewer::Vec(0.01,0,0);
+    if(SceneContainer::ikMode() and SceneContainer::selectedObject()!=NULL){
+//        qglviewer::Vec goal = SceneContainer::selectedObject()->position();
+//        goal += qglviewer::Vec(100,0,0);
+        qglviewer::Vec goal(10,0,0);
 
-        IKSolver::solve((Joint*)SceneContainer::selectedObject(),goal,0);
+        IKSolver::solve((Joint*)SceneContainer::selectedObject(),goal,1);
     }
 
     SceneContainer::drawObjects();

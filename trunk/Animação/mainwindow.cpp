@@ -64,6 +64,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect( ui->viewer, SIGNAL(updateSelected(int)), this, SLOT(setSelectedByID(int)) );
 
+    connect( ui->push_ikmode, SIGNAL(toggled(bool)), this, SLOT(setIKMode(bool)) );
+
 
     // interface
     this->showMaximized();
@@ -337,8 +339,22 @@ void MainWindow::setSelectedByID(int id)
         updateSelectedInfo(NULL);
         ui->timebar->setKeyFrames(NULL);
     }
-//    updateSelectedInfo(obj);
+    //    updateSelectedInfo(obj);
 
     ui->treeWidget->setCurrentItem(selected_item_);
 }
 
+
+void MainWindow::setIKMode(bool ik)
+{
+    if(!play_or_pause_){
+        play_or_pause_ = true;
+        ui->button_play->setIcon(play_icon);
+        ui->viewer->pause();
+    }
+    ui->tab_widget->setEnabled(!ik);
+    ui->timebar->setEnabled(!ik);
+    ui->button_play->setEnabled(!ik);
+    ui->button_stop->setEnabled(!ik);
+    SceneContainer::setIKMode(ik);
+}

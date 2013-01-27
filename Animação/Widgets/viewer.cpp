@@ -14,6 +14,8 @@
 RotationWidget* rotation = new RotationWidget(new Object3D());
 
 static double gx = 0;
+static qglviewer::Vec goal;
+static qglviewer::Vec effector;
 
 Viewer::Viewer(QWidget* parent) :
     QGLViewer(parent){
@@ -32,7 +34,6 @@ void Viewer::draw() {
     SceneContainer::drawExtras();
 
     if(SceneContainer::ikMode() and SceneContainer::selectedObject()!=NULL){
-        qglviewer::Vec goal = qglviewer::Vec(gx+=0.01,0,0);
         qglviewer::Vec effector = ((Joint*)SceneContainer::selectedObject())->globalTransformationMatrix().apply(qglviewer::Vec(0,0,0),false);
         glPushAttrib(GL_ALL_ATTRIB_BITS);
         glDisable(GL_DEPTH_TEST);
@@ -45,8 +46,6 @@ void Viewer::draw() {
         glVertex3f(effector.x,effector.y, effector.z);
         glEnd();
         glPopAttrib();
-
-        IKSolver::solve((Joint*)SceneContainer::selectedObject(),goal,1);
     }
 
     glColor3f(1,1,1);
@@ -249,5 +248,12 @@ void Viewer::ikStop()
 
 void Viewer::ikTimeout()
 {
+    if(SceneContainer::ikMode() and SceneContainer::selectedObject()!=NULL){
+        goal = effector + qglviewer::Vec(3,0,0);
+        effector = ((Joint*)SceneContainer::selectedObject())->globalTransformationMatrix().apply(qglviewer::Vec(0,0,0),false);
+
+        IKSolver::solve((Joint*)SceneContainer::selectedObject(),goal,1);
+    }
+
     repaint();
 }

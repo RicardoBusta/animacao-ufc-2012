@@ -2,6 +2,7 @@
 #define GENERICMATRIX_H
 
 #include <vector>
+#include <string>
 
 class GenericMatrix
 {
@@ -16,6 +17,8 @@ public:
     void set( int index, double val );
     double get( int index );
 
+    double setData(std::vector<double> data);
+
     int rows();
     int cols();
 
@@ -25,7 +28,7 @@ public:
     GenericMatrix operator= (GenericMatrix op);
     GenericMatrix operator* (GenericMatrix op);
 
-    void debugPrint();
+    void debugPrint(std::string debugtext);
 protected:
     int rows_;
     int cols_;

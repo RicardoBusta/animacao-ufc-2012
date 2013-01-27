@@ -6,17 +6,13 @@
 
 #include <Utils/genericmatrix.h>
 
-class Matrix4D : public GenericMatrix
+namespace Matrix4D
 {
-public:
-    Matrix4D();
-    Matrix4D(qglviewer::Vec translation);
-    Matrix4D(qglviewer::Quaternion orientation);
+    GenericMatrix generate();
+    GenericMatrix generate(qglviewer::Vec translation);
+    GenericMatrix generate(qglviewer::Quaternion orientation);
 
-    Matrix4D operator =(Matrix4D op);
-    Matrix4D operator *(Matrix4D op);
-
-    qglviewer::Vec apply(qglviewer::Vec op, bool vector);
-};
+    qglviewer::Vec apply(GenericMatrix matrix, qglviewer::Vec op, bool vector);
+}
 
 #endif // MATRIX4D_H

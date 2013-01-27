@@ -249,7 +249,7 @@ void Viewer::ikStop()
 void Viewer::ikTimeout()
 {
     if(SceneContainer::ikMode() and SceneContainer::selectedObject()!=NULL){
-        goal = effector + qglviewer::Vec(3,0,0);
+        goal = effector + qglviewer::Vec(0.1,0,0);
         effector = ((Joint*)SceneContainer::selectedObject())->globalTransformationMatrix().apply(qglviewer::Vec(0,0,0),false);
 
         IKSolver::solve((Joint*)SceneContainer::selectedObject(),goal,1);

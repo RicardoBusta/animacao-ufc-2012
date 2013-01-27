@@ -135,7 +135,7 @@ void Object3D::drawOrientationAxes() {
     glPopAttrib();
 }
 
-void Object3D::drawObject(int depth) {
+void Object3D::drawObject(int) {
 }
 
 void Object3D::setAnimator(ObjectAnimator *animator)

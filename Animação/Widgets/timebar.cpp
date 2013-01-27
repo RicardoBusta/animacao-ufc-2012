@@ -48,6 +48,14 @@ void TimeBar::paintEvent(QPaintEvent*) {
     QColor border_color = palette().shadow().color().darker();
     QColor selection_color = palette().highlight().color(); /*(0,0,0);*/
 
+    if(!this->isEnabled()){
+        keyframe_pos_color = palette().background().color();
+        keyframe_ori_color = palette().background().color();
+        frame_alternate_color = frame_base_color;
+        frame_border_color = frame_base_color.darker();
+        selection_color = border_color;
+    }
+
     //double step_width = ((double)this->width()) / ((double)number_of_frames_);
     //step_width_ =
     //step_width_ = step_width_ > 1 ? step_width_ : 1;

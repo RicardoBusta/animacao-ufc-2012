@@ -13,26 +13,41 @@
 
 RotationWidget* rotation = new RotationWidget(new Object3D());
 
+static double gx = 0;
+
 Viewer::Viewer(QWidget* parent) :
     QGLViewer(parent){
     grid_size_ = 2.0;
     grid_div_ = 20;
+
+    connect( &ikTimer, SIGNAL(timeout()), this, SLOT(ikTimeout()) );
 }
 
 #include "Utils/iksolver.h"
+#include "Utils/matrix4d.h"
 
 void Viewer::draw() {
 
+    SceneContainer::drawObjects();
+    SceneContainer::drawExtras();
+
     if(SceneContainer::ikMode() and SceneContainer::selectedObject()!=NULL){
-//        qglviewer::Vec goal = SceneContainer::selectedObject()->position();
-//        goal += qglviewer::Vec(100,0,0);
-        qglviewer::Vec goal(10,0,0);
+        qglviewer::Vec goal = qglviewer::Vec(gx+=0.01,0,0);
+        qglviewer::Vec effector = ((Joint*)SceneContainer::selectedObject())->globalTransformationMatrix().apply(qglviewer::Vec(0,0,0),false);
+        glPushAttrib(GL_ALL_ATTRIB_BITS);
+        glDisable(GL_DEPTH_TEST);
+        glDisable(GL_LIGHTING);
+        glPointSize(10);
+        glBegin(GL_POINTS);
+        glColor3f(0,1,0);
+        glVertex3f(goal.x,goal.y,goal.z);
+        glColor3f(1,0,0);
+        glVertex3f(effector.x,effector.y, effector.z);
+        glEnd();
+        glPopAttrib();
 
         IKSolver::solve((Joint*)SceneContainer::selectedObject(),goal,1);
     }
-
-    SceneContainer::drawObjects();
-    SceneContainer::drawExtras();
 
     glColor3f(1,1,1);
     this->drawText(10,10,QString("Frame: %1").arg(SceneContainer::current_frame()));
@@ -108,7 +123,7 @@ void Viewer::init() {
     glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
     glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
     /*
-    /*static GLfloat light1pos[4] = { -0.892, 0.3, 0.9, 0.0 };
+    static GLfloat light1pos[4] = { -0.892, 0.3, 0.9, 0.0 };
     static GLfloat light1diffuse[] = { 0.8f, 0.8f, 0.8, 1.0f };
     static GLfloat light1specular[] = { 0.5f, 0.5f, 0.5f, 1.0f };
 
@@ -218,3 +233,21 @@ void Viewer::postSelection(const QPoint &point)
 //        QGLViewer::mousePressEvent(event);
 //    }
 //}
+
+
+void Viewer::ikStart()
+{
+    ikTimer.start(100);
+}
+
+void Viewer::ikStop()
+{
+    ikTimer.stop();
+}
+
+#include <Utils/matrix4d.h>
+
+void Viewer::ikTimeout()
+{
+    repaint();
+}

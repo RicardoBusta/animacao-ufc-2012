@@ -105,7 +105,21 @@ Joint *Joint::parent()
 
 Matrix4D Joint::globalTransformationMatrix()
 {
-    if(parent()==NULL) return ( Matrix4D(position()) * Matrix4D(orientation()) );
+        if(parent()==NULL) return ( Matrix4D(position()) * Matrix4D(orientation()) );
 
-    return parent()->globalTransformationMatrix() * ( Matrix4D(position()) * Matrix4D(orientation()) );
+        return ( parent()->globalTransformationMatrix() * ( Matrix4D(position()) * Matrix4D(orientation()) ) );
+}
+
+
+qglviewer::Vec Joint::globalPosition()
+{
+    return globalTransformationMatrix().apply(qglviewer::Vec(0,0,0),false);
+//    qglviewer::Vec origin;
+//    Joint* it = this;
+//    while(it != NULL) {
+//        origin = it->orientation().rotate(origin);
+//        origin = origin + it->position();
+//        it = it->parent();
+//    }
+//    return origin;
 }

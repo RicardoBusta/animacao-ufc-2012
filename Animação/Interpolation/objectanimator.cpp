@@ -225,9 +225,18 @@ Matrix4D ObjectAnimator::localTransformationMatrix(int frame)
 Matrix4D ObjectAnimator::globalTransformationMatrix(int frame)
 {
     if( parent()!=NULL ){
-        return parent()->globalTransformationMatrix(frame) * localTransformationMatrix(frame);
+        return ( parent()->globalTransformationMatrix(frame) * localTransformationMatrix(frame) );
     }
     return localTransformationMatrix(frame);
+
+//    qglviewer::Vec origin;
+//        ObjectAnimator* it = this;
+//        while(it != NULL) {
+//            origin = it->orientationAt(frame).rotate(origin);
+//            origin = origin + it->positionAt(frame);
+//            it = it->parent();
+//        }
+//        return origin;
 }
 
 qglviewer::Vec ObjectAnimator::globalPositionAt(int frame)
@@ -238,7 +247,7 @@ qglviewer::Vec ObjectAnimator::globalPositionAt(int frame)
 qglviewer::Quaternion ObjectAnimator::globalOrientationAt(int frame)
 {
     if( parent()!=NULL ){
-       return parent()->globalOrientationAt(frame) * orientationAt(frame);
+       return ( parent()->globalOrientationAt(frame) * orientationAt(frame) );
     }
     return orientationAt(frame);
 }

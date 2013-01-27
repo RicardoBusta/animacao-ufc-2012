@@ -352,6 +352,11 @@ void MainWindow::setIKMode(bool ik)
         ui->button_play->setIcon(play_icon);
         ui->viewer->pause();
     }
+    if(ik){
+        ui->viewer->ikStart();
+    }else{
+        ui->viewer->ikStop();
+    }
     ui->tab_widget->setEnabled(!ik);
     ui->timebar->setEnabled(!ik);
     ui->button_play->setEnabled(!ik);

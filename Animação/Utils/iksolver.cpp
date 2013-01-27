@@ -16,7 +16,7 @@ IKSolver::IKSolver()
 
 void IKSolver::solve(Joint *effector, qglviewer::Vec goal, int type)
 {
-    qglviewer::Vec posEffector = effector->globalTransformationMatrix().apply(qglviewer::Vec(0,0,0),true);
+    qglviewer::Vec posEffector = effector->globalPosition();
 
     if ((goal-posEffector).norm()<DMAX) return;
 
@@ -108,16 +108,16 @@ GenericMatrix IKSolver::jacobian(Joint *effector)
 
     GenericMatrix jacobian = GenericMatrix(3,3*joint_count);
 
-    qglviewer::Vec posEffector = effector->globalTransformationMatrix().apply(qglviewer::Vec(0,0,0),true);
+    qglviewer::Vec posEffector = effector->globalPosition();
 
     int i = 0;
 
     while(joint!=NULL){
         qglviewer::Vec derivatex,derivatey,derivatez;
-        qglviewer::Vec posJoint = joint->getAnimator()->globalPositionAt(SceneContainer::current_frame());
+        qglviewer::Vec posJoint = joint->globalPosition();
         qglviewer::Vec posrelative = posEffector - posJoint;
 
-        Matrix4D globalTransform = joint->getAnimator()->globalTransformationMatrix(SceneContainer::current_frame());
+        Matrix4D globalTransform = joint->globalTransformationMatrix();
 
         derivatex.setValue(globalTransform.get(0),globalTransform.get(1),globalTransform.get(2));
         derivatey.setValue(globalTransform.get(4),globalTransform.get(5),globalTransform.get(6));

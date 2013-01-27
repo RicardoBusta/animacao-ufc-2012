@@ -43,7 +43,7 @@ protected:
     void                           defaultInitialisation();
     void                           drawPositionParticle();
     void                           drawOrientationAxes();
-    virtual void                   drawObject(int depth);
+    virtual void                   drawObject(int);
     virtual void                   drawBoundingBox();
     virtual void                   drawBoxObject();
     virtual void                   drawBone(int depth);

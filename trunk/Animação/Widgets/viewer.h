@@ -5,6 +5,8 @@
 
 #include <QGLShaderProgram>
 
+#include <QTimer>
+
 class BezierQuadratic;
 class Object3D;
 
@@ -15,6 +17,8 @@ public:
     explicit Viewer(QWidget* parent = 0);
 
     int current_shader_;
+
+    QTimer ikTimer;
 
 protected :
     virtual void draw();
@@ -40,6 +44,10 @@ public slots:
     void setCurrentShader(int shader);
     void releaseShader();
     void bindShader();
+
+    void ikStart();
+    void ikStop();
+    void ikTimeout();
 
 //    virtual void mousePressEvent(QMouseEvent *event);
 private:

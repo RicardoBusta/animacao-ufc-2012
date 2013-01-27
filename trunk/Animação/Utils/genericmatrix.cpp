@@ -90,9 +90,11 @@ GenericMatrix GenericMatrix::operator* (GenericMatrix op)
 
     for(int i=0;i<this->rows_;i++){
         for(int j=0;j<op.cols_;j++){
+            double val = 0;
             for(int k=0;k<this->cols_;k++){
-                result.data_[ ((i*result.cols_) + j) ] += this->data_ [  ((i*this->cols_) + k) ] * op.data_[  ((k*op.cols_) + j) ];
+                val += this->get(i,k) * op.get(k,j);
             }
+            result.set(i,j,val);
         }
     }
 

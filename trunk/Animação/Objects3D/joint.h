@@ -19,6 +19,7 @@ public:
 
     Joint *parent();
 
+    qglviewer::Vec globalPosition();
     Matrix4D globalTransformationMatrix();
 protected:
     virtual void drawObject(int depth);

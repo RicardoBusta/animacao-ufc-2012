@@ -60,6 +60,7 @@ private slots:
     void removePositionKeyframe();
     void removeOrientationKeyframe();
     void setSelectedByID(int);
+    void setIKMode(bool);
 };
 
 #endif // MAINWINDOW_H

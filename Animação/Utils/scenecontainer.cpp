@@ -36,6 +36,8 @@ bool SceneContainer::draw_with_names_ = false;
 
 bool SceneContainer::alternate_colors_ = true;
 
+bool SceneContainer::ik_mode_ = false;
+
 unsigned int SceneContainer::render_options_ = 0;
 
 SceneContainer::SceneContainer(){}
@@ -681,4 +683,15 @@ void SceneContainer::setAlternateColors(bool alternate){
 std::vector<ObjectAnimator *>* SceneContainer::getAnimators()
 {
     return &animators_;
+}
+
+
+bool SceneContainer::ikMode()
+{
+    return ik_mode_;
+}
+
+void SceneContainer::setIKMode(bool ik)
+{
+    ik_mode_ = ik;
 }

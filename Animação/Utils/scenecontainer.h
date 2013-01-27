@@ -87,6 +87,10 @@ public:
 
     static std::vector<ObjectAnimator *> *getAnimators();
 
+    static bool ikMode();
+
+    static void setIKMode(bool ik);
+
 private:
     static Object3D* selected_object_;
     static bool animate_position_, animate_orientation_;
@@ -99,6 +103,8 @@ private:
     static bool draw_with_names_;
 
     static bool alternate_colors_;
+
+    static bool ik_mode_;
 
     static std::vector<ObjectAnimator*> animators_;
     static std::vector<Joint*> objects_;

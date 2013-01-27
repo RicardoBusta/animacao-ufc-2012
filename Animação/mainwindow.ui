@@ -41,6 +41,16 @@
        </property>
        <layout class="QVBoxLayout" name="verticalLayout_3">
         <item>
+         <widget class="QPushButton" name="push_ikmode">
+          <property name="text">
+           <string>Inverse Kinematics</string>
+          </property>
+          <property name="checkable">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
          <widget class="QTreeWidget" name="treeWidget">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Expanding">

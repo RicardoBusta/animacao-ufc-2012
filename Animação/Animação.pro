@@ -76,10 +76,10 @@ LIBS *= -lqglviewer-qt4
 }
 
 #tive que recolocar pra compilar, o outro não funcionou.
-unix:!macx: LIBS += -L$$PWD/../../../../../../usr/lib/x86_64-linux-gnu/ -lqglviewer-qt4
-INCLUDEPATH += $$PWD/../../../../../../usr/include/QGLViewer
-DEPENDPATH += $$PWD/../../../../../../usr/include/QGLViewer
-unix:!macx: PRE_TARGETDEPS += $$PWD/../../../../../../usr/lib/x86_64-linux-gnu/libqglviewer-qt4.a
+#unix:!macx: LIBS += -L$$PWD/../../../../../../usr/lib/x86_64-linux-gnu/ -lqglviewer-qt4
+#INCLUDEPATH += $$PWD/../../../../../../usr/include/QGLViewer
+#DEPENDPATH += $$PWD/../../../../../../usr/include/QGLViewer
+#unix:!macx: PRE_TARGETDEPS += $$PWD/../../../../../../usr/lib/x86_64-linux-gnu/libqglviewer-qt4.a
 
 
 RESOURCES +=

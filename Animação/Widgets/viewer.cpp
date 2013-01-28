@@ -14,7 +14,7 @@
 RotationWidget* rotation = new RotationWidget(new Object3D());
 
 static double gx = 0;
-static qglviewer::Vec goal = qglviewer::Vec(0.2, 10.0, 0);
+static qglviewer::Vec goal = qglviewer::Vec(-5, 5.0, 1.0);
 static qglviewer::Vec effector;
 
 Viewer::Viewer(QWidget* parent) :
@@ -35,7 +35,7 @@ void Viewer::draw() {
 
     if(SceneContainer::ikMode() and SceneContainer::selectedObject()!=NULL){
         qglviewer::Vec effector = ((Joint*)SceneContainer::selectedObject())->globalEffectorPosition();
-        std::cout << effector.x << " " << effector.y << " " << effector.z << std::endl;
+//        std::cout << effector.x << " " << effector.y << " " << effector.z << std::endl;
         glPushAttrib(GL_ALL_ATTRIB_BITS);
         glDisable(GL_DEPTH_TEST);
         glDisable(GL_LIGHTING);

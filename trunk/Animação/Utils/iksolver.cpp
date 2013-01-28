@@ -11,7 +11,7 @@
 #define D 0.5;
 #define MAX_DISTANCE_FRAME 0.01
 
-static qglviewer::Vec posEf = qglviewer::Vec(0,3,0);
+static qglviewer::Vec posEf = qglviewer::Vec(0,0.3f,0);
 
 #include <iostream>
 using namespace std;
@@ -22,7 +22,7 @@ IKSolver::IKSolver()
 
 void IKSolver::solve(Joint *effector, qglviewer::Vec goal, int type)
 {
-    qglviewer::Vec posEffector = effector->globalPosition() + posEf;
+    qglviewer::Vec posEffector = effector->globalEffectorPosition();
 
     if ((goal-posEffector).norm()<GOAL_DISTANCE_ERROR) return;
 
@@ -42,16 +42,16 @@ void IKSolver::solve(Joint *effector, qglviewer::Vec goal, int type)
     GenericMatrix jacobianMatrix = pseudoJacobian(effector,type);
 
     qglviewer::Vec e;
-    if(type==0){
-        if((goal-posEffector).norm()<MAX_DISTANCE_FRAME){
-            e = (goal-posEffector);
-        }else{
-            e = ( ((goal-posEffector)*MAX_DISTANCE_FRAME) / ((goal-posEffector).norm()) );
-        }
+//    if(type==0){
+//        if((goal-posEffector).norm()<MAX_DISTANCE_FRAME){
+//            e = (goal-posEffector);
+//        }else{
+//            e = ( ((goal-posEffector)*MAX_DISTANCE_FRAME) / ((goal-posEffector).norm()) );
+//        }
 
-    }else{
+//    }else{
         e = (goal-posEffector)*D;
-    }
+//    }
 
     GenericMatrix position = GenericMatrix(3,1);
 
@@ -67,27 +67,27 @@ void IKSolver::solve(Joint *effector, qglviewer::Vec goal, int type)
     int i = 0;
     while(root!=NULL){
         // Smoothing Factor s
-        double s=1;
+        double s=0.5;
         double angle;
         qglviewer::Vec vector;
-        qglviewer::Quaternion qresult = qglviewer::Quaternion(0,0,0,1);
+        qglviewer::Quaternion qresult = root->orientation();
 
         vector = qglviewer::Vec(1,0,0);
-        angle = ( s*application.get(i,0)*(180.0/M_PI) );
+        angle = ( s*application.get(i,0)/**(180.0/M_PI)*/ );
         qresult = qresult * qglviewer::Quaternion(vector,angle);
         i++;
 
         vector = qglviewer::Vec(0,1,0);
-        angle = ( s*application.get(i,0)*(180.0/M_PI) );
+        angle = ( s*application.get(i,0)/**(180.0/M_PI)*/ );
         qresult = qresult * qglviewer::Quaternion(vector,angle);
         i++;
 
         vector = qglviewer::Vec(0,0,1);
-        angle = ( s*application.get(i,0)*(180.0/M_PI) );
+        angle = ( s*application.get(i,0)/**(180.0/M_PI)*/ );
         qresult = qresult * qglviewer::Quaternion(vector,angle);
         i++;
 
-        root->setNewOrientation(qresult);
+        root->setNewOrientation( qresult );
 
         root = root->parent();
     }
@@ -115,7 +115,7 @@ GenericMatrix IKSolver::jacobian(Joint *effector)
 
     GenericMatrix jacobian = GenericMatrix(3,3*joint_count);
 
-    qglviewer::Vec posEffector = effector->globalPosition() + posEf;
+    qglviewer::Vec posEffector = effector->globalEffectorPosition();
 
     int i = 0;
 
@@ -124,7 +124,7 @@ GenericMatrix IKSolver::jacobian(Joint *effector)
         qglviewer::Vec posJoint = joint->globalPosition();
         qglviewer::Vec posrelative = posEffector - posJoint;
 
-        GenericMatrix globalTransform = joint->globalTransformationMatrix().transpose();
+        GenericMatrix globalTransform = joint->globalTransformationMatrix()/*.transpose()*/;
 
         derivatex.setValue(globalTransform.get(0),globalTransform.get(1),globalTransform.get(2));
         derivatey.setValue(globalTransform.get(4),globalTransform.get(5),globalTransform.get(6));
@@ -149,6 +149,7 @@ GenericMatrix IKSolver::jacobian(Joint *effector)
         joint = joint->parent();
     }
 
+    jacobian.debugPrint("jacobian");
     return jacobian;
 }
 
@@ -156,6 +157,8 @@ GenericMatrix IKSolver::jacobian(Joint *effector)
 GenericMatrix IKSolver::pseudoJacobian(Joint *effector, int type)
 {
     GenericMatrix j = jacobian(effector);
+    return j.transpose();
+
     GenericMatrix j_jt_inverse = (j.transpose() * j);
     j_jt_inverse = j_jt_inverse.inverse();
 

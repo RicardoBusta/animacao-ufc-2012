@@ -13,6 +13,8 @@ class Object3D {
 public:
     static Object3D* getObjectByID(int id);
 
+    float length_;
+
     Object3D();
     Object3D(qglviewer::Vec pos);
     Object3D(qglviewer::Quaternion ori);

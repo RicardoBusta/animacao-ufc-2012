@@ -14,7 +14,7 @@
 RotationWidget* rotation = new RotationWidget(new Object3D());
 
 static double gx = 0;
-static qglviewer::Vec goal = qglviewer::Vec(6,6,0);
+static qglviewer::Vec goal = qglviewer::Vec(0.2, 10.0, 0);
 static qglviewer::Vec effector;
 
 Viewer::Viewer(QWidget* parent) :
@@ -34,7 +34,8 @@ void Viewer::draw() {
     SceneContainer::drawExtras();
 
     if(SceneContainer::ikMode() and SceneContainer::selectedObject()!=NULL){
-        qglviewer::Vec effector = Matrix4D::apply(((Joint*)SceneContainer::selectedObject())->globalTransformationMatrix(),qglviewer::Vec(0,0,0),false);
+        qglviewer::Vec effector = ((Joint*)SceneContainer::selectedObject())->globalEffectorPosition();
+        std::cout << effector.x << " " << effector.y << " " << effector.z << std::endl;
         glPushAttrib(GL_ALL_ATTRIB_BITS);
         glDisable(GL_DEPTH_TEST);
         glDisable(GL_LIGHTING);
@@ -250,9 +251,11 @@ void Viewer::ikTimeout()
 {
     if(SceneContainer::ikMode() and SceneContainer::selectedObject()!=NULL){
 //        goal = effector + qglviewer::Vec(0.1,0,0);
-        effector = Matrix4D::apply(((Joint*)SceneContainer::selectedObject())->globalTransformationMatrix(),qglviewer::Vec(0,0,0),false);
+        effector = ((Joint*)SceneContainer::selectedObject())->globalEffectorPosition();
 
         IKSolver::solve((Joint*)SceneContainer::selectedObject(),goal,1);
+
+//        ikStop();
     }
 
     repaint();

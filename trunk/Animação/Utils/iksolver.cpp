@@ -7,7 +7,7 @@
 #include <Utils/matrix4d.h>
 #include <Interpolation/objectanimator.h>
 
-#define GOAL_DISTANCE_ERROR 0.0001
+#define GOAL_DISTANCE_ERROR 0.001
 #define D 0.5;
 #define MAX_DISTANCE_FRAME 0.01
 
@@ -42,16 +42,17 @@ void IKSolver::solve(Joint *effector, qglviewer::Vec goal, int type)
     GenericMatrix jacobianMatrix = pseudoJacobian(effector,type);
 
     qglviewer::Vec e;
-//    if(type==0){
-//        if((goal-posEffector).norm()<MAX_DISTANCE_FRAME){
-//            e = (goal-posEffector);
-//        }else{
-//            e = ( ((goal-posEffector)*MAX_DISTANCE_FRAME) / ((goal-posEffector).norm()) );
-//        }
+    if(type==0){
+        if((goal-posEffector).norm()<MAX_DISTANCE_FRAME){
+            return;
+        }else{
+            e = ((goal-posEffector)*MAX_DISTANCE_FRAME);
+            //e = ( ((goal-posEffector)*MAX_DISTANCE_FRAME) / ((goal-posEffector).norm()) );
+        }
 
-//    }else{
+    }else{
         e = (goal-posEffector)*D;
-//    }
+    }
 
     GenericMatrix position = GenericMatrix(3,1);
 
@@ -61,7 +62,7 @@ void IKSolver::solve(Joint *effector, qglviewer::Vec goal, int type)
 
 
     GenericMatrix application = (jacobianMatrix * position);
-    application.debugPrint("application");
+//    application.debugPrint("application");
 
 
     int i = 0;
@@ -73,17 +74,17 @@ void IKSolver::solve(Joint *effector, qglviewer::Vec goal, int type)
         qglviewer::Quaternion qresult = root->orientation();
 
         vector = qglviewer::Vec(1,0,0);
-        angle = ( s*application.get(i,0)/**(180.0/M_PI)*/ );
+        angle = ( application.get(i,0)/**(180.0/M_PI)*/ );
         qresult = qresult * qglviewer::Quaternion(vector,angle);
         i++;
 
         vector = qglviewer::Vec(0,1,0);
-        angle = ( s*application.get(i,0)/**(180.0/M_PI)*/ );
+        angle = ( application.get(i,0)/**(180.0/M_PI)*/ );
         qresult = qresult * qglviewer::Quaternion(vector,angle);
         i++;
 
         vector = qglviewer::Vec(0,0,1);
-        angle = ( s*application.get(i,0)/**(180.0/M_PI)*/ );
+        angle = ( application.get(i,0)/**(180.0/M_PI)*/ );
         qresult = qresult * qglviewer::Quaternion(vector,angle);
         i++;
 
@@ -124,7 +125,7 @@ GenericMatrix IKSolver::jacobian(Joint *effector)
         qglviewer::Vec posJoint = joint->globalPosition();
         qglviewer::Vec posrelative = posEffector - posJoint;
 
-        GenericMatrix globalTransform = joint->globalTransformationMatrix()/*.transpose()*/;
+        GenericMatrix globalTransform = joint->globalTransformationMatrix().transpose()/*.transpose()*/;
 
         derivatex.setValue(globalTransform.get(0),globalTransform.get(1),globalTransform.get(2));
         derivatey.setValue(globalTransform.get(4),globalTransform.get(5),globalTransform.get(6));
@@ -149,7 +150,7 @@ GenericMatrix IKSolver::jacobian(Joint *effector)
         joint = joint->parent();
     }
 
-    jacobian.debugPrint("jacobian");
+//    jacobian.debugPrint("jacobian");
     return jacobian;
 }
 
@@ -157,32 +158,35 @@ GenericMatrix IKSolver::jacobian(Joint *effector)
 GenericMatrix IKSolver::pseudoJacobian(Joint *effector, int type)
 {
     GenericMatrix j = jacobian(effector);
-    return j.transpose();
-
-    GenericMatrix j_jt_inverse = (j.transpose() * j);
+//    return j.transpose();
+    if(type==0){
+        return j.transpose();
+    }
+    GenericMatrix j_jt_inverse = (j*j.transpose());
+    j_jt_inverse.debugPrint("pre-inverse");
     j_jt_inverse = j_jt_inverse.inverse();
 
     if( j_jt_inverse.cols() == 1 ) return j.transpose();
 
+    j_jt_inverse.debugPrint("jjtinv");
+
     bool nan= false;
     // If transpose only
-    if(type==0){
-        return j.transpose();
-    }
+
     // Pseudo Inverse
     // Verify if there is inverse
-    for(int i=0;i<j_jt_inverse.cols();i++){
-        for(int j=0;j<j_jt_inverse.rows();j++){
-            if (isnan(j_jt_inverse.get(j,i))){
-                nan = true;
-                break;
-            }
-        }
-    }
+//    for(int i=0;i<j_jt_inverse.cols();i++){
+//        for(int j=0;j<j_jt_inverse.rows();j++){
+//            if (isnan(j_jt_inverse.get(j,i))){
+//                nan = true;
+//                break;
+//            }
+//        }
+//    }
 
-    if(nan){
-        return j.transpose();
-    }
+//    if(nan){
+//        return j.transpose();
+//    }
 
-    return (j_jt_inverse*j.transpose());
+    return (j.transpose()*j_jt_inverse);
 }

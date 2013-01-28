@@ -20,6 +20,9 @@ public:
 
     QTimer ikTimer;
 
+    int inverse_;
+    qglviewer::Vec goal;
+
 protected :
     virtual void draw();
     virtual void drawWithNames();

@@ -51,6 +51,56 @@
          </widget>
         </item>
         <item>
+         <widget class="QCheckBox" name="inverse">
+          <property name="text">
+           <string>Inverse</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_11">
+          <item>
+           <widget class="QDoubleSpinBox" name="spinx">
+            <property name="minimum">
+             <double>-99.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>99.000000000000000</double>
+            </property>
+            <property name="value">
+             <double>5.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QDoubleSpinBox" name="spiny">
+            <property name="minimum">
+             <double>-99.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>99.000000000000000</double>
+            </property>
+            <property name="value">
+             <double>5.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QDoubleSpinBox" name="spinz">
+            <property name="minimum">
+             <double>-99.000000000000000</double>
+            </property>
+            <property name="maximum">
+             <double>99.000000000000000</double>
+            </property>
+            <property name="value">
+             <double>5.000000000000000</double>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
          <widget class="QTreeWidget" name="treeWidget">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Expanding">
@@ -71,7 +121,7 @@
            <bool>true</bool>
           </property>
           <property name="currentIndex">
-           <number>2</number>
+           <number>1</number>
           </property>
           <widget class="QWidget" name="tab_animation">
            <property name="enabled">
@@ -411,7 +461,10 @@
                     <item>
                      <widget class="QDoubleSpinBox" name="spin_ori_x">
                       <property name="minimum">
-                       <double>-99.000000000000000</double>
+                       <double>-360.000000000000000</double>
+                      </property>
+                      <property name="maximum">
+                       <double>360.000000000000000</double>
                       </property>
                      </widget>
                     </item>
@@ -429,7 +482,10 @@
                     <item>
                      <widget class="QDoubleSpinBox" name="spin_ori_y">
                       <property name="minimum">
-                       <double>-99.000000000000000</double>
+                       <double>-360.000000000000000</double>
+                      </property>
+                      <property name="maximum">
+                       <double>360.000000000000000</double>
                       </property>
                      </widget>
                     </item>
@@ -447,7 +503,10 @@
                     <item>
                      <widget class="QDoubleSpinBox" name="spin_ori_z">
                       <property name="minimum">
-                       <double>-99.000000000000000</double>
+                       <double>-360.000000000000000</double>
+                      </property>
+                      <property name="maximum">
+                       <double>360.000000000000000</double>
                       </property>
                      </widget>
                     </item>

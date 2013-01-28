@@ -14,11 +14,13 @@
 RotationWidget* rotation = new RotationWidget(new Object3D());
 
 static double gx = 0;
-static qglviewer::Vec goal = qglviewer::Vec(-5, 5.0, 1.0);
 static qglviewer::Vec effector;
 
 Viewer::Viewer(QWidget* parent) :
-    QGLViewer(parent){
+    QGLViewer(parent)
+{
+    goal = qglviewer::Vec(-5, 5.0, 1.0);
+    inverse_ = 0;
     grid_size_ = 2.0;
     grid_div_ = 20;
 
@@ -35,7 +37,7 @@ void Viewer::draw() {
 
     if(SceneContainer::ikMode() and SceneContainer::selectedObject()!=NULL){
         qglviewer::Vec effector = ((Joint*)SceneContainer::selectedObject())->globalEffectorPosition();
-//        std::cout << effector.x << " " << effector.y << " " << effector.z << std::endl;
+        //        std::cout << effector.x << " " << effector.y << " " << effector.z << std::endl;
         glPushAttrib(GL_ALL_ATTRIB_BITS);
         glDisable(GL_DEPTH_TEST);
         glDisable(GL_LIGHTING);
@@ -114,8 +116,8 @@ void Viewer::init() {
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_CULL_FACE);
- setSelectRegionWidth(5);
- setSelectRegionHeight(5);
+    setSelectRegionWidth(5);
+    setSelectRegionHeight(5);
 
     glShadeModel(GL_SMOOTH);
     glEnable(GL_COLOR_MATERIAL);
@@ -250,12 +252,12 @@ void Viewer::ikStop()
 void Viewer::ikTimeout()
 {
     if(SceneContainer::ikMode() and SceneContainer::selectedObject()!=NULL){
-//        goal = effector + qglviewer::Vec(0.1,0,0);
+        //        goal = effector + qglviewer::Vec(0.1,0,0);
         effector = ((Joint*)SceneContainer::selectedObject())->globalEffectorPosition();
 
-        IKSolver::solve((Joint*)SceneContainer::selectedObject(),goal,1);
+        IKSolver::solve((Joint*)SceneContainer::selectedObject(),goal,inverse_);
 
-//        ikStop();
+        //        ikStop();
     }
 
     repaint();

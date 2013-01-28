@@ -66,6 +66,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect( ui->push_ikmode, SIGNAL(toggled(bool)), this, SLOT(setIKMode(bool)) );
 
+    connect( ui->inverse, SIGNAL(toggled(bool)), this, SLOT(setInverse(bool)) );
+
 
     // interface
     this->showMaximized();
@@ -243,6 +245,10 @@ void MainWindow::updateSelectedInfo(Object3D* object) {
     connect( ui->spin_ori_y, SIGNAL(valueChanged(double)), this, SLOT(updateCurrentOrientation()));
     connect( ui->spin_ori_z, SIGNAL(valueChanged(double)), this, SLOT(updateCurrentOrientation()));
 
+    connect( ui->spinx, SIGNAL(valueChanged(double)), this, SLOT(changeGoal()) );
+    connect( ui->spiny, SIGNAL(valueChanged(double)), this, SLOT(changeGoal()) );
+    connect( ui->spinz, SIGNAL(valueChanged(double)), this, SLOT(changeGoal()) );
+
     ui->tab_object->setEnabled(true);
     ui->viewer->updateGL();
 }
@@ -322,7 +328,7 @@ void MainWindow::updateCurrentScene(int scene){
     ui->timebar->setKeyFrames(NULL);
 
     SceneContainer::setFrameRange(0,100);
-    SceneContainer::setCurrentFrame(0);
+    SceneContainer::setCurrentFrame(1);
     ui->viewer->repaint();
 }
 
@@ -362,4 +368,20 @@ void MainWindow::setIKMode(bool ik)
     ui->button_play->setEnabled(!ik);
     ui->button_stop->setEnabled(!ik);
     SceneContainer::setIKMode(ik);
+}
+
+
+void MainWindow::setInverse(bool inverse)
+{
+    if(inverse){
+        ui->viewer->inverse_ = 1;
+    }else{
+        ui->viewer->inverse_ = 0;
+    }
+}
+
+
+void MainWindow::changeGoal()
+{
+    ui->viewer->goal = qglviewer::Vec(ui->spinx->value(), ui->spiny->value(), ui->spinz->value());
 }

@@ -68,7 +68,7 @@ void SceneContainer::drawExtras()
 }
 
 
-Joint* SceneContainer::addObject(QString label, QString objfile, QString texfile, QVector3D position, QQuaternion rotation, Joint* parent, QVector3D objPos, QQuaternion objRot){
+Joint* SceneContainer::addObject(QString label, QString objfile, QString texfile, QVector3D position, QQuaternion rotation, Joint* parent, float length, QVector3D objPos, QQuaternion objRot){
     FileObj *newobj = new FileObj();
     newobj->setLabel( label.toStdString() );
     newobj->loadFile(objfile);
@@ -76,6 +76,7 @@ Joint* SceneContainer::addObject(QString label, QString objfile, QString texfile
     newobj->setNewPosition(qglviewer::Vec(objPos.x(),objPos.y(),objPos.z()));
     newobj->setNewOrientation(qglviewer::Quaternion(objRot.x(),objRot.y(),objRot.z(),objRot.scalar()));
     Joint *newjoint = new Joint(newobj);
+    newjoint->length_ = length;
     //newjoint->SetLabel( ( label+" Joint" ).toStdString());
     newjoint->setNewPosition(qglviewer::Vec(position.x(),position.y(),position.z()));
     newjoint->setNewOrientation(qglviewer::Quaternion(rotation.x(),rotation.y(),rotation.z(),rotation.scalar()));
@@ -384,7 +385,7 @@ void SceneContainer::createArmScene(){
     Joint* arm_base = addObject("Arm Base",":/models/arm_base.obj",":/textures/wooden.png",QVector3D(0,0.75,0), QQuaternion(1,0,0,0), NULL);
     Joint* arm_part1 = addObject("Part 1",":/models/arm_part1.obj",":/textures/wooden.png",QVector3D(0,0.25,0),QQuaternion(1,0,0,0),arm_base);
     Joint* arm_part2 = addObject("Part 2",":/models/arm_part2.obj",":/textures/wooden.png",QVector3D(0,3.7,0),QQuaternion(1,0,0,0),arm_part1);
-    Joint* arm_hand = addObject("Hand",":/models/arm_hand.obj",":/textures/wooden.png",QVector3D(0,4.7,0),QQuaternion(1,0,0,0),arm_part2);
+    Joint* arm_hand = addObject("Hand",":/models/arm_hand.obj",":/textures/wooden.png",QVector3D(0,4.7,0),QQuaternion(1,0,0,0),arm_part2, 1.4f);
 
     Joint* arm_finger_5_1 = addObject("Finger 5 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0.5,1.4,0),QQuaternion(1,0,0,0),arm_hand);
     Joint* arm_finger_4_1 = addObject("Finger 4 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0.2,1.5,0),QQuaternion(1,0,0,0),arm_hand);
@@ -628,14 +629,14 @@ void SceneContainer::createRobotScene(){
 
     //! Left Leg
     //Hand Scene
-    Joint* arm_part2 = addObject("Part 2",":/models/arm_part1.obj",":/textures/wooden.png",QVector3D(-2,-1,0),QQuaternion(1,0,0,0), body, QVector3D(0,-3.7,0));
-    Joint* arm_part1 = addObject("Part 1",":/models/arm_part1.obj",":/textures/wooden.png",QVector3D(0,-3.7,0),QQuaternion(1,0,0,0), arm_part2, QVector3D(0,-3.7,0));
-    /*Joint* arm_base =*/ addObject("Arm Base",":/models/arm_base.obj",":/textures/wooden.png",QVector3D(0,-3.7,0), QQuaternion(1,0,0,0), arm_part1, QVector3D(0,-0.4,0));
+    Joint* arm_part2 = addObject("Part 2",":/models/arm_part1.obj",":/textures/wooden.png",QVector3D(-2,-1,0),QQuaternion(1,0,0,0), body, 1, QVector3D(0,-3.7,0));
+    Joint* arm_part1 = addObject("Part 1",":/models/arm_part1.obj",":/textures/wooden.png",QVector3D(0,-3.7,0),QQuaternion(1,0,0,0), arm_part2, 1, QVector3D(0,-3.7,0));
+    /*Joint* arm_base =*/ addObject("Arm Base",":/models/arm_base.obj",":/textures/wooden.png",QVector3D(0,-3.7,0), QQuaternion(1,0,0,0), arm_part1, 1, QVector3D(0,-0.4,0));
 
     //! Right Leg
-    Joint* larm_part2 = addObject("Part 2",":/models/arm_part1.obj",":/textures/wooden.png",QVector3D(2,-1,0),QQuaternion(1,0,0,0), body, QVector3D(0,-3.7,0));
-    Joint* larm_part1 = addObject("Part 1",":/models/arm_part1.obj",":/textures/wooden.png",QVector3D(0,-3.7,0),QQuaternion(1,0,0,0), larm_part2, QVector3D(0,-3.7,0));
-    /*Joint* larm_base =*/ addObject("Arm Base",":/models/arm_base.obj",":/textures/wooden.png",QVector3D(0,-3.7,0), QQuaternion(1,0,0,0), larm_part1, QVector3D(0,-0.4,0));
+    Joint* larm_part2 = addObject("Part 2",":/models/arm_part1.obj",":/textures/wooden.png",QVector3D(2,-1,0),QQuaternion(1,0,0,0), body, 1, QVector3D(0,-3.7,0));
+    Joint* larm_part1 = addObject("Part 1",":/models/arm_part1.obj",":/textures/wooden.png",QVector3D(0,-3.7,0),QQuaternion(1,0,0,0), larm_part2, 1, QVector3D(0,-3.7,0));
+    /*Joint* larm_base =*/ addObject("Arm Base",":/models/arm_base.obj",":/textures/wooden.png",QVector3D(0,-3.7,0), QQuaternion(1,0,0,0), larm_part1, 1, QVector3D(0,-0.4,0));
 
     ObjectAnimator *animate;
 

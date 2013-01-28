@@ -30,7 +30,7 @@ public:
     static void setCurrentFrame(int frame);
 
     //! Objects management
-    static Joint* addObject(QString label, QString objfile, QString texfile, QVector3D position, QQuaternion rotation, Joint *parent, QVector3D objPos = QVector3D(0,0,0), QQuaternion objRot = QQuaternion(1,0,0,0));
+    static Joint* addObject(QString label, QString objfile, QString texfile, QVector3D position, QQuaternion rotation, Joint *parent, float length=1, QVector3D objPos = QVector3D(0,0,0), QQuaternion objRot = QQuaternion(1,0,0,0));
     static unsigned int howManyObjects();
     static Joint* objectAt(int i);
     static  ObjectInfoTree *getObjects();

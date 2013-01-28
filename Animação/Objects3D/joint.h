@@ -20,6 +20,7 @@ public:
     Joint *parent();
 
     qglviewer::Vec globalPosition();
+    qglviewer::Vec globalEffectorPosition();
     GenericMatrix globalTransformationMatrix();
 protected:
     virtual void drawObject(int depth);

@@ -123,3 +123,9 @@ qglviewer::Vec Joint::globalPosition()
 //    }
 //    return origin;
 }
+
+
+qglviewer::Vec Joint::globalEffectorPosition()
+{
+    return Matrix4D::apply(globalTransformationMatrix(),qglviewer::Vec(0,length_,0),false);
+}

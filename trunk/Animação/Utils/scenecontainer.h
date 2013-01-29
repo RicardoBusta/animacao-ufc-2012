@@ -60,6 +60,7 @@ public:
     static void drawObjects();
     static void drawObjectsNoShader();
     static void drawExtras();
+    static void drawParticles();
 
     //! Rendering Parameters
     static bool renderBox();

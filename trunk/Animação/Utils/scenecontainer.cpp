@@ -13,6 +13,8 @@
 
 #include "Widgets/viewer.h"
 
+#include "Objects3D/particle.h"
+
 #include <QQuaternion>
 Viewer* SceneContainer::viewer_reference_ = NULL;
 
@@ -65,6 +67,12 @@ void SceneContainer::drawExtras()
         render_options_ = RENDER_NONE;
         object->draw(0);
     }
+}
+
+void SceneContainer::drawParticles()
+{
+    render_options_ = RENDER_SHADER;
+    ParticleSpawner::handleParticleSpawners();
 }
 
 
@@ -304,6 +312,7 @@ QString SceneContainer::genOutput()
 
 void SceneContainer::clearScene()
 {
+    ParticleSpawner::clearParticleSpawners();
     while(animators_.size()>0){
         delete animators_.back();
         animators_.pop_back();
@@ -381,10 +390,13 @@ void SceneContainer::createMonkeyHeadScene(){
 }
 
 void SceneContainer::createArmScene(){
+//    ParticleSpawner *ps = new ParticleSpawner(10);
+//    ps->loadTex(":/textures/particles.png");
+
     //Hand Scene
-    Joint* arm_base = addObject("Arm Base",":/models/arm_base.obj",":/textures/wooden.png",QVector3D(0,0.75,0), QQuaternion(1,0,0,0), NULL);
-    Joint* arm_part1 = addObject("Part 1",":/models/arm_part1.obj",":/textures/wooden.png",QVector3D(0,0.25,0),QQuaternion(1,0,0,0),arm_base);
-    Joint* arm_part2 = addObject("Part 2",":/models/arm_part2.obj",":/textures/wooden.png",QVector3D(0,3.7,0),QQuaternion(1,0,0,0),arm_part1);
+    Joint* arm_base = addObject("Arm Base",":/models/arm_base.obj",":/textures/wooden.png",QVector3D(0,0.75,0), QQuaternion(1,0,0,0), NULL,0.25);
+    Joint* arm_part1 = addObject("Part 1",":/models/arm_part1.obj",":/textures/wooden.png",QVector3D(0,0.25,0),QQuaternion(1,0,0,0),arm_base, 3.7);
+    Joint* arm_part2 = addObject("Part 2",":/models/arm_part2.obj",":/textures/wooden.png",QVector3D(0,3.7,0),QQuaternion(1,0,0,0),arm_part1, 4.7);
     Joint* arm_hand = addObject("Hand",":/models/arm_hand.obj",":/textures/wooden.png",QVector3D(0,4.7,0),QQuaternion(1,0,0,0),arm_part2, 1.4f);
 
     Joint* arm_finger_5_1 = addObject("Finger 5 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0.5,1.4,0),QQuaternion(1,0,0,0),arm_hand);
@@ -696,3 +708,4 @@ void SceneContainer::setIKMode(bool ik)
 {
     ik_mode_ = ik;
 }
+

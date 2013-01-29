@@ -11,6 +11,8 @@
 #include <iostream>
 #include "Interpolation/objectanimator.h"
 
+#include "Objects3D/particle.h"
+
 RotationWidget* rotation = new RotationWidget(new Object3D());
 
 static double gx = 0;
@@ -52,6 +54,7 @@ void Viewer::draw() {
     }
 
     glColor3f(1,1,1);
+
     this->drawText(10,10,QString("Frame: %1").arg(SceneContainer::current_frame()));
 
     //rotation->Draw();
@@ -177,6 +180,8 @@ void Viewer::postDraw(){
         glPopMatrix();
         glPopAttrib();
     }
+
+    SceneContainer::drawParticles();
 }
 
 QString Viewer::helpString() const {

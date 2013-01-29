@@ -11,31 +11,32 @@
 //const vec3 Id3 = vec3(0.798, 0.838, 1.0);
 //const vec3 Is3 = vec3(0.06, 0.0, 0.0);
 
-varying vec3 n;
-varying vec4 p;
+varying vec3 normal;
+varying vec4 position;
 
 uniform sampler2D color_texture;
 
 void main(void)
 {
-    vec3 wi1 = gl_LightSource[0].position.xyz;
-    vec3 Id1 = gl_LightSource[0].diffuse.xyz;
-    vec3 Is1 = gl_LightSource[0].specular.xyz;
+    vec3 wi1 = gl_LightSource[0].position.rgb;
+    vec3 Id1 = gl_LightSource[0].diffuse.rgb;
+    vec3 Is1 = gl_LightSource[0].specular.rgb;
 
-    vec3 wi2 = gl_LightSource[1].position.xyz;
-    vec3 Id2 = gl_LightSource[1].diffuse.xyz;
-    vec3 Is2 = gl_LightSource[1].specular.xyz;
+    vec3 wi2 = gl_LightSource[1].position.rgb;
+    vec3 Id2 = gl_LightSource[1].diffuse.rgb;
+    vec3 Is2 = gl_LightSource[1].specular.rgb;
 
-    vec3 wi3 = gl_LightSource[2].position.xyz;
-    vec3 Id3 = gl_LightSource[2].diffuse.xyz;
-    vec3 Is3 = gl_LightSource[2].specular.xyz;
+    vec3 wi3 = gl_LightSource[2].position.rgb;
+    vec3 Id3 = gl_LightSource[2].diffuse.rgb;
+    vec3 Is3 = gl_LightSource[2].specular.rgb;
 
-    vec3 normal = normalize(n);
-    vec3 wo = normalize(-p.xyz);
+    vec3 normal = normalize(normal);
+    vec3 wo = normalize(-position.xyz);
 //    vec3 wo = normalize(vec3(0, 0, 1));
-    vec3 Kd = gl_FrontMaterial.diffuse.xyz;
-    vec3 Ks = gl_FrontMaterial.specular.xyz;
-    vec3 Ke = gl_FrontMaterial.emission.xyz;
+    float alpha = gl_FrontMaterial.diffuse.a;
+    vec3 Kd = gl_FrontMaterial.diffuse.rgb;
+    vec3 Ks = gl_FrontMaterial.specular.rgb;
+    vec3 Ke = gl_FrontMaterial.emission.rgb;
     float shininess = gl_FrontMaterial.shininess;
 
 //    vec4 texVal = texture2D();
@@ -60,6 +61,6 @@ void main(void)
 //    else I = Kd;
     //end
 
-    gl_FragColor = (vec4(I, 1.0) * texture2D(color_texture, gl_TexCoord[0].st));
+    gl_FragColor = (vec4(I, alpha) * texture2D(color_texture, gl_TexCoord[0].st));
 }
 

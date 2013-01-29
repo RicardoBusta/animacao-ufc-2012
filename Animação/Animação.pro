@@ -34,7 +34,8 @@ HEADERS += \
     Interpolation/genericinterpolator.h \
     Utils/matrix4d.h \
     Utils/iksolver.h \
-    Utils/genericmatrix.h
+    Utils/genericmatrix.h \
+    Objects3D/particle.h
 
 SOURCES += \
     Curves/arclength.cpp \
@@ -58,7 +59,8 @@ SOURCES += \
     Interpolation/genericinterpolator.cpp \
     Utils/matrix4d.cpp \
     Utils/iksolver.cpp \
-    Utils/genericmatrix.cpp
+    Utils/genericmatrix.cpp \
+    Objects3D/particle.cpp
 
 
 FORMS += \

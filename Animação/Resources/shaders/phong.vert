@@ -1,14 +1,13 @@
-varying vec4 p;
-varying vec3 n;
+varying vec4 position;
+varying vec3 normal;
 
 void main(void)
 {
     gl_Position = ftransform();
     gl_FrontColor = gl_Color;
-
     gl_TexCoord[0] = gl_MultiTexCoord0;
 
-    p = gl_ModelViewMatrix * gl_Vertex;
-    n = gl_NormalMatrix * gl_Normal;
+    position = gl_ModelViewMatrix * gl_Vertex;
+    normal = gl_NormalMatrix * gl_Normal;
 }
 

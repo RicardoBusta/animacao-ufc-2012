@@ -15,14 +15,13 @@
 
 RotationWidget* rotation = new RotationWidget(new Object3D());
 
-static double gx = 0;
 static qglviewer::Vec effector;
 
 Viewer::Viewer(QWidget* parent) :
     QGLViewer(parent)
 {
     goal = qglviewer::Vec(-5, 5.0, 1.0);
-    inverse_ = 0;
+    inverse_ = 1;
     grid_size_ = 2.0;
     grid_div_ = 20;
 

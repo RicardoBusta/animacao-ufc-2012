@@ -3,14 +3,17 @@
 
 #include <QVector3D>
 #include <QList>
+#include <QColor>
+#include <Objects3D/joint.h>
 
 class Particle
 {
 public:
-    Particle(int lifetime_, QVector3D position, QVector3D speed);
+    Particle(int lifetime_, QVector3D position, QVector3D speed, QColor color);
 
     int lifetime_;
 
+    QColor color;
     QVector3D position_;
     QVector3D speed_;
 
@@ -28,16 +31,24 @@ public:
     void drawParticles();
     void handleParticles();
 
+    void generateParticle(int number, int type);
+
     int count;
 
     int cooldown;
 
-    int texID;
+    QVector3D position;
 
-    ParticleSpawner(int cooldown);
+    QColor color;
+
+    Joint *joint;
+
+//    int texID;
+
+    ParticleSpawner(int cooldown, QColor color, Joint *parent);
     ~ParticleSpawner();
 
-     void loadTex(QString filename);
+//     void loadTex(QString filename);
 };
 
 #endif // PARTICLE_H

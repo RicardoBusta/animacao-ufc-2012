@@ -35,6 +35,8 @@ HEADERS += \
     Utils/matrix4d.h \
     Utils/iksolver.h \
     Utils/genericmatrix.h \
+    ikdialog.h \
+    Objects3D/iktarget.h \
     Objects3D/particle.h
 
 SOURCES += \
@@ -60,11 +62,14 @@ SOURCES += \
     Utils/matrix4d.cpp \
     Utils/iksolver.cpp \
     Utils/genericmatrix.cpp \
+    ikdialog.cpp \
+    Objects3D/iktarget.cpp\
     Objects3D/particle.cpp
 
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    ikdialog.ui
 
 RESOURCES += \
     Resources/buttons/buttons.qrc \
@@ -77,12 +82,7 @@ exists( /usr/lib/libQGLViewer.so ) {
 LIBS *= -lqglviewer-qt4
 }
 
-#tive que recolocar pra compilar, o outro não funcionou.
-unix:!macx: LIBS += -L$$PWD/../../../../../../usr/lib/x86_64-linux-gnu/ -lqglviewer-qt4
-INCLUDEPATH += $$PWD/../../../../../../usr/include/QGLViewer
-DEPENDPATH += $$PWD/../../../../../../usr/include/QGLViewer
-unix:!macx: PRE_TARGETDEPS += $$PWD/../../../../../../usr/lib/x86_64-linux-gnu/libqglviewer-qt4.a
-
+LIBS *= -lGLU
 
 RESOURCES +=
 

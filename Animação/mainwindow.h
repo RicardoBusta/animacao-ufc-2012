@@ -63,7 +63,6 @@ private slots:
     void removePositionKeyframe();
     void removeOrientationKeyframe();
     void setSelectedByID(int);
-    void setIKMode(bool ik);
     void setInverse(int);
     void changeGoal();
 
@@ -73,6 +72,7 @@ private slots:
     void fillEnd(int index);
     void fillComboBox(Joint *this_obj, QComboBox *combo, bool compensate=false, int compensation=0);
     void setIKTarget();
+    void saveAngles();
 };
 
 #endif // MAINWINDOW_H

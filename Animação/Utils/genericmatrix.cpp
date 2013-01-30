@@ -230,7 +230,7 @@ GenericMatrix GenericMatrix::inverse()
 
     delete AInverse;
 
-    result.debugPrint("result");
+    //result.debugPrint("result");
 
     return result;
 }

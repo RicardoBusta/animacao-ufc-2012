@@ -19,7 +19,7 @@ public:
     //void SetDrawProperties(bool draw_effector, bool draw_bones);
 
     void solve();
-    //void SaveKeyframe();
+    void saveAngles(int frame);
     void drawGlobal();
 
     bool goalReached();

@@ -77,6 +77,11 @@ RESOURCES += \
     Resources/models/models.qrc \
     Resources/shaders/shaders.qrc
 
+        #tive que recolocar pra compilar, o outro não funcionou.	85	LIBS *= -lGLU
+unix:!macx: LIBS += -L$$PWD/../../../../../../usr/lib/x86_64-linux-gnu/ -lqglviewer-qt4
+INCLUDEPATH += $$PWD/../../../../../../usr/include/QGLViewer
+DEPENDPATH += $$PWD/../../../../../../usr/include/QGLViewer
+unix:!macx: PRE_TARGETDEPS += $$PWD/../../../../../../usr/lib/x86_64-linux-gnu/libqglviewer-qt4.a
 
 exists( /usr/lib/libQGLViewer.so ) {
 LIBS *= -lqglviewer-qt4

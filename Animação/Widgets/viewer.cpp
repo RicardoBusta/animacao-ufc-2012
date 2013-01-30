@@ -13,6 +13,9 @@
 
 #include "Objects3D/particle.h"
 
+#include "Utils/iksolver.h"
+#include "Utils/matrix4d.h"
+
 RotationWidget* rotation = new RotationWidget(new Object3D());
 
 static qglviewer::Vec effector;
@@ -21,15 +24,11 @@ Viewer::Viewer(QWidget* parent) :
     QGLViewer(parent)
 {
     goal = qglviewer::Vec(-5, 5.0, 1.0);
-    inverse_ = 1;
     grid_size_ = 2.0;
     grid_div_ = 20;
 
     connect( &ikTimer, SIGNAL(timeout()), this, SLOT(ikTimeout()) );
 }
-
-#include "Utils/iksolver.h"
-#include "Utils/matrix4d.h"
 
 void Viewer::draw() {
 
@@ -110,35 +109,6 @@ void Viewer::init() {
 
     glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, GL_TRUE);
     glColorMaterial(GL_FRONT_AND_BACK, GL_AMBIENT_AND_DIFFUSE);
-    /*
-    static GLfloat light1pos[4] = { -0.892, 0.3, 0.9, 0.0 };
-    static GLfloat light1diffuse[] = { 0.8f, 0.8f, 0.8, 1.0f };
-    static GLfloat light1specular[] = { 0.5f, 0.5f, 0.5f, 1.0f };
-
-    static GLfloat light2pos[4] = { 0.588, 0.46, 0.248, 0.0 };
-    static GLfloat light2diffuse[] = { 0.498f, 0.5f, 0.6, 1.0f };
-    static GLfloat light2specular[] = { 0.2f, 0.2f, 0.2f, 1.0f };
-
-    static GLfloat light3pos[4] = { 0.216, -0.392, -0.216, 0.0 };
-    static GLfloat light3diffuse[] = { 0.798f, 0.838f, 1.0, 1.0f };
-    static GLfloat light3specular[] = { 0.06f, 0.0f, 0.0f, 1.0f };
-
-    glEnable(GL_LIGHTING);
-    //glEnable(GL_LIGHT0);
-    glEnable(GL_LIGHT1);
-    glEnable(GL_LIGHT2);
-
-    //glLightfv(GL_LIGHT0, GL_POSITION, light1pos);
-    //glLightfv(GL_LIGHT0, GL_DIFFUSE, light1diffuse);
-    //glLightfv(GL_LIGHT0, GL_SPECULAR, light1specular);
-
-    glLightfv(GL_LIGHT1, GL_POSITION, light2pos);
-    glLightfv(GL_LIGHT1, GL_DIFFUSE, light2diffuse);
-    glLightfv(GL_LIGHT1, GL_SPECULAR, light2specular);
-
-    glLightfv(GL_LIGHT2, GL_POSITION, light3pos);
-    glLightfv(GL_LIGHT2, GL_DIFFUSE, light3diffuse);
-    glLightfv(GL_LIGHT2, GL_SPECULAR, light3specular);*/
 
     setCurrentShader(0);
     shader_enabled_ = true;
@@ -165,6 +135,7 @@ void Viewer::postDraw(){
     }
 
     SceneContainer::drawParticles();
+    SceneContainer::drawPost();
 }
 
 QString Viewer::helpString() const {
@@ -239,14 +210,10 @@ void Viewer::ikStop()
 
 void Viewer::ikTimeout()
 {
-    /*if(SceneContainer::ikMode() and SceneContainer::selectedObject()!=NULL){
-        //        goal = effector + qglviewer::Vec(0.1,0,0);
-        effector = ((Joint*)SceneContainer::selectedObject())->globalEffectorPosition();
-
-        IKSolver::solve((Joint*)SceneContainer::selectedObject(),goal,inverse_);
-
-        //        ikStop();
-    }
-
-    repaint();*/
+    //if(!SceneContainer::ikTarget.goalReached()){
+        SceneContainer::ikTarget.solve();
+        repaint();
+    //}else{
+//        ikStop();
+//    }
 }

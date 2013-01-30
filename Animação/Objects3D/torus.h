@@ -8,7 +8,7 @@ class Slice {
 public:
     explicit Slice(double radius, qglviewer::Vec original_point, qglviewer::Vec axis, int steps);
 
-    qglviewer::Vec Step(int index);
+    qglviewer::Vec step(int index);
 
 private:
     void createSlice();

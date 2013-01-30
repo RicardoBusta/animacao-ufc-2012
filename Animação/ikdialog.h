@@ -1,40 +1,40 @@
-#ifndef IKDIALOG_H
-#define IKDIALOG_H
+//#ifndef IKDIALOG_H
+//#define IKDIALOG_H
 
-#include <QDialog>
+//#include <QDialog>
 
-#include <map>
+//#include <map>
 
-class Joint;
-class QComboBox;
-class IKTarget;
+//class Joint;
+//class QComboBox;
+//class IKTarget;
 
-namespace Ui {
-class IKDialog;
-}
+//namespace Ui {
+//class IKDialog;
+//}
 
-class IKDialog : public QDialog
-{
-    Q_OBJECT
+//class IKDialog : public QDialog
+//{
+//    Q_OBJECT
     
-public:
-    explicit IKDialog(QWidget *parent = 0);
-    ~IKDialog();
+//public:
+//    explicit IKDialog(QWidget *parent = 0);
+//    ~IKDialog();
 
-    void FillBase();
+//    void FillBase();
 
-    IKTarget* getTarget();
+//    IKTarget* getTarget();
 
-protected slots:
-    void FillComboBox(Joint* this_obj, QComboBox* combo, bool compensate = false, int compensation = 0);
-    void FillParent(int index);
+//protected slots:
+//    void FillComboBox(Joint* this_obj, QComboBox* combo, bool compensate = false, int compensation = 0);
+//    void FillParent(int index);
     
-private:
-    Ui::IKDialog *ui;
+//private:
+//    Ui::IKDialog *ui;
 
-    std::map<int,int> index_id_;
+//    std::map<int,int> index_id_;
 
 
-};
+//};
 
-#endif // IKDIALOG_H
+//#endif // IKDIALOG_H

@@ -9,16 +9,20 @@
 class IKTarget : public Object3D
 {
 public:
-    static IKTarget* GetIKTargetById(int id);
-    IKTarget(qglviewer::Vec pos);
+    //static IKTarget* GetIKTargetById(int id);
+    //IKTarget(qglviewer::Vec pos = qglviewer::Vec(0,0,0));
+    IKTarget();
 
-    void setInverseUsable(bool use_inverse);
-    void AddChildBone(Joint* bone);
-    void SetDrawProperties(bool draw_effector, bool draw_bones);
+    //void setInverseUsable(bool use_inverse);
+    void clear();
+    void addChildBone(Joint* bone);
+    //void SetDrawProperties(bool draw_effector, bool draw_bones);
 
-    void Solve();
-    void SaveKeyframe();
-    void DrawGlobal();
+    void solve();
+    //void SaveKeyframe();
+    void drawGlobal();
+
+    bool goalReached();
 
 protected:
     void drawObject(int depth);
@@ -27,13 +31,14 @@ protected:
 
     std::vector<Joint*> bones_;
 
-    bool inverse_;
+public:
+    int inverse_;
 
-    bool draw_effector_;
-    bool draw_bones_;
+    //bool draw_effector_;
+    //bool draw_bones_;
 
 private:
-    static std::map<int,IKTarget*> ik_targets_;
+    //static std::map<int,IKTarget*> ik_targets_;
 };
 
 #endif // IKTARGET_H

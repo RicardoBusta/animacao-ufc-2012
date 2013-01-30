@@ -11,6 +11,7 @@ class ObjectAnimator;
 class ObjectInfoTree;
 class Object3D;
 class Viewer;
+class IKTarget;
 
 enum RENDER_OPTIONS{ RENDER_NONE=0, RENDER_SHADER=1, RENDER_OPT2=2, RENDER_OPT3=4, RENDER_OPT4=8, RENDER_OPT5=16, RENDER_OPT6=32, RENDER_OPT7=64, RENDER_OPT8=128 };
 
@@ -36,6 +37,7 @@ public:
     static  ObjectInfoTree *getObjects();
     static bool drawBones();
     static void setDrawBones(bool bones);
+    static void AddIKTarget(IKTarget* target);
 
     //! Selected Object Management
     static Object3D* selectedObject();
@@ -110,6 +112,7 @@ private:
     static std::vector<ObjectAnimator*> animators_;
     static std::vector<Joint*> objects_;
     static std::vector<Object3D*> extras_;
+    static std::vector<IKTarget*> ik_targets_;
 };
 
 #endif // SCENECONTAINER_H

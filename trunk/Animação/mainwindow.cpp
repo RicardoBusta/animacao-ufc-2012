@@ -3,6 +3,8 @@
 #include "Utils/scenecontainer.h"
 #include "Interpolation/genericinterpolator.h"
 #include "Objects3D/joint.h"
+#include "ikdialog.h"
+#include "Objects3D/iktarget.h"
 
 static QIcon play_icon;
 static QIcon pause_icon;
@@ -64,9 +66,9 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect( ui->viewer, SIGNAL(updateSelected(int)), this, SLOT(setSelectedByID(int)) );
 
-    connect( ui->push_ikmode, SIGNAL(toggled(bool)), this, SLOT(setIKMode(bool)) );
+    connect( ui->push_ikmode, SIGNAL(clicked()), this, SLOT(setIKMode()) );
 
-    connect( ui->inverse, SIGNAL(toggled(bool)), this, SLOT(setInverse(bool)) );
+    //connect( ui->inverse, SIGNAL(toggled(bool)), this, SLOT(setInverse(bool)) );
 
 
     // interface
@@ -144,7 +146,6 @@ void MainWindow::updateCurrentSelected(QTreeWidgetItem *item, QTreeWidgetItem* o
     if( item_to_object_.find(item) != item_to_object_.end() ) {
         Object3D* object = item_to_object_[item];
         updateSelectedInfo(object);
-        ui->timebar->setKeyFrames(object);
     }
 }
 
@@ -245,11 +246,13 @@ void MainWindow::updateSelectedInfo(Object3D* object) {
     connect( ui->spin_ori_y, SIGNAL(valueChanged(double)), this, SLOT(updateCurrentOrientation()));
     connect( ui->spin_ori_z, SIGNAL(valueChanged(double)), this, SLOT(updateCurrentOrientation()));
 
-    connect( ui->spinx, SIGNAL(valueChanged(double)), this, SLOT(changeGoal()) );
+    /*connect( ui->spinx, SIGNAL(valueChanged(double)), this, SLOT(changeGoal()) );
     connect( ui->spiny, SIGNAL(valueChanged(double)), this, SLOT(changeGoal()) );
-    connect( ui->spinz, SIGNAL(valueChanged(double)), this, SLOT(changeGoal()) );
+    connect( ui->spinz, SIGNAL(valueChanged(double)), this, SLOT(changeGoal()) );*/
 
     ui->tab_object->setEnabled(true);
+
+    ui->timebar->setKeyFrames(object);
     ui->viewer->updateGL();
 }
 
@@ -265,6 +268,10 @@ void MainWindow::updateSelectedLabel(QString label){
 void MainWindow::updateCurrentPosition() {
     qglviewer::Vec current_p(ui->spin_pos_x->value(),ui->spin_pos_y->value(),ui->spin_pos_z->value());
     SceneContainer::setSelectedPosition(current_p);
+    IKTarget* target = IKTarget::GetIKTargetById(SceneContainer::selectedObject()->id());
+    if(target!=NULL){
+        target->Solve();
+    }
     ui->viewer->updateGL();
 }
 
@@ -351,8 +358,18 @@ void MainWindow::setSelectedByID(int id)
 }
 
 
-void MainWindow::setIKMode(bool ik)
+void MainWindow::setIKMode()
 {
+    IKDialog ik_dialog;
+
+    if(ik_dialog.exec() == QDialog::Accepted){
+        IKTarget* new_object = ik_dialog.getTarget();
+        QTreeWidgetItem *childitem = new QTreeWidgetItem(ui->treeWidget,QStringList(QString(new_object->label().c_str())));
+        item_to_object_[childitem] = new_object;
+        object_to_item_[new_object]  = childitem;
+        SceneContainer::AddIKTarget(new_object);
+    }
+/*
     if(!play_or_pause_){
         play_or_pause_ = true;
         ui->button_play->setIcon(play_icon);
@@ -367,7 +384,7 @@ void MainWindow::setIKMode(bool ik)
     ui->timebar->setEnabled(!ik);
     ui->button_play->setEnabled(!ik);
     ui->button_stop->setEnabled(!ik);
-    SceneContainer::setIKMode(ik);
+    SceneContainer::setIKMode(ik);*/
 }
 
 
@@ -383,5 +400,5 @@ void MainWindow::setInverse(bool inverse)
 
 void MainWindow::changeGoal()
 {
-    ui->viewer->goal = qglviewer::Vec(ui->spinx->value(), ui->spiny->value(), ui->spinz->value());
+    //ui->viewer->goal = qglviewer::Vec(ui->spinx->value(), ui->spiny->value(), ui->spinz->value());
 }

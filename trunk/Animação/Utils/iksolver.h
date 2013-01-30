@@ -10,9 +10,9 @@ class IKSolver
 public:
     IKSolver();
 
-    static void solve(Joint *effector, qglviewer::Vec goal, int type);
-    static GenericMatrix jacobian(Joint *effector);
-    static GenericMatrix pseudoJacobian(Joint *effector, int type);
+    static void solve(std::vector<Joint*> *bones, qglviewer::Vec goal, int type);
+    static GenericMatrix jacobian(std::vector<Joint*> *bones);
+    static GenericMatrix pseudoJacobian(std::vector<Joint*> *bones, int type);
 };
 
 #endif // IKSOLVER_H

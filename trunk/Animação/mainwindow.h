@@ -60,7 +60,7 @@ private slots:
     void removePositionKeyframe();
     void removeOrientationKeyframe();
     void setSelectedByID(int);
-    void setIKMode(bool);
+    void setIKMode();
     void setInverse(bool);
     void changeGoal();
 };

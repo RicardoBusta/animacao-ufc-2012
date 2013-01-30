@@ -36,22 +36,6 @@ void Viewer::draw() {
     SceneContainer::drawObjects();
     SceneContainer::drawExtras();
 
-    if(SceneContainer::ikMode() and SceneContainer::selectedObject()!=NULL){
-        qglviewer::Vec effector = ((Joint*)SceneContainer::selectedObject())->globalEffectorPosition();
-        //        std::cout << effector.x << " " << effector.y << " " << effector.z << std::endl;
-        glPushAttrib(GL_ALL_ATTRIB_BITS);
-        glDisable(GL_DEPTH_TEST);
-        glDisable(GL_LIGHTING);
-        glPointSize(10);
-        glBegin(GL_POINTS);
-        glColor3f(0,1,0);
-        glVertex3f(goal.x,goal.y,goal.z);
-        glColor3f(1,0,0);
-        glVertex3f(effector.x,effector.y, effector.z);
-        glEnd();
-        glPopAttrib();
-    }
-
     glColor3f(1,1,1);
 
     this->drawText(10,10,QString("Frame: %1").arg(SceneContainer::current_frame()));
@@ -255,7 +239,7 @@ void Viewer::ikStop()
 
 void Viewer::ikTimeout()
 {
-    if(SceneContainer::ikMode() and SceneContainer::selectedObject()!=NULL){
+    /*if(SceneContainer::ikMode() and SceneContainer::selectedObject()!=NULL){
         //        goal = effector + qglviewer::Vec(0.1,0,0);
         effector = ((Joint*)SceneContainer::selectedObject())->globalEffectorPosition();
 
@@ -264,5 +248,5 @@ void Viewer::ikTimeout()
         //        ikStop();
     }
 
-    repaint();
+    repaint();*/
 }

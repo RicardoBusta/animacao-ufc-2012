@@ -11,6 +11,8 @@
 
 #include "Objects3D/fileobj.h"
 
+#include "Objects3D/iktarget.h"
+
 #include "Widgets/viewer.h"
 
 #include "Objects3D/particle.h"
@@ -21,6 +23,7 @@ Viewer* SceneContainer::viewer_reference_ = NULL;
 std::vector<Joint*> SceneContainer::objects_;
 std::vector<Object3D*> SceneContainer::extras_;
 std::vector<ObjectAnimator*> SceneContainer::animators_;
+std::vector<IKTarget*> SceneContainer::ik_targets_;
 
 Object3D* SceneContainer::selected_object_ = NULL;
 
@@ -66,6 +69,12 @@ void SceneContainer::drawExtras()
         Object3D* object = extras_.at(i);
         render_options_ = RENDER_NONE;
         object->draw(0);
+    }
+    for(unsigned int i = 0 ; i < ik_targets_.size() ; i++ ) {
+        Object3D* object = ik_targets_.at(i);
+        render_options_ = RENDER_NONE;
+        object->draw(0);
+        ik_targets_.at(i)->DrawGlobal();
     }
 }
 
@@ -293,6 +302,11 @@ bool SceneContainer::drawBones()
 void SceneContainer::setDrawBones(bool bones)
 {
     draw_bones_ = bones;
+}
+
+void SceneContainer::AddIKTarget(IKTarget *target)
+{
+    ik_targets_.push_back(target);
 }
 
 bool SceneContainer::renderOptions(int options_mask)

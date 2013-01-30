@@ -20,8 +20,9 @@ IKSolver::IKSolver()
 {
 }
 
-void IKSolver::solve(Joint *effector, qglviewer::Vec goal, int type)
+void IKSolver::solve(std::vector<Joint*>* bones, qglviewer::Vec goal, int type)
 {
+    Joint* effector = bones->at(bones->size()-1);
     qglviewer::Vec posEffector = effector->globalEffectorPosition();
 
     if ((goal-posEffector).norm()<GOAL_DISTANCE_ERROR) return;
@@ -39,7 +40,7 @@ void IKSolver::solve(Joint *effector, qglviewer::Vec goal, int type)
     //    }
     //    root = effector;
 
-    GenericMatrix jacobianMatrix = pseudoJacobian(effector,type);
+    GenericMatrix jacobianMatrix = pseudoJacobian(bones,type);
 
     qglviewer::Vec e;
     if(type==0){
@@ -66,8 +67,9 @@ void IKSolver::solve(Joint *effector, qglviewer::Vec goal, int type)
 
 
     int i = 0;
-    while(root!=NULL){
+    for(int j = 0 ; j < bones->size() ; j++ ) {
         // Smoothing Factor s
+        Joint* root = bones->at(j);
         double s=0.5;
         double angle;
         qglviewer::Vec vector;
@@ -89,38 +91,35 @@ void IKSolver::solve(Joint *effector, qglviewer::Vec goal, int type)
         i++;
 
         root->setNewOrientation( qresult );
-
-        root = root->parent();
     }
 
 }
 
 
-GenericMatrix IKSolver::jacobian(Joint *effector)
+GenericMatrix IKSolver::jacobian(std::vector<Joint*>* bones)
 {
-    Joint *joint;
-    joint = effector;
+    Joint * effector =  bones->at(bones->size()-1);
+    Joint * joint = effector;
     int joint_count=0;
     //    if(!(root==NULL)){
-    while(joint!=NULL){
+    /*while(joint!=NULL){
         //            if(root->getParent()==NULL){
         //                root->DrawObject();
         //            }
         joint_count++;
         joint = joint->parent();
-    }
+    }*/
     //    }else{
     //        joint_count=1;
     //    }
-    joint = effector;
+    //joint = effector;
 
-    GenericMatrix jacobian = GenericMatrix(3,3*joint_count);
+    GenericMatrix jacobian = GenericMatrix(3,3*bones->size());
 
     qglviewer::Vec posEffector = effector->globalEffectorPosition();
 
-    int i = 0;
-
-    while(joint!=NULL){
+    for(int i = 0 ; i < bones->size() ; i++) {
+        joint = bones->at(i);
         qglviewer::Vec derivatex,derivatey,derivatez;
         qglviewer::Vec posJoint = joint->globalPosition();
         qglviewer::Vec posrelative = posEffector - posJoint;
@@ -146,8 +145,7 @@ GenericMatrix IKSolver::jacobian(Joint *effector)
             jacobian.set( 1 , k+(3*i) , vety[k] );
             jacobian.set( 2 , k+(3*i) , vetz[k] );
         }
-        i++;
-        joint = joint->parent();
+
     }
 
 //    jacobian.debugPrint("jacobian");
@@ -155,9 +153,9 @@ GenericMatrix IKSolver::jacobian(Joint *effector)
 }
 
 
-GenericMatrix IKSolver::pseudoJacobian(Joint *effector, int type)
+GenericMatrix IKSolver::pseudoJacobian(std::vector<Joint*> *bones, int type)
 {
-    GenericMatrix j = jacobian(effector);
+    GenericMatrix j = jacobian(bones);
 //    return j.transpose();
     if(type==0){
         return j.transpose();

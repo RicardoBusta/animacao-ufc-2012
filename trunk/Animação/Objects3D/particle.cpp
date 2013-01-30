@@ -5,8 +5,12 @@
 #include "Utils/scenecontainer.h"
 #include "Widgets/viewer.h"
 
-Particle::Particle(int lifetime, QVector3D position, QVector3D speed)
+#include <cstdlib>
+#include <ctime>
+
+Particle::Particle(int lifetime, QVector3D position, QVector3D speed, QColor color)
 {
+    this->color = color;
     this->position_ = position;
     this->speed_ = speed;
     this->lifetime_ = lifetime;
@@ -22,35 +26,30 @@ void Particle::draw()
     //    glDisable(GL_DEPTH_TEST);
     glDisable(GL_CULL_FACE);
 
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
-    glColor4d(1.0,1.0,1.0,1);
+    //    glEnable(GL_BLEND);
+    //    glBlendFunc(GL_SRC_ALPHA,GL_ONE_MINUS_SRC_ALPHA);
+    //    glColor4d(1.0,1.0,1.0,1);
 
+    glColor4f(color.red(),color.green(),color.blue(),color.alpha());
     glTranslatef(position_.x(),position_.y(),position_.z());
 
-    float matrix4f[16];
+    //    float matrix4f[16];
 
-    glGetFloatv(GL_MODELVIEW_MATRIX , matrix4f);
-    for(int i=0; i<3; i++ ){
-        for(int j=0; j<3; j++ ) {
-            if ( i==j )
-                matrix4f[i*4+j] = 1.0;
-            else
-                matrix4f[i*4+j] = 0.0;
-        }
-    }
-    glLoadMatrixf(matrix4f);
+    //    glGetFloatv(GL_MODELVIEW_MATRIX , matrix4f);
+    //    for(int i=0; i<3; i++ ){
+    //        for(int j=0; j<3; j++ ) {
+    //            if ( i==j )
+    //                matrix4f[i*4+j] = 1.0;
+    //            else
+    //                matrix4f[i*4+j] = 0.0;
+    //        }
+    //    }
+    //    glLoadMatrixf(matrix4f);
 
-    glBegin(GL_QUADS);
+    glBegin(GL_POINTS);
 
-    glTexCoord2f(0,0);
+    //    glTexCoord2f(0,0);
     glVertex3f(0,0,0);
-    glTexCoord2f(0,1);
-    glVertex3f(2,0,0);
-    glTexCoord2f(1,1);
-    glVertex3f(2,2,0);
-    glTexCoord2f(1,0);
-    glVertex3f(0,2,0);
 
     glEnd();
     glPopMatrix();
@@ -71,11 +70,15 @@ void Particle::handle()
 
 QList<ParticleSpawner*> ParticleSpawner::particle_spawners_;
 
-ParticleSpawner::ParticleSpawner(int cooldown)
+ParticleSpawner::ParticleSpawner(int cooldown, QColor color, Joint *parent)
 {
+    this->joint = parent;
+    this->color = color;
     this->count = 0;
     this->cooldown = cooldown;
     particle_spawners_.push_back(this);
+
+    srand(time(0));
 }
 
 ParticleSpawner::~ParticleSpawner(){
@@ -93,9 +96,11 @@ void ParticleSpawner::handleParticleSpawners()
         ParticleSpawner *ps = particle_spawners_.at(i);
         ps->count ++;
         if(ps->count > ps->cooldown){
+            ps->position = QVector3D(ps->joint->globalPosition().x,ps->joint->globalPosition().y,ps->joint->globalPosition().z);
             ps->count = 0;
-            Particle *particle = new Particle(100,QVector3D(0,0,0),QVector3D(0,0.1,0));
-            ps->particles.push_back(particle);
+
+            ps->generateParticle(20,0);
+
         }
 
         ps->handleParticles();
@@ -105,7 +110,8 @@ void ParticleSpawner::handleParticleSpawners()
 
 void ParticleSpawner::drawParticles()
 {
-    glBindTexture( GL_TEXTURE_2D, texID );
+    //    glColor4f(color.red(),color.green(),color.blue(),color.alpha());
+    //glBindTexture( GL_TEXTURE_2D, texID );
     for(int i=0;i<particles.size();i++){
         particles.at(i)->draw();
     }
@@ -125,21 +131,52 @@ void ParticleSpawner::handleParticles()
     }
 }
 
-void ParticleSpawner::loadTex(QString filename)
-{
-    QImage tex = QGLWidget::convertToGLFormat( QImage(filename) );
-    //    GLuint texId;
-    glGenTextures( 1, (GLuint*)&texID );
-    glBindTexture( GL_TEXTURE_2D, texID );
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
-    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
-    glTexImage2D(GL_TEXTURE_2D, 0, 4, tex.width(), tex.height(), 0, GL_RGBA,GL_UNSIGNED_BYTE, tex.bits());
-}
+//void ParticleSpawner::loadTex(QString /*filename*/)
+//{
+//    QImage tex = QGLWidget::convertToGLFormat( QImage(filename) );
+//    glGenTextures( 1, (GLuint*)&texID );
+//    glBindTexture( GL_TEXTURE_2D, texID );
+//    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
+//    glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);
+//    glTexImage2D(GL_TEXTURE_2D, 0, 4, tex.width(), tex.height(), 0, GL_RGBA,GL_UNSIGNED_BYTE, tex.bits());
+//}
 
 
 void ParticleSpawner::clearParticleSpawners()
 {
     while(!particle_spawners_.empty()){
         delete particle_spawners_.first();
+    }
+}
+
+
+void ParticleSpawner::generateParticle(int number, int type)
+{
+    Particle *particle;
+    float theta;
+    float phi;
+    float radius;
+    QColor colVet[3];
+    colVet[0] = QColor(255,0,0);
+    colVet[1] = QColor(0,255,0);
+    colVet[2] = QColor(0,0,255);
+    for(int i=0;i<number;i++){
+        switch(type){
+        case 0:
+            theta = ( ((float)(rand()%360000))*M_PI/180000 );
+            phi = ( ((float)(rand()%360000))*M_PI/180000 );
+            radius =  ( ((float)(rand()%100))/1000 );
+            particle = new Particle(10,position, QVector3D(radius*sin(phi)*cos(theta),radius*cos(phi),radius*sin(phi)*sin(theta)), colVet[rand()%3] );
+            particles.push_back(particle);
+            break;
+        case 1:
+            theta = ( ((float)(rand()%360000))*M_PI/180000 );
+            phi = ( ((float)(rand()%360000))*M_PI/180000 );
+            radius =  ( ((float)(rand()%100))/1000 );
+            particle = new Particle(10,position, QVector3D(radius*sin(phi)*cos(theta),1,radius*sin(phi)*sin(theta)), color );
+            particles.push_back(particle);
+            break;
+            break;
+        }
     }
 }

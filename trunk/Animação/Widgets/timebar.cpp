@@ -151,21 +151,21 @@ void TimeBar::setKeyFrames(Object3D *object)
     //std::vector<PositionStep> *posvec = &object->GetAnimator()->GetKeyPositions();
     std::vector<ObjectAnimator*> *animators = SceneContainer::getAnimators();
 
-    for(int i=0;i<animators->size();i++){
+    for(unsigned int i=0;i<animators->size();i++){
         ObjectAnimator *ani = animators->at(i);
         for(int j=0;j<ani->getKeyPositions()->size();j++){
             has_pos_frames_[ ani->getKeyPositions()->at(j).frame_ ] = true;
         }
 
-        for(int j=0;j<ani->getKeyOrientations()->size();j++){
+        for(unsigned int j=0;j<ani->getKeyOrientations()->size();j++){
             has_ori_frames_[ ani->getKeyOrientations()->at(j).frame_ ] = true;
         }
     }
 
-    for(int i=0;i<object->getAnimator()->getKeyOrientations()->size();i++){
+    for(unsigned int i=0;i<object->getAnimator()->getKeyOrientations()->size();i++){
         ori_key_frames_.push_back(object->getAnimator()->getKeyOrientations()->at(i).frame_);
     }
-    for(int i=0;i<object->getAnimator()->getKeyPositions()->size();i++){
+    for(unsigned int i=0;i<object->getAnimator()->getKeyPositions()->size();i++){
         pos_key_frames_.push_back(object->getAnimator()->getKeyPositions()->at(i).frame_);
     }
 

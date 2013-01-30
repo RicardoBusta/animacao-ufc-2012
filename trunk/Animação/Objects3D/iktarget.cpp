@@ -16,7 +16,7 @@
 ////}
 
 IKTarget::IKTarget(){
-    inverse_ = true;
+    inverse_ = 0;
 }
 
 //IKTarget::IKTarget(qglviewer::Vec pos) {
@@ -46,20 +46,20 @@ void IKTarget::solve() {
     }
 }
 
-//void IKTarget::SaveKeyframe() {
-//    for(int i = 0 ; i < bones_.size() ; i++){
-//        Joint* bone = bones_.at(i);
-//        if(bone->getAnimator()!=NULL){
-//            ObjectAnimator* animator = bone->getAnimator();
-//            animator->addKeyPosition(SceneContainer::current_frame(),bone->position());
-//            animator->addKeyOrientation(SceneContainer::current_frame(),bone->orientation());
-//        }
-//    }
-//}
+void IKTarget::saveAngles(int frame) {
+    for(int i = 0 ; i < bones_.size() ; i++){
+        Joint* bone = bones_.at(i);
+        if(bone->getAnimator()!=NULL){
+            ObjectAnimator* animator = bone->getAnimator();
+            animator->addKeyPosition(frame,bone->position());
+            animator->addKeyOrientation(frame,bone->orientation());
+        }
+    }
+}
 
 void IKTarget::drawObject(int depth) {
 
-    //    qglviewer::Vec goal = position();
+//    qglviewer::Vec goal = position();
 
 //    glPushAttrib(GL_ALL_ATTRIB_BITS);
 //    glDisable(GL_DEPTH_TEST);
@@ -77,7 +77,7 @@ void IKTarget::drawObject(int depth) {
 
 void IKTarget::drawGlobal(){
     if(!bones_.empty()){
-        qglviewer::Vec effector = bones_.back()->globalEffectorPosition();
+        qglviewer::Vec effector = bones_.front()->globalEffectorPosition();
 
         glPushAttrib(GL_ALL_ATTRIB_BITS);
         glDisable(GL_DEPTH_TEST);
@@ -94,12 +94,13 @@ void IKTarget::drawGlobal(){
         glBegin(GL_LINE_STRIP);
         glColor3f(1,1,0);
 
+        glVertex3f(effector.x,effector.y, effector.z);
         for(int i = 0 ; i < bones_.size(); i++) {
             qglviewer::Vec begin;
             begin = bones_.at(i)->globalPosition();
             glVertex3f(begin.x,begin.y,begin.z);
         }
-        glVertex3f(effector.x,effector.y, effector.z);
+
         glEnd();
 
         glPopAttrib();

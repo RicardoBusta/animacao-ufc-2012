@@ -4,7 +4,7 @@
 #include <Objects3D/joint.h>
 
 #define GOAL_DISTANCE_ERROR 0.001
-#define D 0.5;
+#define D 0.1;
 #define MAX_DISTANCE_FRAME 0.01
 
 class GenericMatrix;

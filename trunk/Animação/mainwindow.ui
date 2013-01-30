@@ -831,7 +831,10 @@
              </widget>
             </item>
             <item row="5" column="0">
-             <widget class="QLabel" name="label_30">
+             <widget class="QLabel" name="label_target">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="font">
                <font>
                 <weight>75</weight>
@@ -844,30 +847,60 @@
              </widget>
             </item>
             <item row="8" column="1">
-             <widget class="QDoubleSpinBox" name="spiny"/>
+             <widget class="QDoubleSpinBox" name="spiny">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="minimum">
+               <double>-99.000000000000000</double>
+              </property>
+             </widget>
             </item>
             <item row="10" column="1">
-             <widget class="QDoubleSpinBox" name="spinz"/>
+             <widget class="QDoubleSpinBox" name="spinz">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="minimum">
+               <double>-99.000000000000000</double>
+              </property>
+             </widget>
             </item>
             <item row="7" column="1">
-             <widget class="QDoubleSpinBox" name="spinx"/>
+             <widget class="QDoubleSpinBox" name="spinx">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
+              <property name="minimum">
+               <double>-99.000000000000000</double>
+              </property>
+             </widget>
             </item>
             <item row="7" column="0">
-             <widget class="QLabel" name="label_31">
+             <widget class="QLabel" name="label_x">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="text">
                <string>x</string>
               </property>
              </widget>
             </item>
             <item row="8" column="0">
-             <widget class="QLabel" name="label_32">
+             <widget class="QLabel" name="label_y">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="text">
                <string>y</string>
               </property>
              </widget>
             </item>
             <item row="10" column="0">
-             <widget class="QLabel" name="label_33">
+             <widget class="QLabel" name="label_z">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="text">
                <string>z</string>
               </property>
@@ -875,10 +908,16 @@
             </item>
             <item row="11" column="0">
              <widget class="QPushButton" name="save_orientations">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="text">
                <string>Save Orientations</string>
               </property>
              </widget>
+            </item>
+            <item row="11" column="1">
+             <widget class="QSpinBox" name="spin_frame"/>
             </item>
            </layout>
           </widget>

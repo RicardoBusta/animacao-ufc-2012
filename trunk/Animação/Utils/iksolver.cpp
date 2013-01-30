@@ -7,8 +7,6 @@
 #include <Utils/matrix4d.h>
 #include <Interpolation/objectanimator.h>
 
-static qglviewer::Vec posEf = qglviewer::Vec(0,0.3f,0);
-
 #include <iostream>
 using namespace std;
 
@@ -18,7 +16,7 @@ IKSolver::IKSolver()
 
 void IKSolver::solve(std::vector<Joint*>* bones, qglviewer::Vec goal, int type)
 {
-    Joint* effector = bones->back();
+    Joint* effector = bones->front();
     qglviewer::Vec posEffector = effector->globalEffectorPosition();
 
     if ((goal-posEffector).norm()<GOAL_DISTANCE_ERROR) return;
@@ -94,7 +92,8 @@ void IKSolver::solve(std::vector<Joint*>* bones, qglviewer::Vec goal, int type)
 
 GenericMatrix IKSolver::jacobian(std::vector<Joint*>* bones)
 {
-    Joint * effector =  bones->back();
+//    Joint * effector =  bones->back();
+    Joint * effector =  bones->front();
     Joint * joint = effector;
     int joint_count=0;
     //    if(!(root==NULL)){
@@ -114,7 +113,7 @@ GenericMatrix IKSolver::jacobian(std::vector<Joint*>* bones)
 
     qglviewer::Vec posEffector = effector->globalEffectorPosition();
 
-    for(int i = 0 ; i < bones->size() ; i++) {
+    for(unsigned int i = 0 ; i < bones->size() ; i++) {
         joint = bones->at(i);
         qglviewer::Vec derivatex,derivatey,derivatez;
         qglviewer::Vec posJoint = joint->globalPosition();

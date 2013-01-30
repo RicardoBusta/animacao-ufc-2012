@@ -78,6 +78,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->spiny, SIGNAL(valueChanged(double)), this, SLOT(changeGoal()) );
     connect(ui->spinz, SIGNAL(valueChanged(double)), this, SLOT(changeGoal()) );
 
+    connect(ui->save_orientations, SIGNAL(clicked()), this, SLOT(saveAngles()) ) ;
+
 
     // interface
     this->showMaximized();
@@ -365,38 +367,6 @@ void MainWindow::setSelectedByID(int id)
     ui->treeWidget->setCurrentItem(selected_item_);
 }
 
-
-void MainWindow::setIKMode(bool ik)
-{
-    /*
-    IKDialog ik_dialog;
-
-    if(ik_dialog.exec() == QDialog::Accepted){
-        IKTarget* new_object = ik_dialog.getTarget();
-        QTreeWidgetItem *childitem = new QTreeWidgetItem(ui->treeWidget,QStringList(QString(new_object->label().c_str())));
-        item_to_object_[childitem] = new_object;
-        object_to_item_[new_object]  = childitem;
-        SceneContainer::AddIKTarget(new_object);
-    }*/
-
-    if(!play_or_pause_){
-        play_or_pause_ = true;
-        ui->button_play->setIcon(play_icon);
-        ui->viewer->pause();
-    }
-    if(ik){
-        ui->viewer->ikStart();
-    }else{
-        ui->viewer->ikStop();
-    }
-    ui->tab_widget->setEnabled(!ik);
-    ui->timebar->setEnabled(!ik);
-    ui->button_play->setEnabled(!ik);
-    ui->button_stop->setEnabled(!ik);
-    SceneContainer::setIKMode(ik);
-}
-
-
 void MainWindow::setInverse(int inverse)
 {
     SceneContainer::ikTarget.inverse_ = 1;
@@ -424,6 +394,21 @@ void MainWindow::tabChanged(int tab)
         SceneContainer::setIKMode(true);
         ui->viewer->ikStart();
 
+        ui->label_target->setEnabled(false);
+        ui->label_x->setEnabled(false);
+        ui->label_y->setEnabled(false);
+        ui->label_z->setEnabled(false);
+        ui->spinx->setEnabled(false);
+        ui->spiny->setEnabled(false);
+        ui->spinz->setEnabled(false);
+        ui->save_orientations->setEnabled(false);
+        ui->combo_end->setEnabled(false);
+        ui->label_end->setEnabled(false);
+
+        ui->spin_frame->setMinimum(SceneContainer::start_frame());
+        ui->spin_frame->setMaximum(SceneContainer::end_frame());
+        ui->spin_frame->setValue(SceneContainer::current_frame());
+
         fillStart();
     }else{
         ui->timebar->setEnabled(true);
@@ -431,6 +416,7 @@ void MainWindow::tabChanged(int tab)
         ui->button_stop->setEnabled(true);
         SceneContainer::setIKMode(false);
         ui->viewer->ikStop();
+        SceneContainer::ikTarget.clear();
     }
 }
 
@@ -515,7 +501,25 @@ void MainWindow::setIKTarget()
 {
     SceneContainer::ikTarget.clear();
 
-    if( ui->combo_end->currentIndex() == -1 or ui->combo_end->currentIndex()== 0 ) return;
+    if( ui->combo_end->currentIndex() == -1 or ui->combo_end->currentIndex()== 0 ){
+        ui->label_target->setEnabled(false);
+        ui->label_x->setEnabled(false);
+        ui->label_y->setEnabled(false);
+        ui->label_z->setEnabled(false);
+        ui->spinx->setEnabled(false);
+        ui->spiny->setEnabled(false);
+        ui->spinz->setEnabled(false);
+        ui->save_orientations->setEnabled(false);
+        return;
+    }
+    ui->label_target->setEnabled(true);
+    ui->label_x->setEnabled(true);
+    ui->label_y->setEnabled(true);
+    ui->label_z->setEnabled(true);
+    ui->spinx->setEnabled(true);
+    ui->spiny->setEnabled(true);
+    ui->spinz->setEnabled(true);
+    ui->save_orientations->setEnabled(true);
 
     std::cout << "derp" << std::endl;
 
@@ -524,19 +528,33 @@ void MainWindow::setIKTarget()
     int obj_id_end = index_id_[ui->combo_end->currentIndex()+ui->combo_start->count()];
     int obj_id_start = index_id_[ui->combo_start->currentIndex()];
     Joint* obj = dynamic_cast<Joint*>(Object3D::getObjectByID(obj_id_end));
+    qglviewer::Vec effector = obj->globalEffectorPosition();
     Joint* obj_root = dynamic_cast<Joint*>(Object3D::getObjectByID(obj_id_start));
     //SceneContainer::target.setInverseUsable(ui->checkBox->isChecked());
-    std::vector<Joint*> order;
+    //std::vector<Joint*> order;
     while((obj!=NULL) && (obj!=obj_root)){
-        order.push_back(obj);
+        SceneContainer::ikTarget.addChildBone(obj);
+        //  order.push_back(obj);
         obj = obj->parent();
     }
     if(obj==obj_root)
-        order.push_back(obj);
-    for(int i = order.size()-1; i >= 0 ; i--){
-        SceneContainer::ikTarget.addChildBone(order.at(i));
-    }
+        SceneContainer::ikTarget.addChildBone(obj);
+    //        order.push_back(obj);
+    //    for(int i = order.size()-1; i >= 0 ; i--){
+   // for(int i=0; i<order.size();i++){
+        //SceneContainer::ikTarget.addChildBone(order.at(i));
+    //}
+    ui->spinx->setValue(effector.x);
+    ui->spiny->setValue(effector.y);
+    ui->spinz->setValue(effector.z);
+
     ui->viewer->repaint();
 
     //return target;
+}
+
+
+void MainWindow::saveAngles()
+{
+    SceneContainer::ikTarget.saveAngles(ui->spin_frame->value());
 }

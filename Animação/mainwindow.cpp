@@ -66,7 +66,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect( ui->viewer, SIGNAL(updateSelected(int)), this, SLOT(setSelectedByID(int)) );
 
-    connect( ui->push_ikmode, SIGNAL(toggled(bool)), this, SLOT(setIKMode(bool)) );
+    //connect( ui->push_ikmode, SIGNAL(toggled(bool)), this, SLOT(setIKMode(bool)) );
 
     connect( ui->inverse, SIGNAL(currentIndexChanged(int)), this, SLOT(setInverse(int)) );
 

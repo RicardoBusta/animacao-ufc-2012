@@ -66,9 +66,17 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect( ui->viewer, SIGNAL(updateSelected(int)), this, SLOT(setSelectedByID(int)) );
 
-    connect( ui->push_ikmode, SIGNAL(clicked()), this, SLOT(setIKMode()) );
+    connect( ui->push_ikmode, SIGNAL(toggled(bool)), this, SLOT(setIKMode(bool)) );
 
-    //connect( ui->inverse, SIGNAL(toggled(bool)), this, SLOT(setInverse(bool)) );
+    connect( ui->inverse, SIGNAL(currentIndexChanged(int)), this, SLOT(setInverse(int)) );
+
+    connect(ui->tab_widget, SIGNAL(currentChanged(int)), this, SLOT(tabChanged(int)));
+
+    connect(ui->combo_end, SIGNAL(currentIndexChanged(int)), this, SLOT(setIKTarget()) );
+
+    connect(ui->spinx, SIGNAL(valueChanged(double)), this, SLOT(changeGoal()) );
+    connect(ui->spiny, SIGNAL(valueChanged(double)), this, SLOT(changeGoal()) );
+    connect(ui->spinz, SIGNAL(valueChanged(double)), this, SLOT(changeGoal()) );
 
 
     // interface
@@ -268,10 +276,10 @@ void MainWindow::updateSelectedLabel(QString label){
 void MainWindow::updateCurrentPosition() {
     qglviewer::Vec current_p(ui->spin_pos_x->value(),ui->spin_pos_y->value(),ui->spin_pos_z->value());
     SceneContainer::setSelectedPosition(current_p);
-    IKTarget* target = IKTarget::GetIKTargetById(SceneContainer::selectedObject()->id());
-    if(target!=NULL){
-        target->Solve();
-    }
+    //IKTarget* target = IKTarget::GetIKTargetById(SceneContainer::selectedObject()->id());
+    //    if(target!=NULL){
+    //        target->Solve();
+    //    }
     ui->viewer->updateGL();
 }
 
@@ -358,8 +366,9 @@ void MainWindow::setSelectedByID(int id)
 }
 
 
-void MainWindow::setIKMode()
+void MainWindow::setIKMode(bool ik)
 {
+    /*
     IKDialog ik_dialog;
 
     if(ik_dialog.exec() == QDialog::Accepted){
@@ -368,8 +377,8 @@ void MainWindow::setIKMode()
         item_to_object_[childitem] = new_object;
         object_to_item_[new_object]  = childitem;
         SceneContainer::AddIKTarget(new_object);
-    }
-/*
+    }*/
+
     if(!play_or_pause_){
         play_or_pause_ = true;
         ui->button_play->setIcon(play_icon);
@@ -384,21 +393,150 @@ void MainWindow::setIKMode()
     ui->timebar->setEnabled(!ik);
     ui->button_play->setEnabled(!ik);
     ui->button_stop->setEnabled(!ik);
-    SceneContainer::setIKMode(ik);*/
+    SceneContainer::setIKMode(ik);
 }
 
 
-void MainWindow::setInverse(bool inverse)
+void MainWindow::setInverse(int inverse)
 {
-    if(inverse){
-        ui->viewer->inverse_ = 1;
-    }else{
-        ui->viewer->inverse_ = 0;
-    }
+    SceneContainer::ikTarget.inverse_ = 1;
 }
 
 
 void MainWindow::changeGoal()
 {
-    //ui->viewer->goal = qglviewer::Vec(ui->spinx->value(), ui->spiny->value(), ui->spinz->value());
+    SceneContainer::ikTarget.setNewPosition( qglviewer::Vec(ui->spinx->value(), ui->spiny->value(), ui->spinz->value()) );
+    ui->viewer->repaint();
+}
+
+
+void MainWindow::tabChanged(int tab)
+{
+    if(tab == 3){
+        if(!play_or_pause_){
+            play_or_pause_ = true;
+            ui->button_play->setIcon(play_icon);
+            ui->viewer->pause();
+        }
+        ui->timebar->setEnabled(false);
+        ui->button_play->setEnabled(false);
+        ui->button_stop->setEnabled(false);
+        SceneContainer::setIKMode(true);
+        ui->viewer->ikStart();
+
+        fillStart();
+    }else{
+        ui->timebar->setEnabled(true);
+        ui->button_play->setEnabled(true);
+        ui->button_stop->setEnabled(true);
+        SceneContainer::setIKMode(false);
+        ui->viewer->ikStop();
+    }
+}
+
+
+void MainWindow::fillStart()
+{
+    disconnect(ui->combo_start, SIGNAL(currentIndexChanged(int)), this, SLOT(fillEnd(int)) );
+    ui->combo_start->clear();
+    ui->combo_start->addItem(QString("---"));
+    index_id_.clear();
+    for(int i = 0; i < SceneContainer::howManyObjects() ; i++){
+        Joint* obj = dynamic_cast<Joint*>(SceneContainer::objectAt(i));
+        if(obj!=NULL)
+            fillComboBox(obj,ui->combo_start);
+    }
+    connect(ui->combo_start, SIGNAL(currentIndexChanged(int)), this, SLOT(fillEnd(int)) );
+}
+
+
+void MainWindow::fillEnd(int index)
+{
+    ui->combo_end->setEnabled(false);
+    ui->label_end->setEnabled(false);
+    ui->combo_end->clear();
+    ui->combo_end->addItem(QString("---"));
+
+    if(index==-1 or index==0){
+        ui->save_orientations->setEnabled(false);
+        return;
+    }
+    ui->save_orientations->setEnabled(true);
+    int obj_id = index_id_[index];
+
+    Joint* obj = dynamic_cast<Joint*>(Object3D::getObjectByID(obj_id));
+
+    if(obj!=NULL) {
+        if(obj->howManyChilds()>0) {
+            for(int i = 0 ; i < obj->howManyChilds() ; i++ )
+                fillComboBox(obj->childAt(i),ui->combo_end,true,ui->combo_start->count());
+            ui->combo_end->setEnabled(true);
+            ui->label_end->setEnabled(true);
+        }
+    }
+}
+
+
+void MainWindow::fillComboBox(Joint *this_obj, QComboBox *combo, bool compensate, int compensation)
+{
+    Joint* obj = this_obj;
+    if(obj==NULL) return;
+    std::string spaces;
+    std::string label;
+
+    std::vector<std::pair<std::string,Joint*> > stack;
+    std::pair<std::string,Joint*> first_element;
+    first_element.first = "";
+    first_element.second = obj;
+    stack.push_back(first_element);
+
+    while(!stack.empty()) {
+
+        Joint* current = stack.at(stack.size()-1).second;
+        spaces =  stack.at(stack.size()-1).first + "  ";
+        stack.erase(stack.begin()+(stack.size()-1));
+
+        label = current->label();
+        QString object_label = QString(spaces.c_str()) + QString(label.c_str());
+        index_id_[compensate? combo->count() + compensation : combo->count()]=current->id();
+        combo->addItem(object_label);
+
+        for(int i = 0 ; i < current->howManyChilds(); i++){
+            std::pair<std::string,Joint*> new_element;
+            new_element.first = spaces;
+            new_element.second = current->childAt(i);
+            stack.push_back(new_element);
+        }
+    }
+}
+
+
+void MainWindow::setIKTarget()
+{
+    SceneContainer::ikTarget.clear();
+
+    if( ui->combo_end->currentIndex() == -1 or ui->combo_end->currentIndex()== 0 ) return;
+
+    std::cout << "derp" << std::endl;
+
+    //IKTarget* target = new IKTarget(qglviewer::Vec());
+    //target->setLabel(ui->lineEdit->text().toStdString());
+    int obj_id_end = index_id_[ui->combo_end->currentIndex()+ui->combo_start->count()];
+    int obj_id_start = index_id_[ui->combo_start->currentIndex()];
+    Joint* obj = dynamic_cast<Joint*>(Object3D::getObjectByID(obj_id_end));
+    Joint* obj_root = dynamic_cast<Joint*>(Object3D::getObjectByID(obj_id_start));
+    //SceneContainer::target.setInverseUsable(ui->checkBox->isChecked());
+    std::vector<Joint*> order;
+    while((obj!=NULL) && (obj!=obj_root)){
+        order.push_back(obj);
+        obj = obj->parent();
+    }
+    if(obj==obj_root)
+        order.push_back(obj);
+    for(int i = order.size()-1; i >= 0 ; i--){
+        SceneContainer::ikTarget.addChildBone(order.at(i));
+    }
+    ui->viewer->repaint();
+
+    //return target;
 }

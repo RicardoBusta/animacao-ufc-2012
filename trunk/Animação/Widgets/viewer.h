@@ -20,7 +20,6 @@ public:
 
     QTimer ikTimer;
 
-    int inverse_;
     qglviewer::Vec goal;
 
 protected :

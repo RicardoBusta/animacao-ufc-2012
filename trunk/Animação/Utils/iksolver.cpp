@@ -7,10 +7,6 @@
 #include <Utils/matrix4d.h>
 #include <Interpolation/objectanimator.h>
 
-#define GOAL_DISTANCE_ERROR 0.001
-#define D 0.5;
-#define MAX_DISTANCE_FRAME 0.01
-
 static qglviewer::Vec posEf = qglviewer::Vec(0,0.3f,0);
 
 #include <iostream>
@@ -22,7 +18,7 @@ IKSolver::IKSolver()
 
 void IKSolver::solve(std::vector<Joint*>* bones, qglviewer::Vec goal, int type)
 {
-    Joint* effector = bones->at(bones->size()-1);
+    Joint* effector = bones->back();
     qglviewer::Vec posEffector = effector->globalEffectorPosition();
 
     if ((goal-posEffector).norm()<GOAL_DISTANCE_ERROR) return;
@@ -43,7 +39,7 @@ void IKSolver::solve(std::vector<Joint*>* bones, qglviewer::Vec goal, int type)
     GenericMatrix jacobianMatrix = pseudoJacobian(bones,type);
 
     qglviewer::Vec e;
-    if(type==0){
+    if(type==1){
         if((goal-posEffector).norm()<MAX_DISTANCE_FRAME){
             return;
         }else{
@@ -98,7 +94,7 @@ void IKSolver::solve(std::vector<Joint*>* bones, qglviewer::Vec goal, int type)
 
 GenericMatrix IKSolver::jacobian(std::vector<Joint*>* bones)
 {
-    Joint * effector =  bones->at(bones->size()-1);
+    Joint * effector =  bones->back();
     Joint * joint = effector;
     int joint_count=0;
     //    if(!(root==NULL)){
@@ -124,7 +120,7 @@ GenericMatrix IKSolver::jacobian(std::vector<Joint*>* bones)
         qglviewer::Vec posJoint = joint->globalPosition();
         qglviewer::Vec posrelative = posEffector - posJoint;
 
-        GenericMatrix globalTransform = joint->globalTransformationMatrix().transpose()/*.transpose()*/;
+        GenericMatrix globalTransform = joint->globalTransformationMatrix().transpose();
 
         derivatex.setValue(globalTransform.get(0),globalTransform.get(1),globalTransform.get(2));
         derivatey.setValue(globalTransform.get(4),globalTransform.get(5),globalTransform.get(6));
@@ -157,16 +153,16 @@ GenericMatrix IKSolver::pseudoJacobian(std::vector<Joint*> *bones, int type)
 {
     GenericMatrix j = jacobian(bones);
 //    return j.transpose();
-    if(type==0){
+    if(type==1){
         return j.transpose();
     }
     GenericMatrix j_jt_inverse = (j*j.transpose());
-    j_jt_inverse.debugPrint("pre-inverse");
+    //j_jt_inverse.debugPrint("pre-inverse");
     j_jt_inverse = j_jt_inverse.inverse();
 
     if( j_jt_inverse.cols() == 1 ) return j.transpose();
 
-    j_jt_inverse.debugPrint("jjtinv");
+    //j_jt_inverse.debugPrint("jjtinv");
 
     bool nan= false;
     // If transpose only

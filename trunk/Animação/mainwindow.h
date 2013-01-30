@@ -11,6 +11,7 @@ class MainWindow;
 
 class Joint;
 class Object3D;
+class QComboBox;
 
 class MainWindow : public QMainWindow
 {
@@ -31,6 +32,8 @@ private:
 
     std::map<QTreeWidgetItem*, Object3D*> item_to_object_;
     std::map<Object3D*, QTreeWidgetItem*> object_to_item_;
+
+    std::map<int,int> index_id_;
 
 public slots:
     void playPause();
@@ -60,9 +63,16 @@ private slots:
     void removePositionKeyframe();
     void removeOrientationKeyframe();
     void setSelectedByID(int);
-    void setIKMode();
-    void setInverse(bool);
+    void setIKMode(bool ik);
+    void setInverse(int);
     void changeGoal();
+
+    //IK
+    void tabChanged(int tab);
+    void fillStart();
+    void fillEnd(int index);
+    void fillComboBox(Joint *this_obj, QComboBox *combo, bool compensate=false, int compensation=0);
+    void setIKTarget();
 };
 
 #endif // MAINWINDOW_H

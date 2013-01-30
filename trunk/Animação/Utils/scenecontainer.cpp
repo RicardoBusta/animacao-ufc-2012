@@ -11,8 +11,6 @@
 
 #include "Objects3D/fileobj.h"
 
-#include "Objects3D/iktarget.h"
-
 #include "Widgets/viewer.h"
 
 #include "Objects3D/particle.h"
@@ -23,7 +21,8 @@ Viewer* SceneContainer::viewer_reference_ = NULL;
 std::vector<Joint*> SceneContainer::objects_;
 std::vector<Object3D*> SceneContainer::extras_;
 std::vector<ObjectAnimator*> SceneContainer::animators_;
-std::vector<IKTarget*> SceneContainer::ik_targets_;
+//std::vector<IKTarget*> SceneContainer::ik_targets_;
+IKTarget SceneContainer::ikTarget;
 
 Object3D* SceneContainer::selected_object_ = NULL;
 
@@ -65,17 +64,17 @@ void SceneContainer::drawObjectsNoShader() {
 
 void SceneContainer::drawExtras()
 {
+    render_options_ = RENDER_NONE;
     for(unsigned int i = 0 ; i < extras_.size() ; i++ ) {
         Object3D* object = extras_.at(i);
-        render_options_ = RENDER_NONE;
         object->draw(0);
     }
-    for(unsigned int i = 0 ; i < ik_targets_.size() ; i++ ) {
-        Object3D* object = ik_targets_.at(i);
-        render_options_ = RENDER_NONE;
-        object->draw(0);
-        ik_targets_.at(i)->DrawGlobal();
-    }
+//    for(unsigned int i = 0 ; i < ik_targets_.size() ; i++ ) {
+//        Object3D* object = ik_targets_.at(i);
+//        render_options_ = RENDER_NONE;
+//        object->draw(0);
+//        ik_targets_.at(i)->DrawGlobal();
+//    }
 }
 
 void SceneContainer::drawParticles()
@@ -304,10 +303,10 @@ void SceneContainer::setDrawBones(bool bones)
     draw_bones_ = bones;
 }
 
-void SceneContainer::AddIKTarget(IKTarget *target)
-{
-    ik_targets_.push_back(target);
-}
+//void SceneContainer::AddIKTarget(IKTarget *target)
+//{
+//    ik_targets_.push_back(target);
+//}
 
 bool SceneContainer::renderOptions(int options_mask)
 {
@@ -720,3 +719,8 @@ void SceneContainer::setIKMode(bool ik)
     ik_mode_ = ik;
 }
 
+
+void SceneContainer::drawPost()
+{
+    ikTarget.drawGlobal();
+}

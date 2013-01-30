@@ -7,7 +7,7 @@ Slice::Slice(double radius, qglviewer::Vec original_point, qglviewer::Vec axis, 
     createSlice();
 }
 
-qglviewer::Vec Slice::Step(int index)
+qglviewer::Vec Slice::step(int index)
 {
     return slice_.at(index);
 }
@@ -59,8 +59,8 @@ void Torus::drawObject(int) {
         glBegin(GL_TRIANGLE_STRIP);
         for(int j = 0 ; j < steps_ ; j++ ) {
             Vec first, second;
-            first = torus_slices_.at(i).Step(j);
-            second = torus_slices_.at(i+1).Step(j);
+            first = torus_slices_.at(i).step(j);
+            second = torus_slices_.at(i+1).step(j);
             glVertex3d(first.x,first.y,first.z);
             glVertex3d(second.x,second.y,second.z);
         }

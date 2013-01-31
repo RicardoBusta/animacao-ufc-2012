@@ -407,7 +407,7 @@ void SceneContainer::createArmScene(){
     Joint* arm_part1 = addObject("Part 1",":/models/arm_part1.obj",":/textures/wooden.png",QVector3D(0,0.25,0),QQuaternion(1,0,0,0),arm_base, 3.7);
     Joint* arm_part2 = addObject("Part 2",":/models/arm_part2.obj",":/textures/wooden.png",QVector3D(0,3.7,0),QQuaternion(1,0,0,0),arm_part1, 4.7);
     Joint* arm_hand = addObject("Hand",":/models/arm_hand.obj",":/textures/wooden.png",QVector3D(0,4.7,0),QQuaternion(1,0,0,0),arm_part2, 1.4f);
-    ParticleSpawner *ps = new ParticleSpawner(0, QColor(255,255,0,100),arm_hand);
+    ParticleSpawner *ps = new ParticleSpawner(0, QVector3D(0,1.4,0), QColor(255,255,0,100),arm_hand,1);
 
     Joint* arm_finger_5_1 = addObject("Finger 5 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0.5,1.4,0),QQuaternion(1,0,0,0),arm_hand);
     Joint* arm_finger_4_1 = addObject("Finger 4 Part 1",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0.2,1.5,0),QQuaternion(1,0,0,0),arm_hand);
@@ -553,7 +553,8 @@ void SceneContainer::createMonkeySnakeScene(){
     /*Joint* face_brow_left =*/ addObject("Eye Brow Left",":/models/face_brow.obj",":/textures/wooden.png",QVector3D(0.3,1,0), QQuaternion(1,0,0,0), face_eye_lid_back_left);
     /*Joint* face_brow_right =*/ addObject("Eye Brow Right",":/models/face_brow.obj",":/textures/wooden.png",QVector3D(-0.3,1,0), QQuaternion(1,0,0,0), face_eye_lid_back_right);
     /*Joint* face_stache =*/ addObject("Stache",":/models/face_stache.obj",":/textures/stache_teeth.png",QVector3D(0,-0.5,2), QQuaternion(1,0,0,0), face_head);
-    /*Joint* face_hat =*/ addObject("Hat",":/models/face_hat.obj",":/textures/wooden.png",QVector3D(0,1.4,0), QQuaternion(1,0,0,0), face_head);
+    Joint* face_hat = addObject("Hat",":/models/face_hat.obj",":/textures/wooden.png",QVector3D(0,1.4,0), QQuaternion(1,0,0,0), face_head);
+    ParticleSpawner *ps = new ParticleSpawner(0,QVector3D(0,3,0), QColor(255,255,0,100),face_hat,0);
 
     animate = face_teeth_bot->getAnimator();
     animate->addKeyOrientation(0, 0,0,0);
@@ -628,9 +629,10 @@ void SceneContainer::createRobotScene(){
 
     /*Joint* left_arm_finger_5_2 =*/ addObject("left_arm_finger_5_2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),left_arm_finger_5_1);
     /*Joint* left_arm_finger_4_2 =*/ addObject("left_arm_finger_4_2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),left_arm_finger_4_1);
-    /*Joint* left_arm_finger_3_2 =*/ addObject("left_arm_finger_3_2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),left_arm_finger_3_1);
+    Joint* left_arm_finger_3_2 = addObject("left_arm_finger_3_2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),left_arm_finger_3_1);
     /*Joint* left_arm_finger_2_2 =*/ addObject("left_arm_finger_2_2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),left_arm_finger_2_1);
     /*Joint* left_arm_finger_1_2 =*/ addObject("left_arm_finger_1_2",":/models/arm_finger.obj",":/textures/wooden.png",QVector3D(0,0.6,0),QQuaternion(1,0,0,0),left_arm_finger_1_1);
+    ParticleSpawner *ps = new ParticleSpawner(0,QVector3D(0,0,0), QColor(255,255,0,100),left_arm_finger_3_2,2);
 
     //! Right Hand
     Joint* right_arm_part1 = addObject("right_arm_part1",":/models/arm_part1.obj",":/textures/wooden.png",QVector3D(-2,2.4,0),QQuaternion(cos(M_PI_4),0,0,sin(M_PI_4)),body);

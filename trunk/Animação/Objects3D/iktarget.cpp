@@ -17,6 +17,7 @@
 
 IKTarget::IKTarget(){
     inverse_ = 0;
+    root_ = NULL;
 }
 
 //IKTarget::IKTarget(qglviewer::Vec pos) {
@@ -76,9 +77,19 @@ void IKTarget::drawObject(int depth) {
 }
 
 void IKTarget::drawGlobal(){
+    if(root_ != NULL){
+        glPushAttrib(GL_ALL_ATTRIB_BITS);
+        glDisable(GL_DEPTH_TEST);
+        glDisable(GL_LIGHTING);
+        glPointSize(10);
+        glBegin(GL_POINTS);
+        glColor3f(0,0,1);
+        glVertex3f(root_->globalPosition().x,root_->globalPosition().y,root_->globalPosition().z);
+        glEnd();
+        glPopAttrib();
+    }
     if(!bones_.empty()){
         qglviewer::Vec effector = bones_.front()->globalEffectorPosition();
-
         glPushAttrib(GL_ALL_ATTRIB_BITS);
         glDisable(GL_DEPTH_TEST);
         glDisable(GL_LIGHTING);

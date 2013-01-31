@@ -14,6 +14,7 @@ public:
     static Object3D* getObjectByID(int id);
 
     float length_;
+    float size_;
 
     Object3D();
     Object3D(qglviewer::Vec pos);

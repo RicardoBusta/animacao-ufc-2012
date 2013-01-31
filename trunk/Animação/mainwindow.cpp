@@ -80,6 +80,8 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(ui->save_orientations, SIGNAL(clicked()), this, SLOT(saveAngles()) ) ;
 
+    connect(ui->spin_frame, SIGNAL(valueChanged(int)), this, SLOT(changeCurrentFrame(int)) );
+
 
     // interface
     this->showMaximized();
@@ -345,7 +347,7 @@ void MainWindow::updateCurrentScene(int scene){
     ui->timebar->setKeyFrames(NULL);
 
     SceneContainer::setFrameRange(0,100);
-    SceneContainer::setCurrentFrame(1);
+    SceneContainer::setCurrentFrame(0);
     ui->viewer->repaint();
 }
 
@@ -369,7 +371,7 @@ void MainWindow::setSelectedByID(int id)
 
 void MainWindow::setInverse(int inverse)
 {
-    SceneContainer::ikTarget.inverse_ = 1;
+    SceneContainer::ikTarget.inverse_ = inverse;
 }
 
 
@@ -402,8 +404,7 @@ void MainWindow::tabChanged(int tab)
         ui->spiny->setEnabled(false);
         ui->spinz->setEnabled(false);
         ui->save_orientations->setEnabled(false);
-        ui->combo_end->setEnabled(false);
-        ui->label_end->setEnabled(false);
+        fillEnd(-1);
 
         ui->spin_frame->setMinimum(SceneContainer::start_frame());
         ui->spin_frame->setMaximum(SceneContainer::end_frame());
@@ -444,13 +445,14 @@ void MainWindow::fillEnd(int index)
     ui->combo_end->addItem(QString("---"));
 
     if(index==-1 or index==0){
+        SceneContainer::ikTarget.root_ = NULL;
         ui->save_orientations->setEnabled(false);
         return;
     }
     ui->save_orientations->setEnabled(true);
     int obj_id = index_id_[index];
-
     Joint* obj = dynamic_cast<Joint*>(Object3D::getObjectByID(obj_id));
+    SceneContainer::ikTarget.root_ = obj;
 
     if(obj!=NULL) {
         if(obj->howManyChilds()>0) {
@@ -521,8 +523,6 @@ void MainWindow::setIKTarget()
     ui->spinz->setEnabled(true);
     ui->save_orientations->setEnabled(true);
 
-    std::cout << "derp" << std::endl;
-
     //IKTarget* target = new IKTarget(qglviewer::Vec());
     //target->setLabel(ui->lineEdit->text().toStdString());
     int obj_id_end = index_id_[ui->combo_end->currentIndex()+ui->combo_start->count()];
@@ -557,4 +557,10 @@ void MainWindow::setIKTarget()
 void MainWindow::saveAngles()
 {
     SceneContainer::ikTarget.saveAngles(ui->spin_frame->value());
+}
+
+
+void MainWindow::changeCurrentFrame(int x)
+{
+    ui->timebar->setCurrentFrame(x);
 }

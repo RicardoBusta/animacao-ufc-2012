@@ -47,7 +47,7 @@ void FileObj::drawObject(int depth)
             for(int j=0;j<3;j++){
                 glTexCoord2f(texturecoord[thisface.textureID[j]].x(),texturecoord[thisface.textureID[j]].y());
                 glNormal3f(normal[thisface.normalID[j]].x(),normal[thisface.normalID[j]].y(),normal[thisface.normalID[j]].z());
-                glVertex3f(vertex[thisface.vertexID[j]].x(),vertex[thisface.vertexID[j]].y(),vertex[thisface.vertexID[j]].z());
+                glVertex3f(vertex[thisface.vertexID[j]].x()*size_,vertex[thisface.vertexID[j]].y()*size_,vertex[thisface.vertexID[j]].z()*size_);
             }
         }
         glEnd();

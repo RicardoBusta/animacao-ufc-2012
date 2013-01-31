@@ -10,12 +10,15 @@
 #include <iostream>
 using namespace std;
 
+//Type: 0 = inverse ; 1 = transpose; 2 = adjunct;
+
 IKSolver::IKSolver()
 {
 }
 
 void IKSolver::solve(std::vector<Joint*>* bones, qglviewer::Vec goal, int type)
 {
+    //cout << type << endl;
     Joint* effector = bones->front();
     qglviewer::Vec posEffector = effector->globalEffectorPosition();
 
@@ -57,32 +60,49 @@ void IKSolver::solve(std::vector<Joint*>* bones, qglviewer::Vec goal, int type)
 
 
     GenericMatrix application = (jacobianMatrix * position);
-//    application.debugPrint("application");
+    //    application.debugPrint("application");
 
 
     int i = 0;
     for(int j = 0 ; j < bones->size() ; j++ ) {
         // Smoothing Factor s
         Joint* root = bones->at(j);
-        double s=0.5;
+        double s=1;
         double angle;
         qglviewer::Vec vector;
         qglviewer::Quaternion qresult = root->orientation();
 
-        vector = qglviewer::Vec(1,0,0);
-        angle = ( application.get(i,0)/**(180.0/M_PI)*/ );
-        qresult = qresult * qglviewer::Quaternion(vector,angle);
-        i++;
+        if(type == 2){
+            vector = qglviewer::Vec(1,0,0);
+            angle = ( application.get(i,0)/**(180.0/M_PI)*/ );
+            qresult = qglviewer::Quaternion(vector,angle) * qresult;
+            i++;
 
-        vector = qglviewer::Vec(0,1,0);
-        angle = ( application.get(i,0)/**(180.0/M_PI)*/ );
-        qresult = qresult * qglviewer::Quaternion(vector,angle);
-        i++;
+            vector = qglviewer::Vec(0,1,0);
+            angle = ( application.get(i,0)/**(180.0/M_PI)*/ );
+            qresult = qglviewer::Quaternion(vector,angle) * qresult;
+            i++;
 
-        vector = qglviewer::Vec(0,0,1);
-        angle = ( application.get(i,0)/**(180.0/M_PI)*/ );
-        qresult = qresult * qglviewer::Quaternion(vector,angle);
-        i++;
+            vector = qglviewer::Vec(0,0,1);
+            angle = ( application.get(i,0)/**(180.0/M_PI)*/ );
+            qresult = qglviewer::Quaternion(vector,angle) * qresult;
+            i++;
+        }else{
+            vector = qglviewer::Vec(1,0,0);
+            angle = ( application.get(i,0)/**(180.0/M_PI)*/ );
+            qresult = qresult * qglviewer::Quaternion(vector,angle);
+            i++;
+
+            vector = qglviewer::Vec(0,1,0);
+            angle = ( application.get(i,0)/**(180.0/M_PI)*/ );
+            qresult = qresult * qglviewer::Quaternion(vector,angle);
+            i++;
+
+            vector = qglviewer::Vec(0,0,1);
+            angle = ( application.get(i,0)/**(180.0/M_PI)*/ );
+            qresult = qresult * qglviewer::Quaternion(vector,angle);
+            i++;
+        }
 
         root->setNewOrientation( qresult );
     }
@@ -90,12 +110,12 @@ void IKSolver::solve(std::vector<Joint*>* bones, qglviewer::Vec goal, int type)
 }
 
 
-GenericMatrix IKSolver::jacobian(std::vector<Joint*>* bones)
+GenericMatrix IKSolver::jacobian(std::vector<Joint*>* bones, int type)
 {
-//    Joint * effector =  bones->back();
+    //    Joint * effector =  bones->back();
     Joint * effector =  bones->front();
     Joint * joint = effector;
-    int joint_count=0;
+    //int joint_count=0;
     //    if(!(root==NULL)){
     /*while(joint!=NULL){
         //            if(root->getParent()==NULL){
@@ -121,38 +141,50 @@ GenericMatrix IKSolver::jacobian(std::vector<Joint*>* bones)
 
         GenericMatrix globalTransform = joint->globalTransformationMatrix().transpose();
 
-        derivatex.setValue(globalTransform.get(0),globalTransform.get(1),globalTransform.get(2));
-        derivatey.setValue(globalTransform.get(4),globalTransform.get(5),globalTransform.get(6));
-        derivatez.setValue(globalTransform.get(8),globalTransform.get(9),globalTransform.get(10));
+        if(type!=2){
+            derivatex.setValue(globalTransform.get(0),globalTransform.get(1),globalTransform.get(2));
+            derivatey.setValue(globalTransform.get(4),globalTransform.get(5),globalTransform.get(6));
+            derivatez.setValue(globalTransform.get(8),globalTransform.get(9),globalTransform.get(10));
 
-        // Cross Product
-        derivatex = derivatex^posrelative;
-        derivatey = derivatey^posrelative;
-        derivatez = derivatez^posrelative;
+            // Cross Product
+            derivatex = derivatex^posrelative;
+            derivatey = derivatey^posrelative;
+            derivatez = derivatez^posrelative;
 
-        double vetx[3] = {derivatex.x,derivatey.x,derivatez.x};
-        double vety[3] = {derivatex.y,derivatey.y,derivatez.y};
-        double vetz[3] = {derivatex.z,derivatey.z,derivatez.z};
+            double vetx[3] = {derivatex.x,derivatey.x,derivatez.x};
+            double vety[3] = {derivatex.y,derivatey.y,derivatez.y};
+            double vetz[3] = {derivatex.z,derivatey.z,derivatez.z};
 
 
-        for(int k=0;k<3;k++){
-            jacobian.set( 0 , k+(3*i) , vetx[k] );
-            jacobian.set( 1 , k+(3*i) , vety[k] );
-            jacobian.set( 2 , k+(3*i) , vetz[k] );
+            for(int k=0;k<3;k++){
+                jacobian.set( 0 , k+(3*i) , vetx[k] );
+                jacobian.set( 1 , k+(3*i) , vety[k] );
+                jacobian.set( 2 , k+(3*i) , vetz[k] );
+            }
+        }else{
+            posrelative = ( effector->globalEffectorPosition() - joint->globalPosition() );
+            jacobian.set(0, (3*i),      0);
+            jacobian.set(0, 1+(3*i),    posrelative.z);
+            jacobian.set(0, 2+(3*i),    posrelative.y);
+            jacobian.set(1, (3*i),      -posrelative.z);
+            jacobian.set(1, 1+(3*i),    0);
+            jacobian.set(1, 2+(3*i),    posrelative.x);
+            jacobian.set(2, (3*i),      posrelative.y);
+            jacobian.set(2, 1+(3*i),    -posrelative.x);
+            jacobian.set(2, 2+(3*i),    0);
         }
-
     }
 
-//    jacobian.debugPrint("jacobian");
+    //    jacobian.debugPrint("jacobian");
     return jacobian;
 }
 
 
 GenericMatrix IKSolver::pseudoJacobian(std::vector<Joint*> *bones, int type)
 {
-    GenericMatrix j = jacobian(bones);
-//    return j.transpose();
-    if(type==1){
+    GenericMatrix j = jacobian(bones,type);
+    //    return j.transpose();
+    if(type!=0){
         return j.transpose();
     }
     GenericMatrix j_jt_inverse = (j*j.transpose());
@@ -163,23 +195,23 @@ GenericMatrix IKSolver::pseudoJacobian(std::vector<Joint*> *bones, int type)
 
     //j_jt_inverse.debugPrint("jjtinv");
 
-    bool nan= false;
+    //bool nan= false;
     // If transpose only
 
     // Pseudo Inverse
     // Verify if there is inverse
-//    for(int i=0;i<j_jt_inverse.cols();i++){
-//        for(int j=0;j<j_jt_inverse.rows();j++){
-//            if (isnan(j_jt_inverse.get(j,i))){
-//                nan = true;
-//                break;
-//            }
-//        }
-//    }
+    //    for(int i=0;i<j_jt_inverse.cols();i++){
+    //        for(int j=0;j<j_jt_inverse.rows();j++){
+    //            if (isnan(j_jt_inverse.get(j,i))){
+    //                nan = true;
+    //                break;
+    //            }
+    //        }
+    //    }
 
-//    if(nan){
-//        return j.transpose();
-//    }
+    //    if(nan){
+    //        return j.transpose();
+    //    }
 
     return (j.transpose()*j_jt_inverse);
 }

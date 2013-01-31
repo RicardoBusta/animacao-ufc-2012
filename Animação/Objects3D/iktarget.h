@@ -33,6 +33,7 @@ protected:
 
 public:
     int inverse_;
+    Joint* root_;
 
     //bool draw_effector_;
     //bool draw_bones_;

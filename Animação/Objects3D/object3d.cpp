@@ -51,6 +51,7 @@ int Object3D::id() {
 }
 
 void Object3D::defaultInitialisation() {
+    size_ = 1.0f;
     quadric_ = NULL;
     draw_object_ = true;
     draw_position_particle_ = false;

@@ -198,7 +198,7 @@ void Viewer::postSelection(const QPoint &point)
 
 void Viewer::ikStart()
 {
-    ikTimer.start(100);
+    ikTimer.start( 1000/60 );
 }
 
 void Viewer::ikStop()
